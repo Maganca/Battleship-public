@@ -139,7 +139,7 @@ public class Board {
 		return result;
 	}
 
-	public String toString(int x, int y) {
+	public String toString() {
 		String result = "";
 		for (Object[] row : theBoard) {
 			for (Object col : row) {
@@ -170,11 +170,11 @@ public class Board {
 		for (Object[] row : theBoard) {
 			for (Object col : row) {
 				if (col == Board.ShotResult.HIT) {
-					result += "H ";
+					result += "H";
 				} else if (col == Board.ShotResult.MISS) {
-					result += "M ";
+					result += "M";
 				} else {
-					result += "_ ";
+					result += "_";
 				}
 			}
 			result += "\n";
