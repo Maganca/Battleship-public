@@ -9,23 +9,30 @@ public class Board {
 	private int totalBoardHealth;
 
 	public enum ShotResult {
-		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON;
+		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON, INVALID;
 	}
 
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
+
 		totalBoardHealth = 0;
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the ShotResult enum types
+	 * Attempts a new shot on the board and returns one of the ShotResult enum
+	 * types
 	 * 
 	 * @param x
 	 * @param y
 	 * @return ShotResult enum
 	 */
 	public ShotResult shotAttempt(int x, int y) {
+		// Checks to make sure shot attempt is valid
+		if (x >= theBoard[0].length || y >= theBoard.length) {
+			return ShotResult.INVALID;
+		}
+
 		// Checks to see if we've hit a ship
 		if (theBoard[y][x] instanceof Ship) {
 			// Damages ship and reduces board health
@@ -59,15 +66,20 @@ public class Board {
 	/**
 	 * Adds a given ship to the board.
 	 * 
+	 * TODO: NEED TO ADD LOGIC FOR INVALID PLACEMENT
+	 * 
 	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the form
-	 *                  of [[[x1][y1]],[[x2][y2]]]
+	 * @param locations int array of locations for the ship to be added in the
+	 *                  form of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship, int[][] locations) {
 		for (int[] location : locations) {
 			int x = location[0];
 			int y = location[1];
+			if (x >= theBoard[0].length || y >= theBoard.length) {
+				return false;
+			}
 			if (theBoard[y][x] == null) {
 				totalBoardHealth++;
 				theBoard[y][x] = ship;
