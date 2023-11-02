@@ -10,4 +10,8 @@ public class Ship {
 	public int getHealth() {
 		return health;
 	}
+
+	public void damage() {
+		health -= 1;
+	}
 }
