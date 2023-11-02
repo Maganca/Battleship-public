@@ -6,7 +6,7 @@ public class Board {
 	private Object[][] theBoard;
 	private int size;
 
-	public void Board(int size) {
+	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
 	}
@@ -18,6 +18,11 @@ public class Board {
 	 */
 	public int getSize() {
 		return size;
+	}
+	
+	public boolean newShotAttempt(int[] location) {
+		
+		
 	}
 
 	public boolean addShipToBoard(Ship ship, int[][] locations) {
