@@ -5,11 +5,12 @@ public class Board {
 	// Main board object
 	private Object[][] theBoard;
 	private int size;
-	private int totalBoardHealth = 0;
+	private int totalBoardHealth;
 
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
+		totalBoardHealth = 0;
 	}
 
 	/**
