@@ -86,6 +86,14 @@ public class Board {
 	public int getSize() {
 		return size;
 	}
+	
+	/**
+	 * Returns the board.
+	 * @return Object[][]
+	 */
+	public Object[][] getBoard(){
+		return theBoard;
+	}
 
 	/**
 	 * Returns the total health of remaining ships on the board.

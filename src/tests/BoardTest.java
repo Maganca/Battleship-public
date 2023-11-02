@@ -9,7 +9,12 @@ class BoardTest {
 
 	@Test
 	void testBoardSize() {
-		assertEquals(10, a.board.size(10).build());
+		assertEquals(10, a.board.size(10).build().getSize());
+	}
+	
+	@Test
+	void testShipSize() {
+		assertEquals(10, a.board.size(10).build().getSize());
 	}
 
 }
@@ -59,6 +64,10 @@ class a {
 			this.size = size;
 		}
 
+		public ShipBuilder w(int size) {
+			return new ShipBuilder(size);
+		}
+		
 		public Ship build() {
 			Ship result = new Ship(this.size);
 			return result;
