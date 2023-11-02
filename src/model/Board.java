@@ -5,7 +5,7 @@ public class Board {
 	// Main board object
 	private Object[][] theBoard;
 	private int size;
-	private int totalHealthOfShips;
+	private int totalBoardHealth = 0;
 
 	public Board(int size) {
 		this.size = size;
@@ -32,6 +32,10 @@ public class Board {
 		// Handles a proper hit
 		if (theBoard[y][x] instanceof Ship) {
 			((Ship) theBoard[y][x]).damage();
+			totalBoardHealth--;
+			if (totalBoardHealth == 0) {
+				return ShotResult.GAME_WON;
+			}
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
 				// as the ShotResult Type
@@ -59,6 +63,7 @@ public class Board {
 			int x = location[0];
 			int y = location[1];
 			if (theBoard[y][x] == null) {
+				totalBoardHealth++;
 				theBoard[y][x] = ship;
 			} else {
 				return false;
