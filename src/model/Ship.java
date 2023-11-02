@@ -3,7 +3,7 @@ package model;
 public class Ship {
 	private int health;
 
-	Ship(int size) {
+	public Ship(int size) {
 		health = size;
 	}
 
