@@ -10,10 +10,10 @@ public class RandomAI {
 		generator = new Random();
 	}
 
-	@Override
 	public int[] shot(Board game) {
 		int size = game.getSize();
-		while (!game.isFull()) {
+		boolean run = true;
+		while (run) {
 			int row = generator.nextInt(size);
 			int col = generator.nextInt(size);
 			if (game.available(row, col)) {
