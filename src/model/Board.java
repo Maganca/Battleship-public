@@ -20,8 +20,8 @@ public class Board {
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the ShotResult enum
-	 * types
+	 * Attempts a new shot on the board and returns one of the resulting
+	 * ShotResult enum types
 	 * 
 	 * @param x
 	 * @param y
@@ -59,7 +59,7 @@ public class Board {
 		}
 
 		// The spot is neither null or a ship at this point so
-		// it has to be either a HIT or a MISS
+		// it has to be either a HIT or a MISS, meaning that its a repeat
 		return ShotResult.REPEAT_ATTEMPT;
 	}
 
@@ -115,6 +115,55 @@ public class Board {
 	 */
 	public int getBoardHealth() {
 		return totalBoardHealth;
+	}
+
+	/**
+	 * This toString includes the ships in the final string output, which should
+	 * be only visible to the current player.
+	 * 
+	 * @return string
+	 */
+	public String toString() {
+		String result = "";
+		for (Object[] row : theBoard) {
+			for (Object col : row) {
+				if (col == null) {
+					result += "_ ";
+				} else if (col == Board.ShotResult.HIT) {
+					result += "H ";
+				} else if (col == Board.ShotResult.MISS) {
+					result += "M ";
+				} else if (col instanceof Ship) {
+					result += "S ";
+				}
+			}
+			result += "\n";
+		}
+		return result;
+	}
+
+	/**
+	 * This toString hides the ships in the final string output.
+	 * 
+	 * TODO: somehow figure out how to show opponents ships on this view too??
+	 * 
+	 * @return string
+	 */
+	public String toStringOpponentView() {
+		String result = "";
+		for (Object[] row : theBoard) {
+			for (Object col : row) {
+				if (col == Board.ShotResult.HIT) {
+					result += "H ";
+				} else if (col == Board.ShotResult.MISS) {
+					result += "M ";
+				} else {
+					result += "_ ";
+				}
+			}
+			result += "\n";
+		}
+		return result;
 	}
 
 }
