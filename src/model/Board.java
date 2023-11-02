@@ -6,7 +6,7 @@ public class Board {
 	private Object[][] theBoard;
 	private int size;
 
-	public void Board(int size) {
+	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
 	}
