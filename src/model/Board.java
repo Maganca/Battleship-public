@@ -1,6 +1,7 @@
 package model;
 
 public class Board {
+	
 	// Main board object
 	private Object[][] theBoard;
 	private int size;
