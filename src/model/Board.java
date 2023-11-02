@@ -20,8 +20,8 @@ public class Board {
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the resulting
-	 * ShotResult enum types
+	 * Attempts a new shot on the board and returns one of the resulting ShotResult
+	 * enum types
 	 * 
 	 * @param x
 	 * @param y
@@ -69,8 +69,8 @@ public class Board {
 	 * TODO: NEED TO ADD LOGIC FOR INVALID PLACEMENT
 	 * 
 	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the
-	 *                  form of [[[x1][y1]],[[x2][y2]]]
+	 * @param locations int array of locations for the ship to be added in the form
+	 *                  of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship, int[][] locations) {
@@ -118,23 +118,39 @@ public class Board {
 	}
 
 	/**
-	 * This toString includes the ships in the final string output, which should
-	 * be only visible to the current player.
+	 * This toString includes the ships in the final string output, which should be
+	 * only visible to the current player.
 	 * 
 	 * @return string
 	 */
-	public String toString() {
+	public String toStringCoord(int x, int y) {
+		String result = "";
+
+		if (theBoard[y][x] == Board.ShotResult.HIT) {
+			result += "H ";
+		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
+			result += "M ";
+		} else if (theBoard[y][x] instanceof Ship) {
+			result += "S ";
+		} else if (theBoard[y][x] == null) {
+			result += "_ ";
+		}
+
+		return result;
+	}
+
+	public String toString(int x, int y) {
 		String result = "";
 		for (Object[] row : theBoard) {
 			for (Object col : row) {
-				if (col == null) {
-					result += "_ ";
-				} else if (col == Board.ShotResult.HIT) {
+				if (col == Board.ShotResult.HIT) {
 					result += "H ";
 				} else if (col == Board.ShotResult.MISS) {
 					result += "M ";
 				} else if (col instanceof Ship) {
 					result += "S ";
+				} else if (col == null) {
+					result += "_ ";
 				}
 			}
 			result += "\n";
