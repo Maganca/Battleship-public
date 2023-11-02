@@ -22,6 +22,7 @@ public class Board {
 	
 	public boolean newShotAttempt(int[] location) {
 		
+		return false;
 		
 	}
 
