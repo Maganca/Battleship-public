@@ -86,12 +86,13 @@ public class Board {
 	public int getSize() {
 		return size;
 	}
-	
+
 	/**
 	 * Returns the board.
+	 * 
 	 * @return Object[][]
 	 */
-	public Object[][] getBoard(){
+	public Object[][] getBoard() {
 		return theBoard;
 	}
 
