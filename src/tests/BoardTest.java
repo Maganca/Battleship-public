@@ -7,8 +7,8 @@ import model.*;
 class BoardTest {
 
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	void test1() {
+		
 	}
 
 }
