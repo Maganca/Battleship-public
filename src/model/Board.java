@@ -118,25 +118,18 @@ public class Board {
 	}
 
 	/**
-	 * This toString includes the ships in the final string output, which should be
-	 * only visible to the current player.
+	 * This returns an obfuscated object of a board at x, y
 	 * 
-	 * @return string
+	 * @return Object
 	 */
-	public String toStringCoord(int x, int y) {
-		String result = "";
-
-		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			result += "H ";
-		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
-			result += "M ";
-		} else if (theBoard[y][x] instanceof Ship) {
-			result += "S ";
-		} else if (theBoard[y][x] == null) {
-			result += "_ ";
+	public Object getHiddenCoord(int x, int y) {
+		if (x >= size || y >= size) {
+			return ShotResult.INVALID;
 		}
-
-		return result;
+		if (theBoard[y][x] instanceof Ship) {
+			return null;
+		}
+		return theBoard[y][x];
 	}
 
 	public String toString() {
