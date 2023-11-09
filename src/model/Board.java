@@ -19,8 +19,8 @@ public class Board {
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the resulting ShotResult
-	 * enum types
+	 * Attempts a new shot on the board and returns one of the resulting
+	 * ShotResult enum types
 	 * 
 	 * @param x
 	 * @param y
@@ -64,15 +64,16 @@ public class Board {
 	 * Adds a given ship to the board.
 	 * 
 	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the form
-	 *                  of [[[x1][y1]],[[x2][y2]]]
+	 * @param locations int array of locations for the ship to be added in the
+	 *                  form of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+			if (x >= theBoard[0].length || y >= theBoard.length
+					|| theBoard[y][x] != null)
 				return false;
 		}
 		for (int[] location : ship.locations) {
@@ -146,8 +147,8 @@ public class Board {
 	}
 
 	/**
-	 * This toString includes the ships in the final string output, which should be
-	 * only visible to the current player.
+	 * This toString includes the ships in the final string output, which should
+	 * be only visible to the current player.
 	 * 
 	 * @return string
 	 */
@@ -155,13 +156,13 @@ public class Board {
 		String result = "";
 
 		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			result += "H ";
+			result += "H";
 		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
-			result += "M ";
+			result += "M";
 		} else if (theBoard[y][x] instanceof Ship) {
-			result += "S ";
+			result += "S";
 		} else if (theBoard[y][x] == null) {
-			result += "_ ";
+			result += "_";
 		}
 
 		return result;
@@ -191,4 +192,54 @@ public class Board {
 		return result;
 	}
 
+	public boolean predictShipPlacement(Ship ship, int x, int y,
+			String direction) {
+		int[][] locations = new int[ship.getSize()][2];
+		locations[0] = new int[] { x, y };
+
+		// Predict ship placement in the specified direction
+		for (int i = 1; i < ship.getSize(); i++) {
+			switch (direction) {
+			case "up":
+				locations[i] = new int[] { x, y - i };
+				break;
+			case "down":
+				locations[i] = new int[] { x, y + i };
+				break;
+			case "left":
+				locations[i] = new int[] { x - i, y };
+				break;
+			case "right":
+				locations[i] = new int[] { x + i, y };
+				break;
+			default:
+				return false; // Invalid direction
+			}
+
+			// Check if the predicted location is within the board boundaries
+			if (locations[i][0] < 0 || locations[i][0] >= size
+					|| locations[i][1] < 0 || locations[i][1] >= size) {
+				return false;
+			}
+		}
+
+		// Check if the predicted locations are available for placement
+		return addShipToBoard(ship);
+	}
+
+	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
+		int[] result = new int[2];
+
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (playerBoard.theBoard[i][j] == ShotResult.HIT) {
+					result[0]++;
+				} else if (playerBoard.theBoard[i][j] == ShotResult.MISS) {
+					result[1]++;
+				}
+			}
+		}
+
+		return result;
+	}
 }
