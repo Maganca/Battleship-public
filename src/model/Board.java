@@ -190,5 +190,52 @@ public class Board {
 		}
 		return result;
 	}
+*/ @ Chi Thieu
+	public boolean predictShipPlacement(Ship ship, int x, int y, String direction) {
+    int[][] locations = new int[ship.getLength()][2];
+    locations[0] = new int[]{x, y};
 
+    // Predict ship placement in the specified direction
+    for (int i = 1; i < ship.getLength(); i++) {
+        switch (direction) {
+            case "up":
+                locations[i] = new int[]{x, y - i};
+                break;
+            case "down":
+                locations[i] = new int[]{x, y + i};
+                break;
+            case "left":
+                locations[i] = new int[]{x - i, y};
+                break;
+            case "right":
+                locations[i] = new int[]{x + i, y};
+                break;
+            default:
+                return false; // Invalid direction
+        }
+
+        // Check if the predicted location is within the board boundaries
+        if (locations[i][0] < 0 || locations[i][0] >= size || locations[i][1] < 0 || locations[i][1] >= size) {
+            return false;
+        }
+    }
+
+    // Check if the predicted locations are available for placement
+    return addShipToBoard(ship, locations);
+}
+public int[] calculateTotalHitsAndMisses(Board playerBoard) {
+    int[] result = new int[2];
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (playerBoard.theBoard[i][j] == ShotResult.HIT) {
+                result[0]++;
+            } else if (playerBoard.theBoard[i][j] == ShotResult.MISS) {
+                result[1]++;
+            }
+        }
+    }
+
+    return result;
+}
 }
