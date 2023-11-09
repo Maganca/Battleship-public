@@ -74,42 +74,10 @@ public class ShipGameGUI extends Application {
 			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI().toString());
 	private static final Media MISS_NOISE = new Media(
 			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI().toString());
-	private static final Media START_NOISE = new Media(
+	private static final Media GOOD_NOISE = new Media(
 			new File("soundeffects/the-notification-email-143029.mp3").toURI().toString());
 	private static final Media ERROR_NOISE = new Media(new File("soundeffects/error-126627.mp3").toURI().toString());
 	private MediaPlayer soundPlayer;
-
-	/**
-	 * 1 = Sink noise 2 = Hit noise 3 = Miss noise 4 = Start noise 5 = Error noise
-	 * 
-	 * @param soundNum
-	 */
-	private void playSound(int soundNum) {
-		switch (soundNum) {
-		case 1:
-			soundPlayer = new MediaPlayer(SINK_NOISE);
-			soundPlayer.play();
-			return;
-		case 2:
-			soundPlayer = new MediaPlayer(HIT_NOISE);
-			soundPlayer.play();
-			return;
-		case 3:
-			soundPlayer = new MediaPlayer(MISS_NOISE);
-			soundPlayer.play();
-			return;
-		case 4:
-			soundPlayer = new MediaPlayer(START_NOISE);
-			soundPlayer.play();
-			return;
-		case 5:
-			soundPlayer = new MediaPlayer(ERROR_NOISE);
-			soundPlayer.play();
-			return;
-		default:
-			return;
-		}
-	}
 
 	/**
 	 * Start
@@ -128,7 +96,7 @@ public class ShipGameGUI extends Application {
 	 * @param stage
 	 */
 	private void layoutGUI(Stage stage) {
-		Scene scene = new Scene(vBox, 420, 730);
+		Scene scene = new Scene(vBox, 420, 600);
 		title.setWrapText(true);
 		vBox.getChildren().addAll(title, credits, startButton);
 		vBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -256,11 +224,11 @@ public class ShipGameGUI extends Application {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				playerGrid[i][j] = new ImageView(imageChoice(playerBoard.toStringCoord(i, j)));
-				playerGrid[i][j].setFitWidth(30);
-				playerGrid[i][j].setFitHeight(30);
+				playerGrid[i][j].setFitWidth(20);
+				playerGrid[i][j].setFitHeight(20);
 				AIGrid[i][j] = new ImageView(Ocean_null);
-				AIGrid[i][j].setFitWidth(30);
-				AIGrid[i][j].setFitHeight(30);
+				AIGrid[i][j].setFitWidth(20);
+				AIGrid[i][j].setFitHeight(20);
 				AIGrid[i][j].setOnMouseClicked(new ShotListener());
 
 				AIGridPane.add(AIGrid[i][j], i, j);
@@ -308,25 +276,30 @@ public class ShipGameGUI extends Application {
 						ShotResult playerOutcome = AIBoard.shotAttempt(i, j);
 						switch (playerOutcome) {
 						case GAME_WON:
-							playSound(4);
+							soundPlayer = new MediaPlayer(GOOD_NOISE);
+							soundPlayer.play();
 							System.out.print("You Won");
 							break;
 						case HIT:
-							playSound(2);
+							soundPlayer = new MediaPlayer(HIT_NOISE);
+							soundPlayer.play();
 							System.out.print("You hit my ship!");
 							valid++;
 							break;
 						case MISS:
-							playSound(3);
+							soundPlayer = new MediaPlayer(MISS_NOISE);
+							soundPlayer.play();
 							System.out.print("You missed");
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
-							playSound(5);
+							soundPlayer = new MediaPlayer(ERROR_NOISE);
+							soundPlayer.play();
 							System.out.print("Try Again\n");
 							break;
 						case SUNK:
-							playSound(1);
+							soundPlayer = new MediaPlayer(SINK_NOISE);
+							soundPlayer.play();
 							System.out.print("You sunk my ship!");
 							valid++;
 							break;
