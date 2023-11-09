@@ -36,15 +36,15 @@ public class Board {
 			// Damages ship and reduces board health
 			((Ship) theBoard[y][x]).damage();
 			this.totalBoardHealth--;
+			if (this.totalBoardHealth == 0)
+				return ShotResult.GAME_WON;
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
 				theBoard[y][x] = ShotResult.HIT;
 				return ShotResult.SUNK;
 			}
-			theBoard[y][x] = ShotResult.HIT;
-			if (this.totalBoardHealth == 0)
-				return ShotResult.GAME_WON;
 			// The ship did not sink so this is just a hit.
+			theBoard[y][x] = ShotResult.HIT;
 			return ShotResult.HIT;
 		}
 
