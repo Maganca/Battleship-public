@@ -150,6 +150,28 @@ public class Board {
 		}
 		return result;
 	}
+	
+	/**
+	 * This toString includes the ships in the final string output, which should be
+	 * only visible to the current player.
+	 * 
+	 * @return string
+	 */
+	public String toStringCoord(int x, int y) {
+		String result = "";
+
+		if (theBoard[y][x] == Board.ShotResult.HIT) {
+			result += "H ";
+		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
+			result += "M ";
+		} else if (theBoard[y][x] instanceof Ship) {
+			result += "S ";
+		} else if (theBoard[y][x] == null) {
+			result += "_ ";
+		}
+
+		return result;
+	}
 
 	/**
 	 * This toString hides the ships in the final string output.
