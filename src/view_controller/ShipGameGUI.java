@@ -19,6 +19,8 @@ import model.Board;
 import model.Board.ShotResult;
 import model.Ship;
 
+// Attempting to make the windows more organized.
+
 /**
  * Class Ship Game, where the Game logic and GUI are present.
  */
