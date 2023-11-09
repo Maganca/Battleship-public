@@ -9,42 +9,37 @@ public class Board {
 	private int totalBoardHealth;
 
 	public enum ShotResult {
-		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON, INVALID;
+		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON;
 	}
 
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
-		totalBoardHealth = 0;
+		this.totalBoardHealth = 0;
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the resulting
-	 * ShotResult enum types
+	 * Attempts a new shot on the board and returns one of the resulting ShotResult
+	 * enum types
 	 * 
 	 * @param x
 	 * @param y
 	 * @return ShotResult enum
 	 */
 	public ShotResult shotAttempt(int x, int y) {
-		// Checks to make sure shot attempt is valid
-		if (x >= theBoard[0].length || y >= theBoard.length) {
-			return ShotResult.INVALID;
-		}
-
 		// Checks to see if we've hit a ship
 		if (theBoard[y][x] instanceof Ship) {
 			// Damages ship and reduces board health
 			((Ship) theBoard[y][x]).damage();
-			totalBoardHealth--;
-			theBoard[y][x] = ShotResult.HIT;
-			if (totalBoardHealth == 0) {
-				return ShotResult.GAME_WON;
-			}
+			this.totalBoardHealth--;
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
+				theBoard[y][x] = ShotResult.HIT;
 				return ShotResult.SUNK;
 			}
+			theBoard[y][x] = ShotResult.HIT;
+			if (this.totalBoardHealth == 0)
+				return ShotResult.GAME_WON;
 			// The ship did not sink so this is just a hit.
 			return ShotResult.HIT;
 		}
@@ -64,22 +59,21 @@ public class Board {
 	 * Adds a given ship to the board.
 	 * 
 	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the
-	 *                  form of [[[x1][y1]],[[x2][y2]]]
+	 * @param locations int array of locations for the ship to be added in the form
+	 *                  of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length
-					|| theBoard[y][x] != null)
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
 				return false;
 		}
 		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			totalBoardHealth++;
+			this.totalBoardHealth++;
 			theBoard[y][x] = ship;
 		}
 		return true;
@@ -109,7 +103,7 @@ public class Board {
 	 * @return int
 	 */
 	public int getBoardHealth() {
-		return totalBoardHealth;
+		return this.totalBoardHealth;
 	}
 
 	/**
@@ -118,9 +112,6 @@ public class Board {
 	 * @return Object
 	 */
 	public Object getHiddenCoord(int x, int y) {
-		if (x >= size || y >= size) {
-			return ShotResult.INVALID;
-		}
 		if (theBoard[y][x] instanceof Ship) {
 			return null;
 		}
@@ -147,8 +138,8 @@ public class Board {
 	}
 
 	/**
-	 * This toString includes the ships in the final string output, which should
-	 * be only visible to the current player.
+	 * This toString includes the ships in the final string output, which should be
+	 * only visible to the current player.
 	 * 
 	 * @return string
 	 */
@@ -192,8 +183,7 @@ public class Board {
 		return result;
 	}
 
-	public boolean predictShipPlacement(Ship ship, int x, int y,
-			String direction) {
+	public boolean predictShipPlacement(Ship ship, int x, int y, String direction) {
 		int[][] locations = new int[ship.getSize()][2];
 		locations[0] = new int[] { x, y };
 
@@ -217,8 +207,7 @@ public class Board {
 			}
 
 			// Check if the predicted location is within the board boundaries
-			if (locations[i][0] < 0 || locations[i][0] >= size
-					|| locations[i][1] < 0 || locations[i][1] >= size) {
+			if (locations[i][0] < 0 || locations[i][0] >= size || locations[i][1] < 0 || locations[i][1] >= size) {
 				return false;
 			}
 		}
