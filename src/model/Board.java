@@ -156,13 +156,13 @@ public class Board {
 		String result = "";
 
 		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			result += "H ";
+			result += "H";
 		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
-			result += "M ";
+			result += "M";
 		} else if (theBoard[y][x] instanceof Ship) {
-			result += "S ";
+			result += "S";
 		} else if (theBoard[y][x] == null) {
-			result += "_ ";
+			result += "_";
 		}
 
 		return result;
@@ -224,7 +224,7 @@ public class Board {
 		}
 
 		// Check if the predicted locations are available for placement
-		return addShipToBoard(ship, locations);
+		return addShipToBoard(ship);
 	}
 
 	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
