@@ -27,6 +27,10 @@ public class Board {
 	 * @return ShotResult enum
 	 */
 	public ShotResult shotAttempt(int x, int y) {
+		// Checks to make sure shot attempt is valid
+		if (x >= theBoard[0].length || y >= theBoard.length) {
+			return ShotResult.REPEAT_ATTEMPT;
+		}
 		// Checks to see if we've hit a ship
 		if (theBoard[y][x] instanceof Ship) {
 			// Damages ship and reduces board health

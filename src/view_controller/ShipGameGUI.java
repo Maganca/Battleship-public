@@ -6,12 +6,14 @@ import java.io.File;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
@@ -25,7 +27,6 @@ public class ShipGameGUI extends Application {
 	}
 
 	private BorderPane borderPane = new BorderPane();
-	private GridPane gridPane = new GridPane();
 	private VBox vBox = new VBox();
 	private Button startButton = new Button("Start");
 	private Button easyButton = new Button("Start Easy Game");
@@ -54,8 +55,6 @@ public class ShipGameGUI extends Application {
 	private TextField fiveVert = new TextField();
 
 	private Label credits = new Label("By: Kade, Chi, Danilo, and Ethan");
-	private Label AILabel = new Label("CPU's Board");
-	private Label playerLabel = new Label("Player's Board");
 
 	private Image Ocean_null = new Image(new File("Tiles/Ocean1.png").toURI().toString());
 	private Image Ocean_miss = new Image(new File("Tiles/Ocean2.png").toURI().toString());
@@ -129,17 +128,12 @@ public class ShipGameGUI extends Application {
 	 * @param stage
 	 */
 	private void layoutGUI(Stage stage) {
-		Scene scene = new Scene(vBox, 500, 700);
-		gridPane.add(title, 0, 0);
-		gridPane.add(startButton, 0, 1);
-		gridPane.add(credits, 0, 2);
-		vBox.getChildren().add(gridPane);
-		gridPane.setAlignment(Pos.CENTER);
-		title.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(vBox, 420, 730);
 		title.setWrapText(true);
-		credits.setAlignment(Pos.CENTER);
-		startButton.setAlignment(Pos.CENTER);
-
+		vBox.getChildren().addAll(title, credits, startButton);
+		vBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		vBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -148,117 +142,100 @@ public class ShipGameGUI extends Application {
 		vBox.getChildren().clear();
 		Label explanation1 = new Label("Add your ships: ");
 		Label explanation2 = new Label("Verticality takes 0 for horizontal or 1 for vertical");
+		Label pLabel = new Label("\nPatrol Boat (length of 2): ");
+		Label sLabel = new Label("\nSubmarine (length of 3): ");
+		Label dLabel = new Label("\nDestroyer (length of 3): ");
+		Label bLabel = new Label("\nBattleship (length of 4): ");
+		Label cLabel = new Label("\nCarrier (length of 5): ");
 		explanation1.setStyle("-fx-font-size: 20; -fx-font-family: Verdana");
 		explanation2.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
+		pLabel.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
+		sLabel.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
+		dLabel.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
+		bLabel.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
+		cLabel.setStyle("-fx-font-size: 15; -fx-font-family: Verdana");
 
 		GridPane patrol = new GridPane();
 		twoXCoord.setMaxWidth(50);
 		twoYCoord.setMaxWidth(50);
 		twoVert.setMaxWidth(50);
-		patrol.add(new Label("x coord: "), 0, 0);
-		patrol.add(new Label("x coord: "), 2, 0);
-		patrol.add(new Label("x coord: "), 4, 0);
-		patrol.add(twoXCoord, 1, 0);
-		patrol.add(twoYCoord, 3, 0);
-		patrol.add(twoVert, 5, 0);
-		patrol.setHgap(10);
+		patrol.add(new Label("\tx coord: "), 1, 0);
+		patrol.add(new Label("\ty coord: "), 3, 0);
+		patrol.add(new Label("\tverticality: "), 5, 0);
+		patrol.add(twoXCoord, 2, 0);
+		patrol.add(twoYCoord, 4, 0);
+		patrol.add(twoVert, 6, 0);
 
 		GridPane submarine = new GridPane();
 		threeAXCoord.setMaxWidth(50);
 		threeAYCoord.setMaxWidth(50);
 		threeAVert.setMaxWidth(50);
-		submarine.add(new Label("x coord: "), 0, 0);
-		submarine.add(new Label("x coord: "), 2, 0);
-		submarine.add(new Label("x coord: "), 4, 0);
-		submarine.add(threeAXCoord, 1, 0);
-		submarine.add(threeAYCoord, 3, 0);
-		submarine.add(threeAVert, 5, 0);
-		submarine.setHgap(10);
+		submarine.add(new Label("\tx coord: "), 1, 0);
+		submarine.add(new Label("\ty coord: "), 3, 0);
+		submarine.add(new Label("\tverticality: "), 5, 0);
+		submarine.add(threeAXCoord, 2, 0);
+		submarine.add(threeAYCoord, 4, 0);
+		submarine.add(threeAVert, 6, 0);
 
 		GridPane destroyer = new GridPane();
 		threeBXCoord.setMaxWidth(50);
 		threeBYCoord.setMaxWidth(50);
 		threeBVert.setMaxWidth(50);
-		destroyer.add(new Label("x coord: "), 0, 0);
-		destroyer.add(new Label("x coord: "), 2, 0);
-		destroyer.add(new Label("x coord: "), 4, 0);
-		destroyer.add(threeBXCoord, 1, 0);
-		destroyer.add(threeBYCoord, 3, 0);
-		destroyer.add(threeBVert, 5, 0);
-		destroyer.setHgap(10);
+		destroyer.add(new Label("\tx coord: "), 1, 0);
+		destroyer.add(new Label("\ty coord: "), 3, 0);
+		destroyer.add(new Label("\tverticality: "), 5, 0);
+		destroyer.add(threeBXCoord, 2, 0);
+		destroyer.add(threeBYCoord, 4, 0);
+		destroyer.add(threeBVert, 6, 0);
 
 		GridPane battleship = new GridPane();
 		fourXCoord.setMaxWidth(50);
 		fourYCoord.setMaxWidth(50);
 		fourVert.setMaxWidth(50);
-		battleship.add(new Label("x coord: "), 0, 0);
-		battleship.add(new Label("x coord: "), 2, 0);
-		battleship.add(new Label("x coord: "), 4, 0);
-		battleship.add(fourXCoord, 1, 0);
-		battleship.add(fourYCoord, 3, 0);
-		battleship.add(fourVert, 5, 0);
-		battleship.setHgap(10);
+		battleship.add(new Label("\tx coord: "), 1, 0);
+		battleship.add(new Label("\ty coord: "), 3, 0);
+		battleship.add(new Label("\tverticality: "), 5, 0);
+		battleship.add(fourXCoord, 2, 0);
+		battleship.add(fourYCoord, 4, 0);
+		battleship.add(fourVert, 6, 0);
 
 		GridPane carrier = new GridPane();
 		fiveXCoord.setMaxWidth(50);
 		fiveYCoord.setMaxWidth(50);
 		fiveVert.setMaxWidth(50);
-		carrier.add(new Label("x coord: "), 0, 0);
-		carrier.add(new Label("x coord: "), 2, 0);
-		carrier.add(new Label("x coord: "), 4, 0);
-		carrier.add(fiveXCoord, 1, 0);
-		carrier.add(fiveYCoord, 3, 0);
-		carrier.add(fiveVert, 5, 0);
-		carrier.setHgap(10);
+		carrier.add(new Label("\tx coord: "), 1, 0);
+		carrier.add(new Label("\ty coord: "), 3, 0);
+		carrier.add(new Label("\tverticality: "), 5, 0);
+		carrier.add(fiveXCoord, 2, 0);
+		carrier.add(fiveYCoord, 4, 0);
+		carrier.add(fiveVert, 6, 0);
 
 		GridPane buttons = new GridPane();
-		buttons.add(easyButton, 0, 0);
-		buttons.add(hardButton, 5, 0);
+		buttons.add(easyButton, 2, 0);
+		buttons.add(hardButton, 10, 0);
 		buttons.setHgap(10);
 
-		vBox.getChildren().add(explanation1);
-		vBox.getChildren().add(explanation2);
-		vBox.getChildren().add(new Label("Patrol Boat (length of 2): "));
-		vBox.getChildren().add(patrol);
-		vBox.getChildren().add(new Label("Submarine (length of 3): "));
-		vBox.getChildren().add(submarine);
-		vBox.getChildren().add(new Label("Destroyer (length of 3): "));
-		vBox.getChildren().add(destroyer);
-		vBox.getChildren().add(new Label("Battleship (length of 4): "));
-		vBox.getChildren().add(battleship);
-		vBox.getChildren().add(new Label("Carrier (length of 5): "));
-		vBox.getChildren().add(carrier);
-		vBox.getChildren().add(buttons);
+		vBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol, sLabel, submarine, dLabel, destroyer,
+				bLabel, battleship, cLabel, carrier, new Label("\n"), buttons);
 	}
 
 	private void setupBoard() {
 		currentAI.placeShips(AIBoard);
 
-		Ship twoShip = new Ship(
-				new int[] { Integer.parseInt(twoXCoord.getText()), Integer.parseInt(twoYCoord.getText()) },
-				Integer.parseInt(twoVert.getText()), 2);
-		playerBoard.addShipToBoard(twoShip);
+		playerBoard.addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
+				Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
 
-		Ship threeAShip = new Ship(
-				new int[] { Integer.parseInt(threeAXCoord.getText()), Integer.parseInt(threeAYCoord.getText()) },
-				Integer.parseInt(threeAVert.getText()), 3);
-		playerBoard.addShipToBoard(threeAShip);
+		playerBoard.addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
+				Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
 
-		Ship threeBShip = new Ship(
-				new int[] { Integer.parseInt(threeBXCoord.getText()), Integer.parseInt(threeBYCoord.getText()) },
-				Integer.parseInt(threeBVert.getText()), 3);
-		playerBoard.addShipToBoard(threeBShip);
+		playerBoard.addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
+				Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
 
-		Ship fourShip = new Ship(
-				new int[] { Integer.parseInt(fourXCoord.getText()), Integer.parseInt(fourYCoord.getText()) },
-				Integer.parseInt(fourVert.getText()), 4);
-		playerBoard.addShipToBoard(fourShip);
+		playerBoard.addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
+				Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
 
-		Ship fiveShip = new Ship(
-				new int[] { Integer.parseInt(fiveXCoord.getText()), Integer.parseInt(fiveYCoord.getText()) },
-				Integer.parseInt(fiveVert.getText()), 5);
-		playerBoard.addShipToBoard(fiveShip);
-
+		playerBoard.addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
+				Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
 	}
 
 	private Image imageChoice(String stat) {
@@ -278,23 +255,26 @@ public class ShipGameGUI extends Application {
 	private void setupGrid() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-
 				playerGrid[i][j] = new ImageView(imageChoice(playerBoard.toStringCoord(i, j)));
-				playerGrid[i][j].setFitWidth(20);
-				playerGrid[i][j].setFitHeight(20);
+				playerGrid[i][j].setFitWidth(30);
+				playerGrid[i][j].setFitHeight(30);
 				AIGrid[i][j] = new ImageView(Ocean_null);
-				AIGrid[i][j].setFitWidth(20);
-				AIGrid[i][j].setFitHeight(20);
+				AIGrid[i][j].setFitWidth(30);
+				AIGrid[i][j].setFitHeight(30);
 				AIGrid[i][j].setOnMouseClicked(new ShotListener());
 
 				AIGridPane.add(AIGrid[i][j], i, j);
 				playerGridPane.add(playerGrid[i][j], i, j);
 			}
 		}
+		AIGridPane.setHgap(2);
+		AIGridPane.setVgap(2);
+		playerGridPane.setHgap(2);
+		playerGridPane.setVgap(2);
 		vBox.getChildren().clear();
-		vBox.getChildren().add(AILabel);
+		vBox.getChildren().add(new Label("My Board: "));
 		vBox.getChildren().add(AIGridPane);
-		vBox.getChildren().add(playerLabel);
+		vBox.getChildren().add(new Label("\nYour Board: "));
 		vBox.getChildren().add(playerGridPane);
 	}
 
@@ -329,16 +309,16 @@ public class ShipGameGUI extends Application {
 						switch (playerOutcome) {
 						case GAME_WON:
 							playSound(4);
-							System.out.print("Player Won");
+							System.out.print("You Won");
 							break;
 						case HIT:
 							playSound(2);
-							System.out.print("Hit!");
+							System.out.print("You hit my ship!");
 							valid++;
 							break;
 						case MISS:
 							playSound(3);
-							System.out.print("Miss!");
+							System.out.print("You missed");
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
@@ -355,19 +335,19 @@ public class ShipGameGUI extends Application {
 						}
 						if (valid > 0) {
 							ShotResult AIOutcome = currentAI.shoot(playerBoard);
-							System.out.print("\n AI's turn! \n");
+							System.out.print("\nMy turn: ");
 							switch (AIOutcome) {
 							case GAME_WON:
-								System.out.print("AI Won\n");
+								System.out.print("I won!\n");
 								break;
 							case HIT:
-								System.out.print("AI Hit!\n");
+								System.out.print("I hit your ship!\n");
 								break;
 							case MISS:
-								System.out.print("AI Miss!\n");
+								System.out.print("I missed\n");
 								break;
 							case SUNK:
-								System.out.print("AI sunk your ship!\n");
+								System.out.print("I sunk your ship!\n");
 								break;
 							default:
 								break;

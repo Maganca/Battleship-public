@@ -21,7 +21,7 @@ public class RandomAI implements AIStrategy {
 				int row = generator.nextInt(game.getSize());
 				int col = generator.nextInt(game.getSize());
 				int direction = generator.nextInt(1);
-				Ship temp = new Ship(new int[] { row, col }, direction, size);
+				Ship temp = new Ship(row, col, direction, size);
 				placed = game.addShipToBoard(temp);
 			}
 		}

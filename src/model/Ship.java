@@ -15,15 +15,15 @@ public class Ship {
 		locations = new ArrayList<int[]>();
 	}
 
-	public Ship(int[] start, int direction, int size) {
+	public Ship(int row, int col, int direction, int size) {
 		locations = new ArrayList<int[]>();
 		if (direction == 0) {
 			for (int i = 0; i < size; i++) {
-				locations.add(new int[] { start[0] + i, start[1] });
+				locations.add(new int[] { row + i, col });
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				locations.add(new int[] { start[0], start[1] + i });
+				locations.add(new int[] { row, col + i });
 			}
 		}
 		health = locations.size();
@@ -36,7 +36,7 @@ public class Ship {
 	public void damage() {
 		health -= 1;
 	}
-	
+
 	public int getSize() {
 		return startingSize;
 	}
