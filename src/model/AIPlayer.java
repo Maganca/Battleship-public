@@ -4,6 +4,7 @@ import model.Board.ShotResult;
 
 public class AIPlayer {
 
+	// AIStrategy for the current selected strategy
 	private AIStrategy currentStrategy;
 
 	public AIPlayer() {
@@ -14,7 +15,7 @@ public class AIPlayer {
 	/**
 	 * Change the AI for this player.
 	 * 
-	 * @param stategy Any type that implements AIStrategy
+	 * @param strategy Any type that implements AIStrategy
 	 */
 	public void setStrategy(AIStrategy strategy) {
 		currentStrategy = strategy;
