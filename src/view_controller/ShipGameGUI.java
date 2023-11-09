@@ -1,20 +1,19 @@
 package view_controller;
 
+import java.io.File;
 import java.util.Random;
-import java.util.Scanner;
-
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import model.Board;
 import model.Board.ShotResult;
@@ -45,6 +44,54 @@ public class ShipGameGUI extends Application {
 
 	public Board playerBoard = new Board(10);
 	public Board AIBoard = new Board(10);
+
+	private static final Media SINK_NOISE = new Media(
+			new File("soundeffects/explosion-6055.mp3").toURI().toString());
+	private static final Media HIT_NOISE = new Media(
+			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI()
+					.toString());
+	private static final Media MISS_NOISE = new Media(
+			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI()
+					.toString());
+	private static final Media START_NOISE = new Media(
+			new File("soundeffects/the-notification-email-143029.mp3").toURI()
+					.toString());
+	private static final Media ERROR_NOISE = new Media(
+			new File("soundeffects/error-126627.mp3").toURI().toString());
+	private MediaPlayer soundPlayer;
+
+	/**
+	 * 1 = Sink noise 2 = Hit noise 3 = Miss noise 4 = Start noise 5 = Error
+	 * noise
+	 * 
+	 * @param soundNum
+	 */
+	private void playSound(int soundNum) {
+		switch (soundNum) {
+		case 1:
+			soundPlayer = new MediaPlayer(SINK_NOISE);
+			soundPlayer.play();
+			return;
+		case 2:
+			soundPlayer = new MediaPlayer(HIT_NOISE);
+			soundPlayer.play();
+			return;
+		case 3:
+			soundPlayer = new MediaPlayer(MISS_NOISE);
+			soundPlayer.play();
+			return;
+		case 4:
+			soundPlayer = new MediaPlayer(START_NOISE);
+			soundPlayer.play();
+			return;
+		case 5:
+			soundPlayer = new MediaPlayer(ERROR_NOISE);
+			soundPlayer.play();
+			return;
+		default:
+			return;
+		}
+	}
 
 	/**
 	 * Start
@@ -79,27 +126,14 @@ public class ShipGameGUI extends Application {
 	}
 
 	private void setupBoard() {
+		Ship twoShip = new Ship(new int[] { 0, 1 }, 0, 2);
+		AIBoard.addShipToBoard(twoShip);
 
-		int[][] twoShipCoords = new int[3][2];
-		twoShipCoords[0][0] = 1;
-		twoShipCoords[0][1] = 1;
-		twoShipCoords[1][0] = 1;
-		twoShipCoords[1][1] = 2;
-		twoShipCoords[2][0] = 1;
-		twoShipCoords[2][1] = 3;
-		Ship twoShip = new Ship(3);
-		AIBoard.addShipToBoard(twoShip, twoShipCoords);
+		Ship threeShip = new Ship(new int[] { 1, 1 }, 0, 3);
+		AIBoard.addShipToBoard(threeShip);
 
-		int[][] threeShipACoords = new int[3][2];
-		threeShipACoords[0][0] = 2;
-		threeShipACoords[0][1] = 1;
-		threeShipACoords[1][0] = 2;
-		threeShipACoords[1][1] = 2;
-		threeShipACoords[2][0] = 2;
-		threeShipACoords[2][1] = 3;
-
-		Ship threeShipA = new Ship(3);
-		playerBoard.addShipToBoard(threeShipA, threeShipACoords);
+		Ship threeShipA = new Ship(new int[] { 1, 1 }, 0, 3);
+		playerBoard.addShipToBoard(threeShipA);
 
 	}
 
@@ -119,9 +153,6 @@ public class ShipGameGUI extends Application {
 				playerGridPane.add(playerGrid[i][j], i, j);
 			}
 		}
-
-		// TODO Auto-generated method stub
-
 		vBox.getChildren().clear();
 
 		vBox.getChildren().add(AILabel);
@@ -164,27 +195,34 @@ public class ShipGameGUI extends Application {
 							AIx = random.nextInt(10);
 							AIy = random.nextInt(10);
 						}
-						ShotResult AIOutcome = playerBoard.shotAttempt(AIx, AIy);
+						ShotResult AIOutcome = playerBoard.shotAttempt(AIx,
+								AIy);
 
 						switch (playerOutcome) {
 						case GAME_WON:
+							playSound(4);
 							System.out.print("Player Won");
 							break;
 						case HIT:
+							playSound(2);
 							System.out.print("Hit!");
 							valid++;
 							break;
 						case INVALID:
+							playSound(5);
 							System.out.print("Can't do that!");
 							break;
 						case MISS:
+							playSound(3);
 							System.out.print("Miss!");
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
+							playSound(5);
 							System.out.print("Try Again\n");
 							break;
 						case SUNK:
+							playSound(1);
 							System.out.print("You sunk my ship!");
 							valid++;
 							break;
@@ -218,7 +256,8 @@ public class ShipGameGUI extends Application {
 								break;
 
 							}
-							playerGrid[AIx][AIy].setText(playerBoard.toStringCoord(AIx, AIy));
+							playerGrid[AIx][AIy].setText(
+									playerBoard.toStringCoord(AIx, AIy));
 						}
 						AIGrid[i][j].setText(AIBoard.toStringCoord(i, j));
 

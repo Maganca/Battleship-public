@@ -7,9 +7,11 @@ import java.util.ArrayList;
 public class Ship {
 	private int health;
 	public ArrayList<int[]> locations;
+	private int startingSize;
 
 	public Ship(int size) {
 		health = size;
+		startingSize = size;
 		locations = new ArrayList<int[]>();
 	}
 
@@ -33,5 +35,9 @@ public class Ship {
 
 	public void damage() {
 		health -= 1;
+	}
+	
+	public int getSize() {
+		return startingSize;
 	}
 }
