@@ -15,7 +15,6 @@ public class Board {
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
-
 		totalBoardHealth = 0;
 	}
 
@@ -38,17 +37,15 @@ public class Board {
 			// Damages ship and reduces board health
 			((Ship) theBoard[y][x]).damage();
 			totalBoardHealth--;
+			theBoard[y][x] = ShotResult.HIT;
 			if (totalBoardHealth == 0) {
 				return ShotResult.GAME_WON;
 			}
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
-				// as the ShotResult Type
-				theBoard[y][x] = ShotResult.HIT;
 				return ShotResult.SUNK;
 			}
 			// The ship did not sink so this is just a hit.
-			theBoard[y][x] = ShotResult.HIT;
 			return ShotResult.HIT;
 		}
 
@@ -66,26 +63,23 @@ public class Board {
 	/**
 	 * Adds a given ship to the board.
 	 * 
-	 * TODO: NEED TO ADD LOGIC FOR INVALID PLACEMENT
-	 * 
 	 * @param ship      to be added
 	 * @param locations int array of locations for the ship to be added in the form
 	 *                  of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
-	public boolean addShipToBoard(Ship ship, int[][] locations) {
-		for (int[] location : locations) {
+	public boolean addShipToBoard(Ship ship) {
+		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length) {
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
 				return false;
-			}
-			if (theBoard[y][x] == null) {
-				totalBoardHealth++;
-				theBoard[y][x] = ship;
-			} else {
-				return false;
-			}
+		}
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			totalBoardHealth++;
+			theBoard[y][x] = ship;
 		}
 		return true;
 	}
@@ -150,7 +144,7 @@ public class Board {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This toString includes the ships in the final string output, which should be
 	 * only visible to the current player.
