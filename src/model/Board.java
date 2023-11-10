@@ -9,7 +9,7 @@ public class Board {
 	private int totalBoardHealth;
 
 	public enum ShotResult {
-		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON;
+		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON, INVALID;
 	}
 
 	public Board(int size) {
@@ -19,8 +19,8 @@ public class Board {
 	}
 
 	/**
-	 * Attempts a new shot on the board and returns one of the resulting ShotResult
-	 * enum types
+	 * Attempts a new shot on the board and returns one of the resulting
+	 * ShotResult enum types
 	 * 
 	 * @param x
 	 * @param y
@@ -36,8 +36,9 @@ public class Board {
 			// Damages ship and reduces board health
 			((Ship) theBoard[y][x]).damage();
 			this.totalBoardHealth--;
-			if (this.totalBoardHealth == 0)
+			if (this.totalBoardHealth == 0) {
 				return ShotResult.GAME_WON;
+			}
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
 				theBoard[y][x] = ShotResult.HIT;
@@ -57,21 +58,23 @@ public class Board {
 		// The spot is neither null or a ship at this point so
 		// it has to be either a HIT or a MISS, meaning that its a repeat
 		return ShotResult.REPEAT_ATTEMPT;
+
 	}
 
 	/**
 	 * Adds a given ship to the board.
 	 * 
 	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the form
-	 *                  of [[[x1][y1]],[[x2][y2]]]
+	 * @param locations int array of locations for the ship to be added in the
+	 *                  form of [[[x1][y1]],[[x2][y2]]]
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+			if (x >= theBoard[0].length || y >= theBoard.length
+					|| theBoard[y][x] != null)
 				return false;
 		}
 		for (int[] location : ship.locations) {
@@ -116,6 +119,10 @@ public class Board {
 	 * @return Object
 	 */
 	public Object getHiddenCoord(int x, int y) {
+		// basic error checking
+		if ((x > size - 1 || x < 0) || (y > size - 1 || y < 0)) {
+			return ShotResult.INVALID;
+		}
 		if (theBoard[y][x] instanceof Ship) {
 			return null;
 		}
@@ -142,8 +149,8 @@ public class Board {
 	}
 
 	/**
-	 * This toString includes the ships in the final string output, which should be
-	 * only visible to the current player.
+	 * This toString includes the ships in the final string output, which should
+	 * be only visible to the current player.
 	 * 
 	 * @return string
 	 */

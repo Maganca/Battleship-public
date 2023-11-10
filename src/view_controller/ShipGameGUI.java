@@ -2,6 +2,8 @@ package view_controller;
 
 import model.*;
 import model.Board.*;
+import model.Player.PlayerType;
+
 import java.io.File;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -27,6 +29,11 @@ public class ShipGameGUI extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+	private Player player1;
+	private Player player2;
+	private BattleshipGame battleshipGame;
+	private int boardSize = 10;
 
 	private BorderPane borderPane = new BorderPane();
 	private VBox vBox = new VBox();
@@ -58,34 +65,40 @@ public class ShipGameGUI extends Application {
 
 	private Label credits = new Label("By: Kade, Chi, Danilo, and Ethan");
 
-	private Image Ocean_null = new Image(new File("Tiles/Ocean1.png").toURI().toString());
-	private Image Ocean_miss = new Image(new File("Tiles/Ocean2.png").toURI().toString());
-	private Image Ship_miss = new Image(new File("Tiles/Ship1.png").toURI().toString());
-	private Image Ship_hit = new Image(new File("Tiles/ShipHit1.png").toURI().toString());
+	private Image Ocean_null = new Image(
+			new File("Tiles/Ocean1.png").toURI().toString());
+	private Image Ocean_miss = new Image(
+			new File("Tiles/Ocean2.png").toURI().toString());
+	private Image Ship_miss = new Image(
+			new File("Tiles/Ship1.png").toURI().toString());
+	private Image Ship_hit = new Image(
+			new File("Tiles/ShipHit1.png").toURI().toString());
 
-	private AIPlayer currentAI = new AIPlayer();
-	private ImageView[][] playerGrid = new ImageView[10][10];
-	private ImageView[][] AIGrid = new ImageView[10][10];
+	private ImageView[][] playerGrid = new ImageView[boardSize][boardSize];
+	private ImageView[][] AIGrid = new ImageView[boardSize][boardSize];
 	private GridPane playerGridPane = new GridPane();
 	private GridPane AIGridPane = new GridPane();
-	public Board playerBoard = new Board(10);
-	public Board AIBoard = new Board(10);
 
-	private static final Media SINK_NOISE = new Media(new File("soundeffects/explosion-6055.mp3").toURI().toString());
+	private static final Media SINK_NOISE = new Media(
+			new File("soundeffects/explosion-6055.mp3").toURI().toString());
 	private static final Media HIT_NOISE = new Media(
-			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI().toString());
+			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI()
+					.toString());
 	private static final Media MISS_NOISE = new Media(
-			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI().toString());
+			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI()
+					.toString());
 	private static final Media GOOD_NOISE = new Media(
-			new File("soundeffects/the-notification-email-143029.mp3").toURI().toString());
-	private static final Media ERROR_NOISE = new Media(new File("soundeffects/error-126627.mp3").toURI().toString());
+			new File("soundeffects/the-notification-email-143029.mp3").toURI()
+					.toString());
+	private static final Media ERROR_NOISE = new Media(
+			new File("soundeffects/error-126627.mp3").toURI().toString());
 	private MediaPlayer soundPlayer;
 
 	/**
 	 * Start
 	 */
 	public void start(Stage stage) throws Exception {
-		stage.setTitle("Definitely not BattleShip");
+		stage.setTitle("Battleship");
 		layoutGUI(stage);
 		startButton.setOnAction(new Listener());
 		easyButton.setOnAction(new Listener());
@@ -101,9 +114,11 @@ public class ShipGameGUI extends Application {
 		Scene scene = new Scene(vBox, 420, 600);
 		title.setWrapText(true);
 		vBox.getChildren().addAll(title, credits, startButton);
-		vBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-		vBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
+		vBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		vBox.setBorder(new Border(new BorderStroke(Color.BLUE,
+				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
+				new Insets(10, 10, 10, 10))));
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -111,7 +126,8 @@ public class ShipGameGUI extends Application {
 	private void setupCoords() {
 		vBox.getChildren().clear();
 		Label explanation1 = new Label("Add your ships: ");
-		Label explanation2 = new Label("Verticality takes 0 for horizontal or 1 for vertical");
+		Label explanation2 = new Label(
+				"Verticality takes 0 for horizontal or 1 for vertical");
 		Label pLabel = new Label("\nPatrol Boat (length of 2): ");
 		Label sLabel = new Label("\nSubmarine (length of 3): ");
 		Label dLabel = new Label("\nDestroyer (length of 3): ");
@@ -185,27 +201,36 @@ public class ShipGameGUI extends Application {
 		buttons.add(hardButton, 10, 0);
 		buttons.setHgap(10);
 
-		vBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol, sLabel, submarine, dLabel, destroyer,
-				bLabel, battleship, cLabel, carrier, new Label("\n"), buttons);
+		vBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol,
+				sLabel, submarine, dLabel, destroyer, bLabel, battleship,
+				cLabel, carrier, new Label("\n"), buttons);
 	}
 
 	private void setupBoard() {
-		currentAI.placeShips(AIBoard);
+		battleshipGame.getPlayer1Board()
+				.addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
+						Integer.parseInt(twoYCoord.getText()),
+						Integer.parseInt(twoVert.getText()), 2));
 
-		playerBoard.addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
-				Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
+		battleshipGame.getPlayer1Board().addShipToBoard(
+				new Ship(Integer.parseInt(threeAXCoord.getText()),
+						Integer.parseInt(threeAYCoord.getText()),
+						Integer.parseInt(threeAVert.getText()), 3));
 
-		playerBoard.addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
-				Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
+		battleshipGame.getPlayer1Board().addShipToBoard(
+				new Ship(Integer.parseInt(threeBXCoord.getText()),
+						Integer.parseInt(threeBYCoord.getText()),
+						Integer.parseInt(threeBVert.getText()), 3));
 
-		playerBoard.addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
-				Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
+		battleshipGame.getPlayer1Board()
+				.addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
+						Integer.parseInt(fourYCoord.getText()),
+						Integer.parseInt(fourVert.getText()), 4));
 
-		playerBoard.addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
-				Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
-
-		playerBoard.addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
-				Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
+		battleshipGame.getPlayer1Board()
+				.addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
+						Integer.parseInt(fiveYCoord.getText()),
+						Integer.parseInt(fiveVert.getText()), 5));
 	}
 
 	private Image imageChoice(String stat) {
@@ -223,9 +248,10 @@ public class ShipGameGUI extends Application {
 	}
 
 	private void setupGrid() {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				playerGrid[i][j] = new ImageView(imageChoice(playerBoard.toStringCoord(i, j)));
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
+				playerGrid[i][j] = new ImageView(imageChoice(
+						battleshipGame.getPlayer1Board().toStringCoord(i, j)));
 				playerGrid[i][j].setFitWidth(20);
 				playerGrid[i][j].setFitHeight(20);
 				AIGrid[i][j] = new ImageView(Ocean_null);
@@ -252,90 +278,104 @@ public class ShipGameGUI extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 			Labeled item = (Labeled) arg0.getSource();
-			if (item.getText() == "Start")
+			if (item.getText() == "Start") {
 				setupCoords();
+				return;
+			}
 			if (item.getText() == "Start Easy Game") {
-				currentAI.setStrategy(new RandomAI());
-				setupBoard();
-				setupGrid();
+				player1 = new Player(PlayerType.HUMAN);
+				player2 = new Player(PlayerType.AI_RANDOM);
 			}
 			if (item.getText() == "Start Hard Game") {
-				currentAI.setStrategy(new HardAI());
-				setupBoard();
-				setupGrid();
+				player1 = new Player(PlayerType.HUMAN);
+				player2 = new Player(PlayerType.AI_HARD);
 			}
+			battleshipGame = new BattleshipGame(player1, player2, boardSize);
+			setupBoard();
+			setupGrid();
 		}
 	}
 
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent arg0) {
-			ImageView ImageClicked = (ImageView) arg0.getSource();
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 10; j++) {
-					if (AIGrid[i][j] == ImageClicked) {
-						int valid = 0;
-						ShotResult playerOutcome = AIBoard.shotAttempt(i, j);
-						switch (playerOutcome) {
-						case GAME_WON:
-							soundPlayer = new MediaPlayer(GOOD_NOISE);
-							soundPlayer.play();
-							System.out.print("You Won");
-							break;
-						case HIT:
-							soundPlayer = new MediaPlayer(HIT_NOISE);
-							soundPlayer.play();
-							System.out.print("You hit my ship!");
-							valid++;
-							break;
-						case MISS:
-							soundPlayer = new MediaPlayer(MISS_NOISE);
-							soundPlayer.play();
-							System.out.print("You missed");
-							valid++;
-							break;
-						case REPEAT_ATTEMPT:
-							soundPlayer = new MediaPlayer(ERROR_NOISE);
-							soundPlayer.play();
-							System.out.print("Try Again\n");
-							break;
-						case SUNK:
-							soundPlayer = new MediaPlayer(SINK_NOISE);
-							soundPlayer.play();
-							System.out.print("You sunk my ship!");
-							valid++;
-							break;
-						default:
-							break;
-						}
-						if (valid > 0) {
-							ShotResult AIOutcome = currentAI.shoot(playerBoard);
-							System.out.print("\nMy turn: ");
-							switch (AIOutcome) {
+			if (battleshipGame.gameStillRunning()) {
+				ImageView ImageClicked = (ImageView) arg0.getSource();
+				for (int i = 0; i < boardSize; i++) {
+					for (int j = 0; j < boardSize; j++) {
+						if (AIGrid[i][j] == ImageClicked) {
+							ShotResult playerOutcome = battleshipGame
+									.player1Turn(i, j);
+							switch (playerOutcome) {
 							case GAME_WON:
-								System.out.print("I won!\n");
+								soundPlayer = new MediaPlayer(GOOD_NOISE);
+								soundPlayer.play();
+								System.out.print("You Won");
 								break;
 							case HIT:
-								System.out.print("I hit your ship!\n");
+								soundPlayer = new MediaPlayer(HIT_NOISE);
+								soundPlayer.play();
+								System.out.print("You hit my ship!");
 								break;
 							case MISS:
-								System.out.print("I missed\n");
+								soundPlayer = new MediaPlayer(MISS_NOISE);
+								soundPlayer.play();
+								System.out.print("You missed");
+								break;
+							case REPEAT_ATTEMPT:
+								soundPlayer = new MediaPlayer(ERROR_NOISE);
+								soundPlayer.play();
+								System.out.print("Try Again\n");
 								break;
 							case SUNK:
-								System.out.print("I sunk your ship!\n");
+								soundPlayer = new MediaPlayer(SINK_NOISE);
+								soundPlayer.play();
+								System.out.print("You sunk my ship!");
 								break;
 							default:
 								break;
 							}
-							for (int k = 0; k < 10; k++) {
-								for (int l = 0; l < 10; l++) {
-									playerGrid[k][l].setImage(imageChoice(playerBoard.toStringCoord(k, l)));
+							if (playerOutcome.equals(ShotResult.HIT)
+									|| playerOutcome.equals(ShotResult.MISS)
+									|| playerOutcome.equals(ShotResult.SUNK)) {
+								ShotResult AIOutcome = battleshipGame
+										.player2Turn();
+
+								System.out.print("\nMy turn: ");
+								switch (AIOutcome) {
+								case GAME_WON:
+									System.out.print("I won!\n");
+									break;
+								case HIT:
+									System.out.print("I hit your ship!\n");
+									break;
+								case MISS:
+									System.out.print("I missed\n");
+									break;
+								case SUNK:
+									System.out.print("I sunk your ship!\n");
+									break;
+								default:
+									System.out.print(AIOutcome);
+									break;
+								}
+								for (int k = 0; k < boardSize; k++) {
+									for (int l = 0; l < boardSize; l++) {
+										playerGrid[k][l].setImage(imageChoice(
+												battleshipGame.getPlayer1Board()
+														.toStringCoord(k, l)));
+									}
 								}
 							}
+							AIGrid[i][j].setImage(imageChoice(battleshipGame
+									.getPlayer2Board().toStringCoord(i, j)));
 						}
-						AIGrid[i][j].setImage(imageChoice(AIBoard.toStringCoord(i, j)));
 					}
 				}
+			}
+			if (!battleshipGame.gameStillRunning()) {
+				// The game is done so do whatever code here
+				// System.out.print("GAME DONE!\n");
 			}
 		}
 	}

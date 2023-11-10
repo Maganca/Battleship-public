@@ -13,7 +13,6 @@ public class HardAI implements AIStrategy {
 	}
 
 	public boolean placeShips(Board game) {
-		Random generator = new Random();
 		int[] shipSizes = new int[] { 2, 3, 3, 4, 5 };
 		for (int size : shipSizes) {
 			boolean placed = false;
@@ -56,6 +55,7 @@ public class HardAI implements AIStrategy {
 		// Makes a random shot attempt because it has no idea where to shoot
 		ShotResult temp = ShotResult.REPEAT_ATTEMPT;
 		while (temp == ShotResult.REPEAT_ATTEMPT) {
+			generator = new Random();
 			int row = generator.nextInt(size);
 			int col = generator.nextInt(size);
 			temp = game.shotAttempt(row, col);
