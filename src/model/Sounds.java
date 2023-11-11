@@ -25,16 +25,18 @@ public class Sounds {
 		});
 	}
 
-	public void queueUpNextSong(Media sound) {
+	public void queueSound(Media sound) {
 		musicQueue.add(sound);
+		if (!isPlaying)
+			play();
 	}
 
 	public void play() {
-		if (!musicQueue.isEmpty() && !isPlaying) {
-			soundPlayer = new MediaPlayer(musicQueue.remove(0));
-			soundPlayer.play();
+		if (!musicQueue.isEmpty()) {
+			MediaPlayer temp = new MediaPlayer(musicQueue.remove(0));
+			temp.play();
 			isPlaying = true;
-			soundPlayer.setOnEndOfMedia(new Waiter());
+			temp.setOnEndOfMedia(new Waiter());
 		}
 	}
 

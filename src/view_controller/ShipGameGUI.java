@@ -76,14 +76,13 @@ public class ShipGameGUI extends Application {
 	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
 	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
-	private Sounds background = new Sounds();
 
 	/**
 	 * Start
 	 */
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Definitely not BattleShip");
-		background.loop(BACKGROUND);
+		soundEffect.loop(BACKGROUND);
 		layoutGUI(stage);
 		startButton.setOnAction(new Listener());
 		easyButton.setOnAction(new Listener());
@@ -276,25 +275,29 @@ public class ShipGameGUI extends Application {
 						ShotResult playerOutcome = AIBoard.shotAttempt(i, j);
 						switch (playerOutcome) {
 						case GAME_WON:
-							soundEffect.queueUpNextSong(GOOD_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(GOOD_NOISE);
 							System.out.print("You Won");
 							break;
 						case HIT:
-							soundEffect.queueUpNextSong(HIT_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(HIT_NOISE);
 							System.out.print("You hit my ship!");
 							valid++;
 							break;
 						case MISS:
-							soundEffect.queueUpNextSong(MISS_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(MISS_NOISE);
 							System.out.print("You missed");
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
-							soundEffect.queueUpNextSong(BAD_NOISE);
+							soundEffect.queueSound(BAD_NOISE);
 							System.out.print("Try Again\n");
 							break;
 						case SUNK:
-							soundEffect.queueUpNextSong(SHOOT_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
 							System.out.print("You sunk my ship!");
 							valid++;
 							break;
@@ -302,6 +305,12 @@ public class ShipGameGUI extends Application {
 							break;
 						}
 						if (valid > 0) {
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							AIGrid[i][j].setImage(imageChoice(AIBoard.toStringCoord(i, j)));
 							ShotResult AIOutcome = currentAI.shoot(playerBoard);
 							System.out.print("\nMy turn: ");
 							switch (AIOutcome) {
@@ -326,7 +335,6 @@ public class ShipGameGUI extends Application {
 								}
 							}
 						}
-						AIGrid[i][j].setImage(imageChoice(AIBoard.toStringCoord(i, j)));
 					}
 				}
 			}
