@@ -69,21 +69,21 @@ public class ShipGameGUI extends Application {
 	public Board playerBoard = new Board(10);
 	public Board AIBoard = new Board(10);
 
-	private static final Media SINK_NOISE = new Media(new File("soundeffects/explosion-6055.mp3").toURI().toString());
-	private static final Media HIT_NOISE = new Media(
-			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI().toString());
-	private static final Media MISS_NOISE = new Media(
-			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI().toString());
-	private static final Media GOOD_NOISE = new Media(
-			new File("soundeffects/the-notification-email-143029.mp3").toURI().toString());
-	private static final Media ERROR_NOISE = new Media(new File("soundeffects/error-126627.mp3").toURI().toString());
-	private MediaPlayer soundPlayer;
+	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
+	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
+	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
+	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private Sounds soundEffect = new Sounds();
+	private Sounds background;
 
 	/**
 	 * Start
 	 */
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Definitely not BattleShip");
+		background = new Sounds(BACKGROUND);
 		layoutGUI(stage);
 		startButton.setOnAction(new Listener());
 		easyButton.setOnAction(new Listener());
@@ -293,12 +293,12 @@ public class ShipGameGUI extends Application {
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
-							soundPlayer = new MediaPlayer(ERROR_NOISE);
+							soundPlayer = new MediaPlayer(BAD_NOISE);
 							soundPlayer.play();
 							System.out.print("Try Again\n");
 							break;
 						case SUNK:
-							soundPlayer = new MediaPlayer(SINK_NOISE);
+							soundPlayer = new MediaPlayer(SHOOT_NOISE);
 							soundPlayer.play();
 							System.out.print("You sunk my ship!");
 							valid++;
