@@ -14,29 +14,23 @@ public class Sounds {
 		musicQueue = new ArrayList<Media>();
 		isPlaying = false;
 	}
-	
-	public Sounds(Media song) {
-		isPlaying = false;
-		loop(song);
-	}
-	
-	private void loop(Media song) {
-		if(!isPlaying) {
-			soundPlayer = new MediaPlayer(song);
-			soundPlayer.play();
-			soundPlayer.setOnEndOfMedia(new Waiter());
-		}
+
+	public void loop(Media song) {
+		soundPlayer = new MediaPlayer(song);
+		soundPlayer.play();
+		soundPlayer.setOnEndOfMedia(new Runnable() {
+			public void run() {
+				loop(song);
+			}
+		});
 	}
 
 	public void queueUpNextSong(Media sound) {
 		musicQueue.add(sound);
 	}
 
-	/*
-	 * This function plays a song if the queue is not empty.
-	 */
 	public void play() {
-		if (!musicQueue.isEmpty()&& !isPlaying) {
+		if (!musicQueue.isEmpty() && !isPlaying) {
 			soundPlayer = new MediaPlayer(musicQueue.remove(0));
 			soundPlayer.play();
 			isPlaying = true;

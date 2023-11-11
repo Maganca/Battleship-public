@@ -76,14 +76,14 @@ public class ShipGameGUI extends Application {
 	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
 	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
-	private Sounds background;
+	private Sounds background = new Sounds();
 
 	/**
 	 * Start
 	 */
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Definitely not BattleShip");
-		background = new Sounds(BACKGROUND);
+		background.loop(BACKGROUND);
 		layoutGUI(stage);
 		startButton.setOnAction(new Listener());
 		easyButton.setOnAction(new Listener());
@@ -276,30 +276,25 @@ public class ShipGameGUI extends Application {
 						ShotResult playerOutcome = AIBoard.shotAttempt(i, j);
 						switch (playerOutcome) {
 						case GAME_WON:
-							soundPlayer = new MediaPlayer(GOOD_NOISE);
-							soundPlayer.play();
+							soundEffect.queueUpNextSong(GOOD_NOISE);
 							System.out.print("You Won");
 							break;
 						case HIT:
-							soundPlayer = new MediaPlayer(HIT_NOISE);
-							soundPlayer.play();
+							soundEffect.queueUpNextSong(HIT_NOISE);
 							System.out.print("You hit my ship!");
 							valid++;
 							break;
 						case MISS:
-							soundPlayer = new MediaPlayer(MISS_NOISE);
-							soundPlayer.play();
+							soundEffect.queueUpNextSong(MISS_NOISE);
 							System.out.print("You missed");
 							valid++;
 							break;
 						case REPEAT_ATTEMPT:
-							soundPlayer = new MediaPlayer(BAD_NOISE);
-							soundPlayer.play();
+							soundEffect.queueUpNextSong(BAD_NOISE);
 							System.out.print("Try Again\n");
 							break;
 						case SUNK:
-							soundPlayer = new MediaPlayer(SHOOT_NOISE);
-							soundPlayer.play();
+							soundEffect.queueUpNextSong(SHOOT_NOISE);
 							System.out.print("You sunk my ship!");
 							valid++;
 							break;
