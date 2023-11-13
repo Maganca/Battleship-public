@@ -79,26 +79,21 @@ public class ShipGameGUI extends Application {
 	private GridPane playerGridPane = new GridPane();
 	private GridPane AIGridPane = new GridPane();
 
-	private static final Media SINK_NOISE = new Media(
-			new File("soundeffects/explosion-6055.mp3").toURI().toString());
-	private static final Media HIT_NOISE = new Media(
-			new File("soundeffects/muffled-distant-explosion-7104.mp3").toURI()
-					.toString());
-	private static final Media MISS_NOISE = new Media(
-			new File("soundeffects/splash-by-blaukreuz-6261.mp3").toURI()
-					.toString());
-	private static final Media GOOD_NOISE = new Media(
-			new File("soundeffects/the-notification-email-143029.mp3").toURI()
-					.toString());
-	private static final Media ERROR_NOISE = new Media(
-			new File("soundeffects/error-126627.mp3").toURI().toString());
-	private MediaPlayer soundPlayer;
+	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
+	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
+	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
+	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private Sounds soundEffect = new Sounds();
+
 
 	/**
 	 * Start
 	 */
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Battleship");
+		soundEffect.loop(BACKGROUND);
 		layoutGUI(stage);
 		startButton.setOnAction(new Listener());
 		easyButton.setOnAction(new Listener());
@@ -299,45 +294,53 @@ public class ShipGameGUI extends Application {
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent arg0) {
-			if (battleshipGame.gameStillRunning()) {
-				ImageView ImageClicked = (ImageView) arg0.getSource();
-				for (int i = 0; i < boardSize; i++) {
-					for (int j = 0; j < boardSize; j++) {
-						if (AIGrid[i][j] == ImageClicked) {
-							ShotResult playerOutcome = battleshipGame
+    if (battleshipGame.gameStillRunning()) {
+			ImageView ImageClicked = (ImageView) arg0.getSource();
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					if (AIGrid[i][j] == ImageClicked) {
+						int valid = 0;
+						ShotResult playerOutcome = battleshipGame
 									.player1Turn(i, j);
-							switch (playerOutcome) {
-							case GAME_WON:
-								soundPlayer = new MediaPlayer(GOOD_NOISE);
-								soundPlayer.play();
-								System.out.print("You Won");
-								break;
-							case HIT:
-								soundPlayer = new MediaPlayer(HIT_NOISE);
-								soundPlayer.play();
-								System.out.print("You hit my ship!");
-								break;
-							case MISS:
-								soundPlayer = new MediaPlayer(MISS_NOISE);
-								soundPlayer.play();
-								System.out.print("You missed");
-								break;
-							case REPEAT_ATTEMPT:
-								soundPlayer = new MediaPlayer(ERROR_NOISE);
-								soundPlayer.play();
-								System.out.print("Try Again\n");
-								break;
-							case SUNK:
-								soundPlayer = new MediaPlayer(SINK_NOISE);
-								soundPlayer.play();
-								System.out.print("You sunk my ship!");
-								break;
-							default:
-								break;
-							}
+						switch (playerOutcome) {
+						case GAME_WON:
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(GOOD_NOISE);
+							System.out.print("You Won");
+							break;
+						case HIT:
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(HIT_NOISE);
+							System.out.print("You hit my ship!");
+							valid++;
+							break;
+						case MISS:
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(MISS_NOISE);
+							System.out.print("You missed");
+							valid++;
+							break;
+						case REPEAT_ATTEMPT:
+							soundEffect.queueSound(BAD_NOISE);
+							System.out.print("Try Again\n");
+							break;
+						case SUNK:
+							soundEffect.queueSound(SHOOT_NOISE);
+							soundEffect.queueSound(SHOOT_NOISE);
+							System.out.print("You sunk my ship!");
+							valid++;
+							break;
+						default:
+							break;
+						}
 							if (playerOutcome.equals(ShotResult.HIT)
 									|| playerOutcome.equals(ShotResult.MISS)
 									|| playerOutcome.equals(ShotResult.SUNK)) {
+                try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 								ShotResult AIOutcome = battleshipGame
 										.player2Turn();
 
