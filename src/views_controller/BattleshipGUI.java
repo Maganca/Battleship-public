@@ -40,6 +40,11 @@ public class BattleshipGUI extends Application {
 		stage.setResizable(false);
 	}
 
+	/**
+	 * Initializes the menu bar that is always on top of the window
+	 * 
+	 * @return
+	 */
 	private MenuBar initMenuBar() {
 		MenuBar menuBar = new MenuBar();
 		Menu options = new Menu("Options");
@@ -96,6 +101,12 @@ public class BattleshipGUI extends Application {
 
 	}
 
+	/**
+	 * Sets up all views needed for the program. Also handles the flow of the
+	 * program by managing the button event handles for each page.
+	 *
+	 * If one wanted to add a new page to the program, this is where you do it.
+	 */
 	private void setupAllViews() {
 		startView = new StartScreenView();
 		startView.startButton.setOnAction(mouseEvent -> {
