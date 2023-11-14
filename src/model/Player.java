@@ -1,18 +1,66 @@
 package model;
 
+import model.Board.ShotResult;
+
 public class Player {
 	PlayerType playerType;
 	int wins;
 	int losses;
+	private Board board;
+	private int size;
 
 	public enum PlayerType {
 		HUMAN, AI_HARD, AI_RANDOM, LAN_PLAYER1, LAN_PLAYER2;
 	}
 
-	public Player(PlayerType player) {
+	public Player(PlayerType player, int size) {
 		this.wins = 0;
 		this.losses = 0;
 		this.playerType = player;
+		this.size = size;
+		board = new Board(size);
+
+		// Automatically places ships if player is computer
+		if (playerType.equals(PlayerType.AI_HARD)) {
+			HardAI ai = new HardAI();
+			ai.placeShips(board);
+		}
+		if (playerType.equals(PlayerType.AI_RANDOM)) {
+			RandomAI ai = new RandomAI();
+			ai.placeShips(board);
+		}
+	}
+
+	public ShotResult takeShot(Player opponent, int x, int y) {
+		if (playerType.equals(PlayerType.AI_RANDOM)
+				|| playerType.equals(PlayerType.AI_HARD)) {
+			return ShotResult.INVALID;
+		}
+		return opponent.getBoard().shotAttempt(x, y);
+	}
+
+	public ShotResult takeShot(Player opponent) {
+		switch (playerType) {
+		case AI_RANDOM:
+			RandomAI randomAI = new RandomAI();
+			return randomAI.shoot(opponent.getBoard());
+		case AI_HARD:
+			HardAI hardAI = new HardAI();
+			return hardAI.shoot(opponent.getBoard());
+		default:
+			return ShotResult.INVALID;
+		}
+	}
+
+	public boolean isAlive() {
+		if (board.getBoardHealth() == 0 || board.getBoardHealth() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	public int getBoardSize() {
+		return size;
 	}
 
 	public PlayerType getType() {
@@ -33,5 +81,9 @@ public class Player {
 
 	public int getLosses() {
 		return losses;
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 }
