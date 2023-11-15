@@ -1,6 +1,8 @@
 // Kade Dean
 package views_controller;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -8,8 +10,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
 import javafx.stage.Stage;
 import model.Player;
+import model.Sounds;
 import model.Player.PlayerType;
 
 public class BattleshipGUI extends Application {
@@ -21,12 +25,16 @@ public class BattleshipGUI extends Application {
 	private StartScreenView startView;
 	private ShipSelectionView shipSelectionView;
 	private ShipGameView shipGameView;
+	private static final Media BACKGROUND = new Media(
+			new File("soundeffects/hit.mp3").toURI().toString());
+	private Sounds soundEffect = new Sounds();
 
 	private BorderPane window;
 	public static final int width = 700;
 	public static final int height = 600;
 
 	public void start(Stage stage) {
+		soundEffect.loop(BACKGROUND);
 		stage.setTitle("Battleship");
 		window = new BorderPane();
 		Scene scene = new Scene(window, width, height);
