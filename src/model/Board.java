@@ -2,6 +2,9 @@
 // Kade Dean
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Board.java class that handles all battleship board functions.
  */
@@ -9,7 +12,9 @@ public class Board {
 	private Object[][] theBoard; // Main board object
 	private int size; // Board size
 	private int totalBoardHealth; // Aggregate health of all ships on board
-
+	
+	private List<Ship> shipList = new ArrayList<>();
+	
 	/**
 	 * Shot result enum types.
 	 */
@@ -27,7 +32,7 @@ public class Board {
 		theBoard = new Object[size][size];
 		this.totalBoardHealth = 0;
 	}
-
+	
 	/**
 	 * Attempts a new shot on the board and returns one of the resulting ShotResult
 	 * enum types
@@ -90,6 +95,7 @@ public class Board {
 			this.totalBoardHealth++;
 			theBoard[y][x] = ship;
 		}
+		shipList.add(ship);
 		return true;
 	}
 
@@ -119,7 +125,9 @@ public class Board {
 	public int getBoardHealth() {
 		return this.totalBoardHealth;
 	}
-
+	public List<Ship> getShipList(){
+		return shipList;
+	}
 	/**
 	 * This returns an obfuscated object of a board at x, y
 	 * 

@@ -12,6 +12,10 @@ public class Ship {
 	private int health;
 	public ArrayList<int[]> locations;
 	private int startingSize;
+	private int[] start;
+	private int[] end;
+	
+	
 
 	/**
 	 * Ship object constructor
@@ -36,16 +40,28 @@ public class Ship {
 		locations = new ArrayList<int[]>();
 		if (direction == 0) {
 			for (int i = 0; i < size; i++) {
+				if (i == 0) {
+					start = new int[] { row + i, col };
+				}
+				else if (i == size-1) {
+					end = new int[] { row + i, col };
+				}
 				locations.add(new int[] { row + i, col });
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
+				if (i == 0) {
+					start = new int[] { row, col + i };
+				}
+				else if (i == size-1) {
+					end = new int[] { row, col + i };
+				}
 				locations.add(new int[] { row, col + i });
 			}
 		}
 		health = locations.size();
 	}
-
+   
 	/**
 	 * gets the ship's current health
 	 * 
@@ -70,4 +86,5 @@ public class Ship {
 	public int getSize() {
 		return startingSize;
 	}
+	
 }

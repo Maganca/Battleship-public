@@ -93,9 +93,9 @@ public class BattleshipGUI extends Application {
 		});
 
 		multiplayerSetupView = new MultiplayerSetupView();
-		startView.multiplayerButton.setOnAction(mouseEvent -> {
-			window.setCenter(multiplayerSetupView);
-		});
+		//startView.multiplayerButton.setOnAction(mouseEvent -> {
+		//	window.setCenter(multiplayerSetupView);
+		//});
 
 		shipSelectionView = new ShipSelectionView();
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {

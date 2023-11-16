@@ -1,6 +1,7 @@
 package views_controller;
 
 import java.io.File;
+import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -18,9 +18,11 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import model.Player;
+import model.Ship;
 import model.Sounds;
 import model.Board.ShotResult;
 
@@ -33,21 +35,78 @@ public class ShipGameView extends BorderPane {
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
-	private Image Ocean_null = new Image(new File("Tiles/Ocean1.png").toURI().toString());
-	private Image Ocean_miss = new Image(new File("Tiles/Ocean2.png").toURI().toString());
-	private Image Ship_miss = new Image(new File("Tiles/Ship1.png").toURI().toString());
-	private Image Ship_hit = new Image(new File("Tiles/ShipHit1.png").toURI().toString());
+	
+	private List<Ship> shipList1;
+	private List<Ship> shipList2;
+	
+	private Image ocean = new Image(
+			new File("Tiles/Oceangif1.gif").toURI().toString());
+	
+	private Image shipha = new Image(
+			new File("Tiles/shipha.gif").toURI().toString());
+	private Image shiphb = new Image(
+			new File("Tiles/shiphb.gif").toURI().toString());
+	private Image shiphc = new Image(
+			new File("Tiles/shiphc.gif").toURI().toString());
+	private Image shipva = new Image(
+			new File("Tiles/shipha.gif").toURI().toString());
+	private Image shipvb = new Image(
+			new File("Tiles/shiphb.gif").toURI().toString());
+	private Image shipvc = new Image(
+			new File("Tiles/shiphc.gif").toURI().toString());
+	
+	private Image hitha = new Image(
+			new File("Tiles/hitha.gif").toURI().toString());
+	private Image hithb = new Image(
+			new File("Tiles/hithb.gif").toURI().toString());
+	private Image hithc = new Image(
+			new File("Tiles/hithc.gif").toURI().toString());
+	private Image hitva = new Image(
+			new File("Tiles/hitva").toURI().toString());
+	private Image hitvb = new Image(
+			new File("Tiles/hitvb.gif").toURI().toString());
+	private Image hitvc = new Image(
+			new File("Tiles/hitvc.gif").toURI().toString());
+	
+	private Image sunkha = new Image(
+			new File("Tiles/sunkha.png").toURI().toString());
+	private Image sunkhb = new Image(
+			new File("Tiles/sunkhb.png").toURI().toString());
+	private Image sunkhc = new Image(
+			new File("Tiles/sunkhc.png").toURI().toString());
+	private Image sunkva = new Image(
+			new File("Tiles/sunkva.png").toURI().toString());
+	private Image sunkvb = new Image(
+			new File("Tiles/sunkvb.png").toURI().toString());
+	private Image sunkvc = new Image(
+			new File("Tiles/sunkvc.png").toURI().toString());
+	
+	private Image miss = new Image(
+			new File("Tiles/pmiss.gif").toURI().toString());
+	private Image hit = new Image(
+			new File("Tiles/phit.gif").toURI().toString());
+	private Image background = new Image(
+			new File("Tiles/background.png").toURI().toString());
 
-	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
-	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
-	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
-	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
-	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media SHOOT_NOISE = new Media(
+			new File("soundeffects/shoot.mp3").toURI().toString());
+	private static final Media HIT_NOISE = new Media(
+			new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media MISS_NOISE = new Media(
+			new File("soundeffects/miss.mp3").toURI().toString());
+	private static final Media GOOD_NOISE = new Media(
+			new File("soundeffects/good.mp3").toURI().toString());
+	private static final Media BAD_NOISE = new Media(
+			new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(
+			new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	public ShipGameView(Player player1, Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
+		shipList1 = player1.getBoard().getShipList();
+		shipList2 = player1.getBoard().getShipList();
 		initializePanel();
 	}
 
@@ -57,10 +116,11 @@ public class ShipGameView extends BorderPane {
 		player2Grid = new ImageView[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
-				player1Grid[i][j] = new ImageView(imageChoice(player1.getBoard().toStringCoord(i, j)));
+				player1Grid[i][j] = new ImageView(
+						imageChoice(player1.getBoard().toStringCoord(i, j)));
 				player1Grid[i][j].setFitWidth(20);
 				player1Grid[i][j].setFitHeight(20);
-				player2Grid[i][j] = new ImageView(Ocean_null);
+				player2Grid[i][j] = new ImageView(ocean);
 				player2Grid[i][j].setFitWidth(20);
 				player2Grid[i][j].setFitHeight(20);
 				player2Grid[i][j].setOnMouseClicked(new ShotListener());
@@ -78,26 +138,36 @@ public class ShipGameView extends BorderPane {
 		ourVBox.getChildren().add(player2GridPane);
 		ourVBox.getChildren().add(new Label("\nYour Board: "));
 		ourVBox.getChildren().add(player1GridPane);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundImage(background, null, null,null,null)));
+		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
+				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
+				new Insets(10, 10, 10, 10))));
 
 		this.setCenter(ourVBox);
 	}
-
+	/**
+	 * determines ship image status for players
+	 * @param stat
+	 * @param ship
+	 * @return
+	 */
 	private Image imageChoice(String stat) {
 		if (stat.equals("H")) {
-			return Ship_hit;
+			return hit;
 		} else if (stat.equals("M")) {
-			return Ocean_miss;
+			return miss;
 		} else if (stat.equals("S")) {
-			return Ship_miss;
+			return hit;
 		} else if (stat.equals("_")) {
-			return Ocean_null;
+			return ocean;
 		} else {
 			return null;
 		}
 	}
-
+	
+	private Image playerImageChoice;
+	
+	
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent arg0) {
@@ -107,7 +177,8 @@ public class ShipGameView extends BorderPane {
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 10; j++) {
 						if (player2Grid[i][j] == ImageClicked) {
-							ShotResult player1Outcome = player1.takeShot(player2, i, j);
+							ShotResult player1Outcome = player1
+									.takeShot(player2, i, j);
 							switch (player1Outcome) {
 							case GAME_WON:
 								soundEffect.queueSound(SHOOT_NOISE);
@@ -136,9 +207,11 @@ public class ShipGameView extends BorderPane {
 							default:
 								break;
 							}
-							if (player1Outcome.equals(ShotResult.HIT) || player1Outcome.equals(ShotResult.MISS)
+							if (player1Outcome.equals(ShotResult.HIT)
+									|| player1Outcome.equals(ShotResult.MISS)
 									|| player1Outcome.equals(ShotResult.SUNK)) {
-								ShotResult AIOutcome = player2.takeShot(player1);
+								ShotResult AIOutcome = player2
+										.takeShot(player1);
 
 								System.out.print("\nMy turn: ");
 								switch (AIOutcome) {
@@ -160,11 +233,14 @@ public class ShipGameView extends BorderPane {
 								}
 								for (int k = 0; k < boardSize; k++) {
 									for (int l = 0; l < boardSize; l++) {
-										player1Grid[k][l].setImage(imageChoice(player1.getBoard().toStringCoord(k, l)));
+										player1Grid[k][l].setImage(
+												imageChoice(player1.getBoard()
+														.toStringCoord(k, l)));
 									}
 								}
 							}
-							player2Grid[i][j].setImage(imageChoice(player2.getBoard().toStringCoord(i, j)));
+							player2Grid[i][j].setImage(imageChoice(
+									player2.getBoard().toStringCoord(i, j)));
 						}
 					}
 				}

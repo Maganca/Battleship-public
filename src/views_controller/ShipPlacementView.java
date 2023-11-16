@@ -1,5 +1,7 @@
 package views_controller;
 
+import java.util.List;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,6 +19,7 @@ public class ShipPlacementView extends GridPane {
     private int boardSize = 10;
     private Button shuffleButton;
     private Button startGameButton;
+    private List<Ship> shipList;
 
     public ShipPlacementView() {
         initialize();
