@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -82,5 +83,15 @@ public class ShipPlacement {
             Ship ship = new Ship(row, col, selectedPlacement[2], size);
             board.addShipToBoard(ship);
         }
+    }
+
+    public static void shuffleShips(Board board) {
+        Random random = new Random();
+
+        // Remove existing ships from the board
+        board.clearBoard();
+
+        // Place ships randomly on the board
+        randomlyPlaceRemainingShips(board);
     }
 }
