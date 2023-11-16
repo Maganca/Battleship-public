@@ -33,27 +33,17 @@ public class ShipGameView extends BorderPane {
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
-	private Image Ocean_null = new Image(
-			new File("Tiles/Ocean1.png").toURI().toString());
-	private Image Ocean_miss = new Image(
-			new File("Tiles/Ocean2.png").toURI().toString());
-	private Image Ship_miss = new Image(
-			new File("Tiles/Ship1.png").toURI().toString());
-	private Image Ship_hit = new Image(
-			new File("Tiles/ShipHit1.png").toURI().toString());
+	private Image Ocean_null = new Image(new File("Tiles/Ocean1.png").toURI().toString());
+	private Image Ocean_miss = new Image(new File("Tiles/Ocean2.png").toURI().toString());
+	private Image Ship_miss = new Image(new File("Tiles/Ship1.png").toURI().toString());
+	private Image Ship_hit = new Image(new File("Tiles/ShipHit1.png").toURI().toString());
 
-	private static final Media SHOOT_NOISE = new Media(
-			new File("soundeffects/shoot.mp3").toURI().toString());
-	private static final Media HIT_NOISE = new Media(
-			new File("soundeffects/hit.mp3").toURI().toString());
-	private static final Media MISS_NOISE = new Media(
-			new File("soundeffects/miss.mp3").toURI().toString());
-	private static final Media GOOD_NOISE = new Media(
-			new File("soundeffects/good.mp3").toURI().toString());
-	private static final Media BAD_NOISE = new Media(
-			new File("soundeffects/bad.mp3").toURI().toString());
-	private static final Media BACKGROUND = new Media(
-			new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
+	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
+	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
+	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	public ShipGameView(Player player1, Player player2) {
@@ -68,8 +58,7 @@ public class ShipGameView extends BorderPane {
 		player2Grid = new ImageView[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
-				player1Grid[i][j] = new ImageView(
-						imageChoice(player1.getBoard().toStringCoord(i, j)));
+				player1Grid[i][j] = new ImageView(imageChoice(player1.getBoard().toStringCoord(i, j)));
 				player1Grid[i][j].setFitWidth(20);
 				player1Grid[i][j].setFitHeight(20);
 				player2Grid[i][j] = new ImageView(Ocean_null);
@@ -90,11 +79,9 @@ public class ShipGameView extends BorderPane {
 		ourVBox.getChildren().add(player2GridPane);
 		ourVBox.getChildren().add(new Label("\nYour Board: "));
 		ourVBox.getChildren().add(player1GridPane);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
-				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
-				new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
 
 		this.setCenter(ourVBox);
 	}
@@ -122,8 +109,7 @@ public class ShipGameView extends BorderPane {
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 10; j++) {
 						if (player2Grid[i][j] == ImageClicked) {
-							ShotResult player1Outcome = player1
-									.takeShot(player2, i, j);
+							ShotResult player1Outcome = player1.takeShot(player2, i, j);
 							switch (player1Outcome) {
 							case GAME_WON:
 								soundEffect.queueSound(SHOOT_NOISE);
@@ -152,11 +138,9 @@ public class ShipGameView extends BorderPane {
 							default:
 								break;
 							}
-							if (player1Outcome.equals(ShotResult.HIT)
-									|| player1Outcome.equals(ShotResult.MISS)
+							if (player1Outcome.equals(ShotResult.HIT) || player1Outcome.equals(ShotResult.MISS)
 									|| player1Outcome.equals(ShotResult.SUNK)) {
-								ShotResult AIOutcome = player2
-										.takeShot(player1);
+								ShotResult AIOutcome = player2.takeShot(player1);
 
 								System.out.print("\nMy turn: ");
 								switch (AIOutcome) {
@@ -178,14 +162,11 @@ public class ShipGameView extends BorderPane {
 								}
 								for (int k = 0; k < boardSize; k++) {
 									for (int l = 0; l < boardSize; l++) {
-										player1Grid[k][l].setImage(
-												imageChoice(player1.getBoard()
-														.toStringCoord(k, l)));
+										player1Grid[k][l].setImage(imageChoice(player1.getBoard().toStringCoord(k, l)));
 									}
 								}
 							}
-							player2Grid[i][j].setImage(imageChoice(
-									player2.getBoard().toStringCoord(i, j)));
+							player2Grid[i][j].setImage(imageChoice(player2.getBoard().toStringCoord(i, j)));
 						}
 					}
 				}

@@ -12,9 +12,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
-import model.Player;
-import model.Sounds;
-import model.Player.PlayerType;
+import model.*;
+import model.Player.*;
 
 public class BattleshipGUI extends Application {
 
@@ -26,8 +25,7 @@ public class BattleshipGUI extends Application {
 	private ShipSelectionView shipSelectionView;
 	private ShipGameView shipGameView;
 	private MultiplayerSetupView multiplayerSetupView;
-	private static final Media BACKGROUND = new Media(
-			new File("soundeffects/hit.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	private BorderPane window;
@@ -101,14 +99,12 @@ public class BattleshipGUI extends Application {
 
 		shipSelectionView = new ShipSelectionView();
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(
-					shipSelectionView.getConstructedPlayer(),
+			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_EASY, 10));
 			setViewTo(shipGameView);
 		});
 		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(
-					shipSelectionView.getConstructedPlayer(),
+			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_NORMAL, 10));
 			setViewTo(shipGameView);
 		});

@@ -29,13 +29,10 @@ public class StartScreenView extends BorderPane {
 
 	private void initializePanel() {
 		title.setWrapText(true);
-		ourVBox.getChildren().addAll(title, credits, startButton,
-				multiplayerButton);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
-				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
-				new Insets(10, 10, 10, 10))));
+		ourVBox.getChildren().addAll(title, credits, startButton, multiplayerButton);
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
 		this.setCenter(ourVBox);
 	}
 }

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Random;
-
 import model.Board.ShotResult;
 
 public class HardAI implements AIStrategy {
@@ -57,7 +56,7 @@ public class HardAI implements AIStrategy {
 		// Makes a random shot attempt because it has no idea where to shoot
 		ShotResult temp = ShotResult.REPEAT_ATTEMPT;
 		while (temp == ShotResult.REPEAT_ATTEMPT) {
-			temp = game.shotAttempt(last[0]+1, last[1]);
+			temp = game.shotAttempt(last[0] + 1, last[1]);
 		}
 		return temp;
 	}
