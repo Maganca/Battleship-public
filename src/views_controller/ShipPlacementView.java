@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Board;
 import model.Ship;
+import model.ShipPlacement;
 
 public class ShipPlacementView extends GridPane {
 
@@ -31,16 +32,17 @@ public class ShipPlacementView extends GridPane {
 
     private void setupBoard() {
         board = new Board(boardSize);
-        // Add code here to show light pink coordinates for ship placement prediction
-        // You may use rectangles or other visual elements to represent the coordinates
-        // Set the color to light pink or any color you prefer
-        // Example:
-        showPredictionCoordinates(5, 5, 3);
+        showPredictionCoordinates(5, 5, 3); // Example prediction, you can customize this
         this.getChildren().addAll(getBoardVisual());
     }
 
     private void showPredictionCoordinates(int row, int col, int size) {
-        // Add code here to show light pink coordinates for ship placement prediction
+        // Visualize ship placement predictions (light pink color)
+        for (int i = 0; i < size; i++) {
+            Rectangle cell = new Rectangle(30, 30);
+            cell.setFill(Color.LIGHTPINK);
+            this.add(cell, col + i, row);
+        }
     }
 
     private Rectangle[][] getBoardVisual() {
@@ -66,19 +68,30 @@ public class ShipPlacementView extends GridPane {
     }
 
     private void shuffleShips() {
-        // Add code here to shuffle ships randomly on the board
-        model.ShipPlacement.randomlyPlaceRemainingShips(board);
-        // Update the visual representation of the board
+        ShipPlacement.randomlyPlaceRemainingShips(board);
         updateBoardVisual();
     }
 
     private void startGame() {
+    	// Create a new ShipGameView with the current board and any other necessary parameters
+        ShipGameView shipGameView = new ShipGameView();
+        // Create a new Scene with the ShipGameView
+        Scene scene = new Scene(shipGameView, 800, 600);  // Adjust width and height as needed
+        // Get the current window (Stage)
+        Stage stage = (Stage) getScene().getWindow();
+        // Set the scene to the new ShipGameView
+        stage.setScene(scene);
+        // Show the stage
+        stage.show();
     }
 
     private void updateBoardVisual() {
-        // Add code here to update the visual representation of the board
-        // You may change the color of rectangles to represent ship positions
-        // Example:
+        // Update the visual representation of the board
+        // Reset the board
+        this.getChildren().clear();
+        this.getChildren().addAll(getBoardVisual());
+
+        // Visualize placed ships (dark gray color)
         for (Ship ship : board.getShips()) {
             for (int[] location : ship.locations) {
                 int row = location[0];
