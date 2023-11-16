@@ -4,17 +4,34 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * Ship.java class which represents a single ship to be placed on a board
+ * object.
+ */
 public class Ship {
 	private int health;
 	public ArrayList<int[]> locations;
 	private int startingSize;
 
+	/**
+	 * Ship object constructor
+	 * 
+	 * @param size total size of ship
+	 */
 	public Ship(int size) {
 		health = size;
 		startingSize = size;
 		locations = new ArrayList<int[]>();
 	}
 
+	/**
+	 * Ship object constructor
+	 * 
+	 * @param row       root coordinate for ship to be placed
+	 * @param col       root coordinate for ship to be placed
+	 * @param direction for ship to go
+	 * @param size      how far for ship to expand
+	 */
 	public Ship(int row, int col, int direction, int size) {
 		locations = new ArrayList<int[]>();
 		if (direction == 0) {
@@ -29,14 +46,27 @@ public class Ship {
 		health = locations.size();
 	}
 
+	/**
+	 * gets the ship's current health
+	 * 
+	 * @return the ship's current health
+	 */
 	public int getHealth() {
 		return health;
 	}
 
+	/**
+	 * Damages a ship
+	 */
 	public void damage() {
 		health -= 1;
 	}
 
+	/**
+	 * gets the ship's starting size
+	 * 
+	 * @return the ship's starting size
+	 */
 	public int getSize() {
 		return startingSize;
 	}

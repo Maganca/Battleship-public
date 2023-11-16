@@ -25,6 +25,7 @@ public class BattleshipGUI extends Application {
 	private StartScreenView startView;
 	private ShipSelectionView shipSelectionView;
 	private ShipGameView shipGameView;
+	private MultiplayerSetupView multiplayerSetupView;
 	private static final Media BACKGROUND = new Media(
 			new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
@@ -68,37 +69,9 @@ public class BattleshipGUI extends Application {
 		// TODO: Get menu buttons working
 		// EVENT HANDLING FOR ALL MENU BUTTONS
 		// Switches view to textArea without restarting the current game
-//		textArea.setOnAction(mouseEvent -> {
-//			activeView = 0;
-//			setViewTo(textAreaView);
-//		});
-//		// Switches view to button without restarting the current game
-//		button.setOnAction(mouseEvent -> {
-//			activeView = 2;
-//			setViewTo(buttonView);
-//		});
-//
-//		// Switches view to drawing without restarting the current game
-//		drawing.setOnAction(mouseEvent -> {
-//			activeView = 1;
-//			setViewTo(drawingView);
-//		});
-//
 //		// Starts a new game
 //		startNewGame.setOnAction(mouseEvent -> {
 //			startGameAndViews();
-//		});
-//
-//		// Switches AI to random without restarting the current game
-//		randomMenu.setOnAction(mouseEvent -> {
-//			useHardAI = false;
-//			theGame.setComputerPlayerStrategy(new RandomAI());
-//		});
-//
-//		// Switches AI to intermediate without restarting the current game
-//		intermediateMenu.setOnAction(mouseEvent -> {
-//			useHardAI = true;
-//			theGame.setComputerPlayerStrategy(new IntermediateAI());
 //		});
 
 		MenuItem startNewGame = new MenuItem("New Game");
@@ -119,6 +92,11 @@ public class BattleshipGUI extends Application {
 		startView = new StartScreenView();
 		startView.startButton.setOnAction(mouseEvent -> {
 			window.setCenter(shipSelectionView);
+		});
+
+		multiplayerSetupView = new MultiplayerSetupView();
+		startView.multiplayerButton.setOnAction(mouseEvent -> {
+			window.setCenter(multiplayerSetupView);
 		});
 
 		shipSelectionView = new ShipSelectionView();
