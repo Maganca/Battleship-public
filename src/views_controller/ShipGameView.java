@@ -86,10 +86,7 @@ public class ShipGameView extends BorderPane {
 	private void initializePanel() {
 		nextButton.setOnAction(mouseEvent -> {
 			this.setCenter(null);
-			if (!(player1.isAlive()))
-				this.setCenter(new ShipWinView(1));
-			else
-				this.setCenter(new ShipWinView(0));
+			this.setCenter(new ShipWinView(player1.isAlive()));
 		});
 		int boardSize = player1.getBoardSize();
 		player1Grid = new ImageView[boardSize][boardSize];
