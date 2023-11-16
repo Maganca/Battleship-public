@@ -53,14 +53,10 @@ public class ShipSelectionView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
-				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
-				new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
 		Label explanation1 = new Label("Add your ships: ");
-		Label explanation2 = new Label(
-				"Verticality takes 0 for horizontal or 1 for vertical");
+		Label explanation2 = new Label("Verticality takes 0 for horizontal or 1 for vertical");
 		Label pLabel = new Label("\nPatrol Boat (length of 2): ");
 		Label sLabel = new Label("\nSubmarine (length of 3): ");
 		Label dLabel = new Label("\nDestroyer (length of 3): ");
@@ -134,37 +130,26 @@ public class ShipSelectionView extends BorderPane {
 		buttons.add(hardButton, 10, 0);
 		buttons.setHgap(10);
 
-		ourVBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol,
-				sLabel, submarine, dLabel, destroyer, bLabel, battleship,
-				cLabel, carrier, new Label("\n"), buttons);
+		ourVBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol, sLabel, submarine, dLabel, destroyer,
+				bLabel, battleship, cLabel, carrier, new Label("\n"), buttons);
 		this.setCenter(ourVBox);
 	}
 
 	public Player getConstructedPlayer() {
-		player.getBoard()
-				.addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
-						Integer.parseInt(twoYCoord.getText()),
-						Integer.parseInt(twoVert.getText()), 2));
+		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
+				Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
 
-		player.getBoard().addShipToBoard(
-				new Ship(Integer.parseInt(threeAXCoord.getText()),
-						Integer.parseInt(threeAYCoord.getText()),
-						Integer.parseInt(threeAVert.getText()), 3));
+		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
+				Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
 
-		player.getBoard().addShipToBoard(
-				new Ship(Integer.parseInt(threeBXCoord.getText()),
-						Integer.parseInt(threeBYCoord.getText()),
-						Integer.parseInt(threeBVert.getText()), 3));
+		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
+				Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
 
-		player.getBoard()
-				.addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
-						Integer.parseInt(fourYCoord.getText()),
-						Integer.parseInt(fourVert.getText()), 4));
+		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
+				Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
 
-		player.getBoard()
-				.addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
-						Integer.parseInt(fiveYCoord.getText()),
-						Integer.parseInt(fiveVert.getText()), 5));
+		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
+				Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
 		return player;
 	}
 }

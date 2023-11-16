@@ -27,11 +27,8 @@ public class MultiplayerSetupView extends BorderPane {
 
 	private void initializePanel() {
 		ourVBox.getChildren().addAll(title, hostButton, joinButton);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
-				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
-				new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
 		this.setCenter(ourVBox);
 
 	}

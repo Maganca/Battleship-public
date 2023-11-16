@@ -3,15 +3,7 @@ package views_controller;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class StartScreenView extends BorderPane {
@@ -30,9 +22,8 @@ public class StartScreenView extends BorderPane {
 	private void initializePanel() {
 		title.setWrapText(true);
 		ourVBox.getChildren().addAll(title, credits, startButton, multiplayerButton);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
 		this.setCenter(ourVBox);
 	}
 }

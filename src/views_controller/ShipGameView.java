@@ -79,9 +79,8 @@ public class ShipGameView extends BorderPane {
 		ourVBox.getChildren().add(player2GridPane);
 		ourVBox.getChildren().add(new Label("\nYour Board: "));
 		ourVBox.getChildren().add(player1GridPane);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
 
 		this.setCenter(ourVBox);
 	}
