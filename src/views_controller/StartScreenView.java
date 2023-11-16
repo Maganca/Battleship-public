@@ -15,15 +15,14 @@ public class StartScreenView extends BorderPane {
 
 	private VBox ourVBox = new VBox();
 	public Button startButton = new Button("Start");
+	public Button infoButton = new Button("Info");
 	public Button multiplayerButton = new Button("Multiplayer");
-	private Image title = new Image(
-			new File("Tiles/background.gif").toURI().toString());
-	private Image background = new Image(
-			new File("Tiles/background.png").toURI().toString());
+	private Image title = new Image(new File("Tiles/background.gif").toURI().toString());
+	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 	private Label credits = new Label("By: Kade, Chi, Danilo, and Ethan");
-	
-	private ImageView titleView =  new ImageView(title);
-	
+
+	private ImageView titleView = new ImageView(title);
+
 	public StartScreenView() {
 		initializePanel();
 	}
@@ -31,10 +30,10 @@ public class StartScreenView extends BorderPane {
 	private void initializePanel() {
 		titleView.setScaleX(0.5);
 		titleView.setScaleY(0.5);
-		
-		ourVBox.getChildren().addAll(titleView, credits, startButton, multiplayerButton);
+
+		ourVBox.getChildren().addAll(titleView, credits, startButton, infoButton, multiplayerButton);
 		ourVBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
-		
+
 		ourVBox.setAlignment(Pos.CENTER);
 		this.setCenter(ourVBox);
 	}
