@@ -73,9 +73,6 @@ public class ShipPlacementView extends GridPane {
     }
 
     private void startGame() {
-        // Add code here to transition to the game view
-        // You may want to pass the board object to the game view
-        // Example: new ShipGameView(board);
     }
 
     private void updateBoardVisual() {
