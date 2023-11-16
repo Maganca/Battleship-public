@@ -62,6 +62,38 @@ public class Board {
 	}
 
 	// Chi thieu
+	public boolean addShipToBoard(Ship ship) {
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+				return false;
+		}
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			this.totalBoardHealth++;
+			theBoard[y][x] = ship;
+		}
+		return true;
+	}
+
+	
+	public int getSize() {
+		return size;
+	}
+	public Object[][] getBoard() {
+		return theBoard;
+	}
+	public void clearBoard() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				theBoard[i][j] = null;
+			}
+		}
+		this.totalBoardHealth = 0;
+	}
+
 	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
 		int[] result = new int[2];
 
@@ -77,53 +109,4 @@ public class Board {
 
 		return result;
 	}
-	public void clearBoard() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                theBoard[i][j] = null;
-            }
-        }
-        totalBoardHealth = 0;
-    }
-
-    /**
-     * Checks if a ship can be placed at the given location.
-     *
-     * @param ship      The ship to be placed.
-     * @param locations The locations where the ship is to be placed.
-     * @return true if the ship can be placed, false otherwise.
-     */
-    public boolean canPlaceShip(Ship ship, int[][] locations) {
-        for (int[] location : locations) {
-            int x = location[0];
-            int y = location[1];
-            if (x < 0 || x >= size || y < 0 || y >= size || theBoard[y][x] != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Returns the status of the specified cell on the board.
-     *
-     * @param x The x-coordinate of the cell.
-     * @param y The y-coordinate of the cell.
-     * @return ShotResult enum representing the status of the cell.
-     */
-    public ShotResult getCellStatus(int x, int y) {
-        // basic error checking
-        if ((x > size - 1 || x < 0) || (y > size - 1 || y < 0)) {
-            return ShotResult.INVALID;
-        }
-
-        if (theBoard[y][x] instanceof Ship) {
-            return ShotResult.HIT;
-        } else if (theBoard[y][x] == ShotResult.MISS) {
-            return ShotResult.MISS;
-        } else {
-            return ShotResult.REPEAT_ATTEMPT;
-        }
-    }
 }
-
