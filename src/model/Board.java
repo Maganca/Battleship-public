@@ -2,16 +2,26 @@
 
 package model;
 
+/**
+ * Board.java class that handles all battleship board functions.
+ */
 public class Board {
-	// Main board object
-	private Object[][] theBoard;
-	private int size;
-	private int totalBoardHealth;
+	private Object[][] theBoard; // Main board object
+	private int size; // Board size
+	private int totalBoardHealth; // Aggregate health of all ships on board
 
+	/**
+	 * Shot result enum types.
+	 */
 	public enum ShotResult {
 		HIT, MISS, SUNK, REPEAT_ATTEMPT, GAME_WON, INVALID;
 	}
 
+	/**
+	 * Board object constructor
+	 * 
+	 * @param size of board
+	 */
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
@@ -22,8 +32,8 @@ public class Board {
 	 * Attempts a new shot on the board and returns one of the resulting
 	 * ShotResult enum types
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x coordinate
+	 * @param y coordinate
 	 * @return ShotResult enum
 	 */
 	public ShotResult shotAttempt(int x, int y) {
@@ -64,9 +74,8 @@ public class Board {
 	/**
 	 * Adds a given ship to the board.
 	 * 
-	 * @param ship      to be added
-	 * @param locations int array of locations for the ship to be added in the
-	 *                  form of [[[x1][y1]],[[x2][y2]]]
+	 * @param ship to be added. The ship object will contain the needed
+	 *             coordinates.
 	 * @return true if ship was added, false if ship cannot be added
 	 */
 	public boolean addShipToBoard(Ship ship) {
@@ -107,7 +116,7 @@ public class Board {
 	/**
 	 * Returns the total health of remaining ships on the board.
 	 * 
-	 * @return int
+	 * @return int of board health
 	 */
 	public int getBoardHealth() {
 		return this.totalBoardHealth;
@@ -116,7 +125,9 @@ public class Board {
 	/**
 	 * This returns an obfuscated object of a board at x, y
 	 * 
-	 * @return Object
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return object at location on board
 	 */
 	public Object getHiddenCoord(int x, int y) {
 		// basic error checking
@@ -152,7 +163,9 @@ public class Board {
 	 * This toString includes the ships in the final string output, which should
 	 * be only visible to the current player.
 	 * 
-	 * @return string
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return String representation of the coordinate.
 	 */
 	public String toStringCoord(int x, int y) {
 		String result = "";
@@ -191,22 +204,6 @@ public class Board {
 			}
 			result += "\n";
 		}
-		return result;
-	}
-
-	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
-		int[] result = new int[2];
-
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (playerBoard.theBoard[i][j] == ShotResult.HIT) {
-					result[0]++;
-				} else if (playerBoard.theBoard[i][j] == ShotResult.MISS) {
-					result[1]++;
-				}
-			}
-		}
-
 		return result;
 	}
 }
