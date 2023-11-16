@@ -43,7 +43,6 @@ public class ShipGameView extends BorderPane {
 	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
 	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
 	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
-	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	public ShipGameView(Player player1, Player player2) {

@@ -26,6 +26,7 @@ public class ShipSelectionView extends BorderPane {
 	private VBox ourVBox = new VBox();
 
 	public Button easyButton = new Button("Start Easy Game");
+	public Button normalButton = new Button("Start Normal Game");
 	public Button hardButton = new Button("Start Hard Game");
 
 	private TextField twoXCoord = new TextField();
@@ -127,7 +128,8 @@ public class ShipSelectionView extends BorderPane {
 
 		GridPane buttons = new GridPane();
 		buttons.add(easyButton, 2, 0);
-		buttons.add(hardButton, 10, 0);
+		buttons.add(normalButton, 7, 0);
+		buttons.add(hardButton, 12, 0);
 		buttons.setHgap(10);
 
 		ourVBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol, sLabel, submarine, dLabel, destroyer,

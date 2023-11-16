@@ -10,7 +10,7 @@ public class Player {
 	private int size;
 
 	public enum PlayerType {
-		HUMAN, AI_NORMAL, AI_EASY, LAN_PLAYER1, LAN_PLAYER2;
+		HUMAN, AI_HARD, AI_NORMAL, AI_EASY, LAN_PLAYER1, LAN_PLAYER2;
 	}
 
 	public Player(PlayerType player, int size) {
@@ -21,6 +21,10 @@ public class Player {
 		board = new Board(size);
 
 		// Automatically places ships if player is computer
+		if (playerType.equals(PlayerType.AI_HARD)) {
+			HardAI ai = new HardAI();
+			ai.placeShips(board);
+		}
 		if (playerType.equals(PlayerType.AI_NORMAL)) {
 			NormalAI ai = new NormalAI();
 			ai.placeShips(board);
@@ -32,8 +36,8 @@ public class Player {
 	}
 
 	public ShotResult takeShot(Player opponent, int x, int y) {
-		if (playerType.equals(PlayerType.AI_EASY)
-				|| playerType.equals(PlayerType.AI_NORMAL)) {
+		if (playerType.equals(PlayerType.AI_EASY) || playerType.equals(PlayerType.AI_NORMAL)
+				|| playerType.equals(PlayerType.AI_HARD)) {
 			return ShotResult.INVALID;
 		}
 		return opponent.getBoard().shotAttempt(x, y);
@@ -47,6 +51,9 @@ public class Player {
 		case AI_NORMAL:
 			NormalAI normalAI = new NormalAI();
 			return normalAI.shoot(opponent.getBoard());
+		case AI_HARD:
+			HardAI hardAI = new HardAI();
+			return hardAI.shoot(opponent.getBoard());
 		default:
 			return ShotResult.INVALID;
 		}

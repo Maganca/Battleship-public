@@ -103,9 +103,14 @@ public class BattleshipGUI extends Application {
 					new Player(PlayerType.AI_EASY, 10));
 			setViewTo(shipGameView);
 		});
-		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
+		shipSelectionView.normalButton.setOnAction(mouseEvent -> {
 			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_NORMAL, 10));
+			setViewTo(shipGameView);
+		});
+		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
+			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
+					new Player(PlayerType.AI_HARD, 10));
 			setViewTo(shipGameView);
 		});
 

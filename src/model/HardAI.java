@@ -56,7 +56,12 @@ public class HardAI implements AIStrategy {
 		// Makes a random shot attempt because it has no idea where to shoot
 		ShotResult temp = ShotResult.REPEAT_ATTEMPT;
 		while (temp == ShotResult.REPEAT_ATTEMPT) {
-			temp = game.shotAttempt(last[0] + 1, last[1]);
+			if (game.getHiddenCoord(last[0], last[1]) == ShotResult.INVALID)
+				last[1] = 1;
+			else {
+				temp = game.shotAttempt(last[0], last[1]);
+				last = new int[] { last[0] + 1, last[1] - 1 };
+			}
 		}
 		return temp;
 	}
