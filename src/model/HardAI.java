@@ -7,9 +7,11 @@ import model.Board.ShotResult;
 public class HardAI implements AIStrategy {
 
 	private static Random generator;
+	private int[] last;
 
 	public HardAI() {
 		generator = new Random();
+		last = new int[] { 0, 0 };
 	}
 
 	public boolean placeShips(Board game) {
@@ -55,10 +57,7 @@ public class HardAI implements AIStrategy {
 		// Makes a random shot attempt because it has no idea where to shoot
 		ShotResult temp = ShotResult.REPEAT_ATTEMPT;
 		while (temp == ShotResult.REPEAT_ATTEMPT) {
-			generator = new Random();
-			int row = generator.nextInt(size);
-			int col = generator.nextInt(size);
-			temp = game.shotAttempt(row, col);
+			temp = game.shotAttempt(last[0]+1, last[1]);
 		}
 		return temp;
 	}
