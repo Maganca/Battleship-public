@@ -19,11 +19,6 @@ public class ShipWinView extends BorderPane {
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 
 	public ShipWinView(boolean x) {
-		StartScreenView shipWinView = new StartScreenView();
-		playAgainButton.setOnAction(mouseEvent -> {
-			this.setCenter(null);
-			this.setCenter(shipWinView);
-		});
 		if (x)
 			vBox.getChildren().add(winText);
 		else

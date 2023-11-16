@@ -13,10 +13,6 @@ public class InfoView extends BorderPane {
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 
 	public InfoView() {
-		backButton.setOnAction(mouseEvent -> {
-			this.setCenter(null);
-			this.setCenter(new StartScreenView());
-		});
 		infoText.setStyle("-fx-font-size: 20; -fx-font-family: Verdana");
 		vBox.getChildren().add(infoText);
 		vBox.getChildren().add(backButton);
