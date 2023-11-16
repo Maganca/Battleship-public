@@ -1,11 +1,15 @@
 package views_controller;
 
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -24,7 +28,10 @@ public class ShipSelectionView extends BorderPane {
 	private Player player = new Player(PlayerType.HUMAN, GAME_SIZE);
 
 	private VBox ourVBox = new VBox();
-
+	
+	private Image background = new Image(
+			new File("Tiles/background.png").toURI().toString());
+	
 	public Button easyButton = new Button("Start Easy Game");
 	public Button normalButton = new Button("Start Normal Game");
 	public Button hardButton = new Button("Start Hard Game");
@@ -54,7 +61,7 @@ public class ShipSelectionView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+		ourVBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		ourVBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
 		Label explanation1 = new Label("Add your ships: ");
 		Label explanation2 = new Label("Verticality takes 0 for horizontal or 1 for vertical");

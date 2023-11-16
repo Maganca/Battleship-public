@@ -14,6 +14,7 @@ public class Ship {
 	private int startingSize;
 	private int[] start;
 	private int[] end;
+	private int verticality;
 	
 	
 
@@ -38,6 +39,7 @@ public class Ship {
 	 */
 	public Ship(int row, int col, int direction, int size) {
 		locations = new ArrayList<int[]>();
+		verticality = direction;
 		if (direction == 0) {
 			for (int i = 0; i < size; i++) {
 				if (i == 0) {

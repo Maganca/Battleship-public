@@ -45,7 +45,7 @@ public class Sounds {
 		public void run() {
 			isPlaying = false;
 			try {
-				Thread.sleep(500);
+				Thread.sleep(0);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

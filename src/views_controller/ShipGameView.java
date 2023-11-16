@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
@@ -28,13 +29,14 @@ import model.Board.ShotResult;
 
 public class ShipGameView extends BorderPane {
 
-	private VBox ourVBox = new VBox();
+	private HBox ourHBox = new HBox();
 	private Player player1;
 	private Player player2;
 	private ImageView[][] player1Grid;
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
+	public Button nextButton = new Button("Next");
 	
 	private List<Ship> shipList1;
 	private List<Ship> shipList2;
@@ -99,7 +101,7 @@ public class ShipGameView extends BorderPane {
 	private static final Media BAD_NOISE = new Media(
 			new File("soundeffects/bad.mp3").toURI().toString());
 	private static final Media BACKGROUND = new Media(
-			new File("soundeffects/hit.mp3").toURI().toString());
+			new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	public ShipGameView(Player player1, Player player2) {
@@ -111,6 +113,11 @@ public class ShipGameView extends BorderPane {
 	}
 
 	private void initializePanel() {
+		ShipWinView shipWinView = new ShipWinView();
+		nextButton.setOnAction(mouseEvent -> {
+			this.setCenter(null);
+			this.setCenter(shipWinView);
+		});
 		int boardSize = player1.getBoardSize();
 		player1Grid = new ImageView[boardSize][boardSize];
 		player2Grid = new ImageView[boardSize][boardSize];
@@ -133,17 +140,19 @@ public class ShipGameView extends BorderPane {
 		player2GridPane.setVgap(2);
 		player1GridPane.setHgap(2);
 		player1GridPane.setVgap(2);
-		ourVBox.getChildren().clear();
-		ourVBox.getChildren().add(new Label("My Board: "));
-		ourVBox.getChildren().add(player2GridPane);
-		ourVBox.getChildren().add(new Label("\nYour Board: "));
-		ourVBox.getChildren().add(player1GridPane);
-		ourVBox.setBackground(new Background(new BackgroundImage(background, null, null,null,null)));
-		ourVBox.setBorder(new Border(new BorderStroke(Color.BLUE,
+		ourHBox.getChildren().clear();
+		ourHBox.getChildren().add(new Label("My Board: "));
+		ourHBox.getChildren().add(player2GridPane);
+		ourHBox.getChildren().add(new Label("\nYour Board: "));
+		ourHBox.getChildren().add(player1GridPane);
+		ourHBox.setBackground(new Background(new BackgroundImage(background, null, null,null,null)));
+		ourHBox.setBorder(new Border(new BorderStroke(Color.BLUE,
 				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY,
 				new Insets(10, 10, 10, 10))));
-
-		this.setCenter(ourVBox);
+		ourHBox.getChildren().add(nextButton);
+		nextButton.setVisible(false);
+		;
+		this.setCenter(ourHBox);
 	}
 	/**
 	 * determines ship image status for players
@@ -246,8 +255,7 @@ public class ShipGameView extends BorderPane {
 				}
 			}
 			if (!(player1.isAlive() && player2.isAlive())) {
-				// The game is done so do whatever code here
-				// System.out.print("GAME DONE!\n");
+				nextButton.setVisible(true);
 			}
 		}
 	}

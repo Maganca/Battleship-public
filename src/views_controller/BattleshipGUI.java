@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
@@ -25,10 +26,12 @@ public class BattleshipGUI extends Application {
 	private ShipSelectionView shipSelectionView;
 	private ShipGameView shipGameView;
 	private MultiplayerSetupView multiplayerSetupView;
-	private static final Media BACKGROUND = new Media(new File("soundeffects/hit.mp3").toURI().toString());
+	private ShipWinView shipWinView;
+	
+	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
-	private BorderPane window;
+	public BorderPane window;
 	public static final int width = 700;
 	public static final int height = 600;
 
@@ -40,7 +43,7 @@ public class BattleshipGUI extends Application {
 
 		setupAllViews();
 
-		window.setTop(initMenuBar());
+		//window.setTop(initMenuBar());
 
 		stage.setScene(scene);
 		stage.show();
@@ -88,6 +91,7 @@ public class BattleshipGUI extends Application {
 	 */
 	private void setupAllViews() {
 		startView = new StartScreenView();
+		setViewTo(startView);
 		startView.startButton.setOnAction(mouseEvent -> {
 			window.setCenter(shipSelectionView);
 		});
@@ -96,7 +100,8 @@ public class BattleshipGUI extends Application {
 		//startView.multiplayerButton.setOnAction(mouseEvent -> {
 		//	window.setCenter(multiplayerSetupView);
 		//});
-
+		
+		
 		shipSelectionView = new ShipSelectionView();
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
 			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
@@ -113,11 +118,11 @@ public class BattleshipGUI extends Application {
 					new Player(PlayerType.AI_HARD, 10));
 			setViewTo(shipGameView);
 		});
-
-		setViewTo(startView);
+		
+		
 	}
 
-	private void setViewTo(Node newView) {
+	public void setViewTo(Node newView) {
 		window.setCenter(null);
 		window.setCenter((Node) newView);
 	}
