@@ -1,7 +1,6 @@
 // Kade Dean
-
+// Kade Dean
 package model;
-
 public class Board {
 	// Main board object
 	private Object[][] theBoard;
@@ -208,5 +207,28 @@ public class Board {
 		}
 
 		return result;
+	}
+	public boolean addShipToBoard1(Ship ship) {
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+				return false;
+		}
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			this.totalBoardHealth++;
+			theBoard[y][x] = ship;
+		}
+		return true;
+	}
+	public void clearBoard() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				theBoard[i][j] = null;
+			}
+		}
+		this.totalBoardHealth = 0;
 	}
 }
