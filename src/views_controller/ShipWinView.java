@@ -1,6 +1,5 @@
 package views_controller;
 
-
 import java.io.File;
 
 import javafx.geometry.Pos;
@@ -14,9 +13,9 @@ import javafx.scene.layout.VBox;
 
 public class ShipWinView extends BorderPane{
 	private VBox vBox = new VBox();
-	private Label winText = new Label("YROUE WINNER");
-	private Label loseText = new Label("YROUE LOSED");
-	public Button playAgainButton = new Button("Play Again?1!");
+	private Label winText = new Label("YOU WINNER");
+	private Label loseText = new Label("YOU LOSE");
+	public Button playAgainButton = new Button("Play Again?");
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 	
 	public ShipWinView() {
