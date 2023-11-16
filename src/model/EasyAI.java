@@ -4,11 +4,11 @@ import java.util.Random;
 
 import model.Board.ShotResult;
 
-public class RandomAI implements AIStrategy {
+public class EasyAI implements AIStrategy {
 
 	private static Random generator;
 
-	public RandomAI() {
+	public EasyAI() {
 		generator = new Random();
 	}
 
