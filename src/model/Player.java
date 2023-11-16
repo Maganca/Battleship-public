@@ -10,7 +10,7 @@ public class Player {
 	private int size;
 
 	public enum PlayerType {
-		HUMAN, AI_HARD, AI_NORMAL, AI_EASY, LAN_PLAYER1, LAN_PLAYER2;
+		HUMAN, AI_HARD, AI_NORMAL, AI_EASY, LAN_HOST, LAN_PLAYER2;
 	}
 
 	public Player(PlayerType player, int size) {

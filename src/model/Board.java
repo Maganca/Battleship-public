@@ -12,9 +12,9 @@ public class Board {
 	private Object[][] theBoard; // Main board object
 	private int size; // Board size
 	private int totalBoardHealth; // Aggregate health of all ships on board
-	
+
 	private List<Ship> shipList = new ArrayList<>();
-	
+
 	/**
 	 * Shot result enum types.
 	 */
@@ -32,7 +32,7 @@ public class Board {
 		theBoard = new Object[size][size];
 		this.totalBoardHealth = 0;
 	}
-	
+
 	/**
 	 * Attempts a new shot on the board and returns one of the resulting ShotResult
 	 * enum types
@@ -126,9 +126,11 @@ public class Board {
 	public int getBoardHealth() {
 		return this.totalBoardHealth;
 	}
-	public List<Ship> getShipList(){
+
+	public List<Ship> getShipList() {
 		return shipList;
 	}
+
 	/**
 	 * This returns an obfuscated object of a board at x, y
 	 * 
@@ -212,38 +214,6 @@ public class Board {
 			result += "\n";
 		}
 		return result;
-	}
-
-	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
-		int[] result = new int[2];
-
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (playerBoard.theBoard[i][j] == ShotResult.HIT) {
-					result[0]++;
-				} else if (playerBoard.theBoard[i][j] == ShotResult.MISS) {
-					result[1]++;
-				}
-			}
-		}
-
-		return result;
-	}
-
-	public boolean addShipToBoard1(Ship ship) {
-		for (int[] location : ship.locations) {
-			int x = location[0];
-			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
-				return false;
-		}
-		for (int[] location : ship.locations) {
-			int x = location[0];
-			int y = location[1];
-			this.totalBoardHealth++;
-			theBoard[y][x] = ship;
-		}
-		return true;
 	}
 
 	public void clearBoard() {
