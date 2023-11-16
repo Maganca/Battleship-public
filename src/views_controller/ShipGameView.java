@@ -36,7 +36,7 @@ public class ShipGameView extends BorderPane {
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
-	public Button nextButton = new Button("Next");
+	public Button nextButton = new Button("Continue");
 
 	private List<Ship> shipList1;
 	private List<Ship> shipList2;
@@ -84,10 +84,12 @@ public class ShipGameView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		ShipWinView shipWinView = new ShipWinView();
 		nextButton.setOnAction(mouseEvent -> {
 			this.setCenter(null);
-			this.setCenter(shipWinView);
+			if (!(player1.isAlive()))
+				this.setCenter(new ShipWinView(1));
+			else
+				this.setCenter(new ShipWinView(0));
 		});
 		int boardSize = player1.getBoardSize();
 		player1Grid = new ImageView[boardSize][boardSize];
@@ -158,17 +160,17 @@ public class ShipGameView extends BorderPane {
 							ShotResult player1Outcome = player1.takeShot(player2, i, j);
 							switch (player1Outcome) {
 							case GAME_WON:
-								soundEffect.queueSound(SHOOT_NOISE);
+								// soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(GOOD_NOISE);
 								System.out.print("You Won");
 								break;
 							case HIT:
-								soundEffect.queueSound(SHOOT_NOISE);
+								// soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(HIT_NOISE);
 								System.out.print("You hit my ship!");
 								break;
 							case MISS:
-								soundEffect.queueSound(SHOOT_NOISE);
+								// soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(MISS_NOISE);
 								System.out.print("You missed");
 								break;
@@ -177,13 +179,14 @@ public class ShipGameView extends BorderPane {
 								System.out.print("Try Again\n");
 								break;
 							case SUNK:
-								soundEffect.queueSound(SHOOT_NOISE);
+								// soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(SHOOT_NOISE);
 								System.out.print("You sunk my ship!");
 								break;
 							default:
 								break;
 							}
+							// while(soundEffect.isPlaying) {}
 							if (player1Outcome.equals(ShotResult.HIT) || player1Outcome.equals(ShotResult.MISS)
 									|| player1Outcome.equals(ShotResult.SUNK)) {
 								ShotResult AIOutcome = player2.takeShot(player1);

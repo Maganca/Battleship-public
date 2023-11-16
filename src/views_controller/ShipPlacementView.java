@@ -36,7 +36,7 @@ public class ShipPlacementView extends GridPane {
     private void setupBoard() {
         board = new Board(boardSize);
         showPredictionCoordinates(5, 5, 3); // Example prediction, you can customize this
-        this.getChildren().addAll(getBoardVisual());
+        this.getChildren().add(getBoardVisual());
     }
 
     private void showPredictionCoordinates(int row, int col, int size) {

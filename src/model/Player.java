@@ -60,7 +60,7 @@ public class Player {
 	}
 
 	public boolean isAlive() {
-		if (board.getBoardHealth() == 0 || board.getBoardHealth() == 0) {
+		if (board.getBoardHealth() == 0) {
 			return false;
 		}
 		return true;

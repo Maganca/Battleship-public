@@ -11,24 +11,27 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class ShipWinView extends BorderPane{
+public class ShipWinView extends BorderPane {
 	private VBox vBox = new VBox();
 	private Label winText = new Label("YOU WINNER");
 	private Label loseText = new Label("YOU LOSE");
 	public Button playAgainButton = new Button("Play Again?");
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
-	
-	public ShipWinView() {
-		initializePanel();
+
+	public ShipWinView(int x) {
+		initializePanel(x);
 	}
 
-	private void initializePanel() {
+	private void initializePanel(int x) {
 		StartScreenView shipWinView = new StartScreenView();
 		playAgainButton.setOnAction(mouseEvent -> {
 			this.setCenter(null);
 			this.setCenter(shipWinView);
 		});
-		vBox.getChildren().add(winText);
+		if (x == 0)
+			vBox.getChildren().add(winText);
+		else
+			vBox.getChildren().add(loseText);
 		vBox.getChildren().add(playAgainButton);
 		vBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		vBox.setAlignment(Pos.CENTER);
