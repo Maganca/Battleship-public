@@ -38,8 +38,8 @@ public class Board {
 	 */
 	public ShotResult shotAttempt(int x, int y) {
 		// Checks to make sure shot attempt is valid
-		if (x >= theBoard[0].length || y >= theBoard.length) {
-			return ShotResult.REPEAT_ATTEMPT;
+		if (x >= theBoard[0].length || y >= theBoard.length || x < 0 || y < 0) {
+			return ShotResult.INVALID;
 		}
 		// Checks to see if we've hit a ship
 		if (theBoard[y][x] instanceof Ship) {
@@ -77,6 +77,7 @@ public class Board {
 	 * @param ship to be added. The ship object will contain the needed coordinates.
 	 * @return true if ship was added, false if ship cannot be added
 	 */
+
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];

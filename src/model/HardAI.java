@@ -6,11 +6,11 @@ import model.Board.ShotResult;
 public class HardAI implements AIStrategy {
 
 	private static Random generator;
-	private int[] last;
+	private int last;
 
 	public HardAI() {
 		generator = new Random();
-		last = new int[] { 0, 0 };
+		last = 0;
 	}
 
 	public boolean placeShips(Board game) {
@@ -56,12 +56,9 @@ public class HardAI implements AIStrategy {
 		// Makes a random shot attempt because it has no idea where to shoot
 		ShotResult temp = ShotResult.REPEAT_ATTEMPT;
 		while (temp == ShotResult.REPEAT_ATTEMPT) {
-			if (game.getHiddenCoord(last[0], last[1]) == ShotResult.INVALID)
-				last[1] = 1;
-			else {
-				temp = game.shotAttempt(last[0], last[1]);
-				last = new int[] { last[0] + 1, last[1] - 1 };
-			}
+			temp = game.shotAttempt(last / 10, (last % 10) + ((last / 10) % 2));
+			//System.out.println("(" + last / 10 + ", " + ((last % 10) + ((last / 10) % 2)) + ")");
+			last += 2;
 		}
 		return temp;
 	}
