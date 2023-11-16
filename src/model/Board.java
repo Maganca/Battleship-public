@@ -1,7 +1,6 @@
 // Kade Dean
-
+// Kade Dean
 package model;
-
 public class Board {
 	// Main board object
 	private Object[][] theBoard;
@@ -61,12 +60,20 @@ public class Board {
 
 	}
 
-	// Chi thieu
+	/**
+	 * Adds a given ship to the board.
+	 * 
+	 * @param ship      to be added
+	 * @param locations int array of locations for the ship to be added in the
+	 *                  form of [[[x1][y1]],[[x2][y2]]]
+	 * @return true if ship was added, false if ship cannot be added
+	 */
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];
 			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+			if (x >= theBoard[0].length || y >= theBoard.length
+					|| theBoard[y][x] != null)
 				return false;
 		}
 		for (int[] location : ship.locations) {
@@ -78,20 +85,112 @@ public class Board {
 		return true;
 	}
 
-	
+	/**
+	 * Returns the dimension of the square board
+	 * 
+	 * @return int
+	 */
 	public int getSize() {
 		return size;
 	}
+
+	/**
+	 * Returns the board.
+	 * 
+	 * @return Object[][]
+	 */
 	public Object[][] getBoard() {
 		return theBoard;
 	}
-	public void clearBoard() {
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				theBoard[i][j] = null;
-			}
+
+	/**
+	 * Returns the total health of remaining ships on the board.
+	 * 
+	 * @return int
+	 */
+	public int getBoardHealth() {
+		return this.totalBoardHealth;
+	}
+
+	/**
+	 * This returns an obfuscated object of a board at x, y
+	 * 
+	 * @return Object
+	 */
+	public Object getHiddenCoord(int x, int y) {
+		// basic error checking
+		if ((x > size - 1 || x < 0) || (y > size - 1 || y < 0)) {
+			return ShotResult.INVALID;
 		}
-		this.totalBoardHealth = 0;
+		if (theBoard[y][x] instanceof Ship) {
+			return null;
+		}
+		return theBoard[y][x];
+	}
+
+	public String toString() {
+		String result = "";
+		for (Object[] row : theBoard) {
+			for (Object col : row) {
+				if (col == Board.ShotResult.HIT) {
+					result += "H ";
+				} else if (col == Board.ShotResult.MISS) {
+					result += "M ";
+				} else if (col instanceof Ship) {
+					result += "S ";
+				} else if (col == null) {
+					result += "_ ";
+				}
+			}
+			result += "\n";
+		}
+		return result;
+	}
+
+	/**
+	 * This toString includes the ships in the final string output, which should
+	 * be only visible to the current player.
+	 * 
+	 * @return string
+	 */
+	public String toStringCoord(int x, int y) {
+		String result = "";
+
+		if (theBoard[y][x] == Board.ShotResult.HIT) {
+			result += "H";
+		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
+			result += "M";
+		} else if (theBoard[y][x] instanceof Ship) {
+			result += "S";
+		} else if (theBoard[y][x] == null) {
+			result += "_";
+		}
+
+		return result;
+	}
+
+	/**
+	 * This toString hides the ships in the final string output.
+	 * 
+	 * TODO: somehow figure out how to show opponents ships on this view too??
+	 * 
+	 * @return string
+	 */
+	public String toStringOpponentView() {
+		String result = "";
+		for (Object[] row : theBoard) {
+			for (Object col : row) {
+				if (col == Board.ShotResult.HIT) {
+					result += "H";
+				} else if (col == Board.ShotResult.MISS) {
+					result += "M";
+				} else {
+					result += "_";
+				}
+			}
+			result += "\n";
+		}
+		return result;
 	}
 
 	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
@@ -108,5 +207,28 @@ public class Board {
 		}
 
 		return result;
+	}
+	public boolean addShipToBoard1(Ship ship) {
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+				return false;
+		}
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			this.totalBoardHealth++;
+			theBoard[y][x] = ship;
+		}
+		return true;
+	}
+	public void clearBoard() {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				theBoard[i][j] = null;
+			}
+		}
+		this.totalBoardHealth = 0;
 	}
 }
