@@ -46,44 +46,9 @@ public class BattleshipGUI extends Application {
 
 		setupAllViews();
 
-		// window.setTop(initMenuBar());
-
 		stage.setScene(scene);
 		stage.show();
 		stage.setResizable(false);
-	}
-
-	/**
-	 * Initializes the menu bar that is always on top of the window
-	 * 
-	 * @return
-	 */
-	private MenuBar initMenuBar() {
-		MenuBar menuBar = new MenuBar();
-		Menu options = new Menu("Options");
-		Menu strategies = new Menu("Strategies");
-		MenuItem randomMenu = new MenuItem("RandomAI");
-		MenuItem intermediateMenu = new MenuItem("Intermediate");
-		strategies.getItems().addAll(randomMenu, intermediateMenu);
-		Menu views = new Menu("Views");
-		MenuItem textArea = new MenuItem("TextArea"); // activeView = 0
-		MenuItem button = new MenuItem("Button"); // activeView = 2
-		MenuItem drawing = new MenuItem("Drawing"); // activeView = 1
-		views.getItems().addAll(button, textArea, drawing);
-		// TODO: Get menu buttons working
-		// EVENT HANDLING FOR ALL MENU BUTTONS
-		// Switches view to textArea without restarting the current game
-//		// Starts a new game
-//		startNewGame.setOnAction(mouseEvent -> {
-//			startGameAndViews();
-//		});
-
-		MenuItem startNewGame = new MenuItem("New Game");
-
-		options.getItems().addAll(startNewGame, strategies, views);
-		menuBar.getMenus().addAll(options);
-		return menuBar;
-
 	}
 
 	/**
@@ -95,18 +60,24 @@ public class BattleshipGUI extends Application {
 	private void setupAllViews() {
 		startView = new StartScreenView();
 		infoView = new InfoView();
-		setViewTo(startView);
+		shipSelectionView = new ShipSelectionView();
+		multiplayerSetupView = new MultiplayerSetupView();
+		
+		// Handles start view buttons
+		setViewTo(startView); // Sets window to start view on launch
 		startView.startButton.setOnAction(mouseEvent -> {
 			setViewTo(shipSelectionView);
 		});
 		startView.infoButton.setOnAction(mouseEvent -> {
 			setViewTo(infoView);
 		});
+		
+		// Handles info view button
 		infoView.backButton.setOnAction(mouseEvent -> {
 			setViewTo(startView);
 		});
 
-		multiplayerSetupView = new MultiplayerSetupView();
+		// Handles multiplayer view buttons
 		startView.multiplayerButton.setOnAction(mouseEvent -> {
 			setViewTo(multiplayerSetupView);
 		});
@@ -114,7 +85,7 @@ public class BattleshipGUI extends Application {
 			setViewTo(startView);
 		});
 
-		shipSelectionView = new ShipSelectionView();
+		// Handles ship placement/selection stuff
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
 			if (shipSelectionView.getConstructedPlayer() != null) {
 				shipGameView = new ShipGameView(
@@ -142,6 +113,10 @@ public class BattleshipGUI extends Application {
 
 	}
 
+	/**
+	 * Clears current view and sets view to the desired new view
+	 * @param newView new view to switch to
+	 */
 	public void setViewTo(Node newView) {
 		window.setCenter(null);
 		window.setCenter((Node) newView);
