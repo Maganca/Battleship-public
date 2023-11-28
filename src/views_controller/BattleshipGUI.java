@@ -10,6 +10,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
@@ -106,28 +107,37 @@ public class BattleshipGUI extends Application {
 		});
 
 		multiplayerSetupView = new MultiplayerSetupView();
-		// startView.multiplayerButton.setOnAction(mouseEvent -> {
-		// window.setCenter(multiplayerSetupView);
-		// });
+		startView.multiplayerButton.setOnAction(mouseEvent -> {
+			setViewTo(multiplayerSetupView);
+		});
+		multiplayerSetupView.backButton.setOnAction(MouseEvent -> {
+			setViewTo(startView);
+		});
 
 		shipSelectionView = new ShipSelectionView();
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(
-					shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_EASY, 10));
-			setViewTo(shipGameView);
+			if (shipSelectionView.getConstructedPlayer() != null) {
+				shipGameView = new ShipGameView(
+						shipSelectionView.getConstructedPlayer(),
+						new Player(PlayerType.AI_EASY, 10));
+				setViewTo(shipGameView);
+			}
 		});
 		shipSelectionView.normalButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(
-					shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_NORMAL, 10));
-			setViewTo(shipGameView);
+			if (shipSelectionView.getConstructedPlayer() != null) {
+				shipGameView = new ShipGameView(
+						shipSelectionView.getConstructedPlayer(),
+						new Player(PlayerType.AI_NORMAL, 10));
+				setViewTo(shipGameView);
+			}
 		});
 		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(
-					shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_HARD, 10));
-			setViewTo(shipGameView);
+			if (shipSelectionView.getConstructedPlayer() != null) {
+				shipGameView = new ShipGameView(
+						shipSelectionView.getConstructedPlayer(),
+						new Player(PlayerType.AI_HARD, 10));
+				setViewTo(shipGameView);
+			}
 		});
 
 	}

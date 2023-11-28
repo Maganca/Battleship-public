@@ -1,24 +1,20 @@
 package views_controller;
 
 import java.io.File;
-
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import model.Player;
 import model.Ship;
 import model.Player.PlayerType;
@@ -145,6 +141,7 @@ public class ShipSelectionView extends BorderPane {
 	}
 
 	public Player getConstructedPlayer() {
+		try {
 		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
 				Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
 
@@ -160,5 +157,13 @@ public class ShipSelectionView extends BorderPane {
 		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
 				Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
 		return player;
+		}
+		catch (Exception e) {
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText("Ship placement is not valid!");
+			errorAlert.setContentText("Make sure all your ships are properly placed and all fields are filled out.");
+			errorAlert.showAndWait();
+		}
+		return null;
 	}
 }

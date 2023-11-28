@@ -9,32 +9,35 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 public class StartScreenView extends BorderPane {
 
-	private VBox ourVBox = new VBox();
-	public Button startButton = new Button("Start");
-	public Button infoButton = new Button("Info");
-	public Button multiplayerButton = new Button("Multiplayer");
-	private Image title = new Image(new File("Tiles/background.gif").toURI().toString());
-	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
-	private Label credits = new Label("By: Kade, Chi, Danilo, and Ethan");
+    private VBox ourVBox = new VBox();
+    public Button startButton = new Button("Start");
+    public Button infoButton = new Button("Info");
+    public Button multiplayerButton = new Button("Multiplayer");
+    private Image titleImage = new Image(new File("Tiles/background.gif").toURI().toString());
+    private Image backgroundImage = new Image(new File("Tiles/background.png").toURI().toString());
+    private Label credits = new Label("By: Kade, Chi, Danilo, and Ethan");
 
-	private ImageView titleView = new ImageView(title);
+    private ImageView titleView = new ImageView(titleImage);
 
-	public StartScreenView() {
-		initializePanel();
-	}
+    public StartScreenView() {
+        initializePanel();
+    }
 
-	private void initializePanel() {
-		titleView.setScaleX(0.5);
-		titleView.setScaleY(0.5);
+    private void initializePanel() {
+        titleView.setFitWidth(400); // Adjust the width as needed
+        titleView.setPreserveRatio(true);
 
-		ourVBox.getChildren().addAll(titleView, credits, startButton, infoButton, multiplayerButton);
-		ourVBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
+        ourVBox.getChildren().addAll(titleView, credits, startButton, infoButton, multiplayerButton);
+        ourVBox.setAlignment(Pos.CENTER);
+        ourVBox.setSpacing(20);
+        ourVBox.setPadding(new Insets(50));
+        
+        BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        ourVBox.setBackground(new Background(backgroundImg));
 
-		ourVBox.setAlignment(Pos.CENTER);
-		this.setCenter(ourVBox);
-	}
+        setCenter(ourVBox);
+    }
 }
