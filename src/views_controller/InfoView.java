@@ -17,7 +17,7 @@ public class InfoView extends BorderPane {
     private Label aboutBattleship = new Label("About Battleship:");
     private Label battleshipInfo = new Label("Battleship is a classic guessing game played by two players. Each player has a grid where they place their ships without the opponent seeing their placement. Players take turns calling out specific coordinates on the opponent's grid, aiming to hit the opponent's ships. The player who sinks all of the opponent's ships first wins the game.");
     private Label howToPlay = new Label("How to Play:");
-    private Label howToPlayInfo = new Label("1. Each player places their ships on their grid.\n2. Players take turns calling out coordinates (e.g., A5, B6) to guess the opponent's ship locations.\n3. If the guessed coordinate has an opponent's ship, it's a hit. Otherwise, it's a miss.\n4. The game continues until one player sinks all of the opponent's ships.");
+    private Label howToPlayInfo = new Label("1. Each player places their ships on their grid.\n2. Players take turns clicking coordinates to guess the opponent's ship locations.\n3. If the guessed coordinate has an opponent's ship, it's a hit. Otherwise, it's a miss.\n4. The game continues until one player sinks all of the opponent's ships.");
     public Button backButton = new Button("Back");
     private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 
