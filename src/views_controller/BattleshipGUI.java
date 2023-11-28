@@ -29,7 +29,8 @@ public class BattleshipGUI extends Application {
 	private MultiplayerSetupView multiplayerSetupView;
 	private ShipWinView shipWinView;
 
-	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(
+			new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds music = new Sounds();
 
 	public BorderPane window;
@@ -102,7 +103,6 @@ public class BattleshipGUI extends Application {
 		});
 		infoView.backButton.setOnAction(mouseEvent -> {
 			setViewTo(startView);
-
 		});
 
 		multiplayerSetupView = new MultiplayerSetupView();
@@ -112,21 +112,23 @@ public class BattleshipGUI extends Application {
 
 		shipSelectionView = new ShipSelectionView();
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
+			shipGameView = new ShipGameView(
+					shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_EASY, 10));
 			setViewTo(shipGameView);
 		});
 		shipSelectionView.normalButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
+			shipGameView = new ShipGameView(
+					shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_NORMAL, 10));
 			setViewTo(shipGameView);
 		});
 		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
+			shipGameView = new ShipGameView(
+					shipSelectionView.getConstructedPlayer(),
 					new Player(PlayerType.AI_HARD, 10));
 			setViewTo(shipGameView);
 		});
-		
 
 	}
 
