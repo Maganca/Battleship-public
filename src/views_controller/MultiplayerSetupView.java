@@ -59,6 +59,8 @@ public class MultiplayerSetupView extends BorderPane {
         portLabel.setStyle("-fx-font-size: 20px; -fx-min-width: 60px; -fx-min-height: 30px;");
         hostname.setMaxWidth(150);
         port.setMaxWidth(150);
+        ourVBox.setMaxWidth(400);
+        ourVBox.setMaxHeight(400);
 
         this.setCenter(ourVBox);
         this.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
