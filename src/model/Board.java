@@ -5,6 +5,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
  * Board.java class that handles all battleship board functions.
  */
@@ -14,7 +16,19 @@ public class Board {
 	private int totalBoardHealth; // Aggregate health of all ships on board
 	
 	private List<Ship> shipList = new ArrayList<>();
+	
+	private final SimpleObjectProperty<GameResult> gameResult = new SimpleObjectProperty<>(null);
 
+	private List<Ship> placedShips;
+	
+    public enum GameResult {
+        WIN, LOSE
+    }
+
+    public SimpleObjectProperty<GameResult> gameResultProperty() {
+        return gameResult;
+    }
+	
 	/**
 	 * Shot result enum types.
 	 */
@@ -31,8 +45,10 @@ public class Board {
 		this.size = size;
 		theBoard = new Object[size][size];
 		this.totalBoardHealth = 0;
+		
+		placedShips = new ArrayList<>();
 	}
-
+	
 	/**
 	 * Attempts a new shot on the board and returns one of the resulting ShotResult
 	 * enum types
@@ -118,6 +134,7 @@ public class Board {
 	public Object[][] getBoard() {
 		return theBoard;
 	}
+	
 
 	/**
 	 * Returns the total health of remaining ships on the board.
@@ -127,11 +144,9 @@ public class Board {
 	public int getBoardHealth() {
 		return this.totalBoardHealth;
 	}
-
-	public List<Ship> getShipList() {
+	public List<Ship> getShipList(){
 		return shipList;
 	}
-
 	/**
 	 * This returns an obfuscated object of a board at x, y
 	 * 
@@ -282,6 +297,56 @@ public class Board {
 		}
 		return result;
 	}
+	
+	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
+		int[] result = new int[2];
+
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (playerBoard.theBoard[i][j] == ShotResult.HIT) {
+					result[0]++;
+				} else if (playerBoard.theBoard[i][j] == ShotResult.MISS) {
+					result[1]++;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public boolean addShipToBoard1(Ship ship) {
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
+				return false;
+		}
+		for (int[] location : ship.locations) {
+			int x = location[0];
+			int y = location[1];
+			this.totalBoardHealth++;
+			theBoard[y][x] = ship;
+		}
+		placedShips.add(ship);
+		return true;
+		
+	}
+	
+	public boolean allShipsPlaced() {
+        for (Ship ship : Ship.values()) {
+            if (!placedShips.contains(ship)) {
+                return false;
+            }
+        }
+        return true;
+    }
+	
+	public void customizeBoardSize(int newSize) {
+        this.size = newSize;
+        this.theBoard = new Object[newSize][newSize];
+        clearBoard();
+    }
+	
 
 	public void clearBoard() {
 		for (int i = 0; i < size; i++) {

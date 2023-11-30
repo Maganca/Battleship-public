@@ -31,6 +31,7 @@ public class ShipSelectionView extends BorderPane {
 	public Button easyButton = new Button("Start Easy Game");
 	public Button normalButton = new Button("Start Normal Game");
 	public Button hardButton = new Button("Start Hard Game");
+	public Button backButton = new Button("Back");
 
 	private TextField twoXCoord = new TextField();
 	private TextField twoYCoord = new TextField();
@@ -133,7 +134,11 @@ public class ShipSelectionView extends BorderPane {
 		buttons.add(easyButton, 2, 0);
 		buttons.add(normalButton, 7, 0);
 		buttons.add(hardButton, 12, 0);
+		backButton.setStyle(
+				"-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
+		buttons.add(backButton, 2, 2);
 		buttons.setHgap(10);
+		buttons.setVgap(10);
 
 		ourVBox.getChildren().addAll(explanation1, explanation2, pLabel, patrol, sLabel, submarine, dLabel, destroyer,
 				bLabel, battleship, cLabel, carrier, new Label("\n"), buttons);

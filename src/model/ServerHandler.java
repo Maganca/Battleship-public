@@ -1,42 +1,58 @@
 package model;
 
-import java.io.*;
-import java.net.*;
-import java.util.Date;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Basic server template code to begin working on Battleship multiplayer.
- */
 public class ServerHandler {
+    private ServerSocket serverSocket;
+    private List<ServerClient> clients = new ArrayList<>();
+    private Board gameBoard;
+    private GameStartListener gameStartListener; // Listener for game start event
 
-	/**
-	 * 
-	 * @param args port
-	 */
-	public static void main(String[] args) {
-		if (args.length < 1)
-			return;
-
-		int port = Integer.parseInt(args[0]);
-
-		try (ServerSocket serverSocket = new ServerSocket(port)) {
-
-			System.out.println("Server is listening on port " + port);
-
-			while (true) {
-				Socket socket = serverSocket.accept();
-
-				System.out.println("Waiting for client to connect");
-
-				OutputStream output = socket.getOutputStream();
-				PrintWriter writer = new PrintWriter(output, true);
-
-				writer.println(new Date().toString());
-			}
-
-		} catch (IOException ex) {
-			System.out.println("Server exception: " + ex.getMessage());
-			ex.printStackTrace();
-		}
+    
+	public enum ServerComms {
+		START_GAME, ;
 	}
+	
+    public interface GameStartListener {
+        void onGameStart(); // Method to be called when the game starts
+    }
+
+    public void setGameStartListener(GameStartListener listener) {
+        this.gameStartListener = listener;
+    }
+
+
+    public ServerHandler(int port) throws IOException{
+        try {
+            serverSocket = new ServerSocket(port);
+            gameBoard = new Board(10); // Initialize the game board with a size
+
+            // Start listening for incoming connections
+            while (clients.size() < 2) {
+                Socket clientSocket = serverSocket.accept();
+                ServerClient serverClient = new ServerClient(clientSocket, gameBoard);
+                clients.add(serverClient);
+                serverClient.start();
+            }
+            startGame();
+        } catch (IOException e) {
+        	throw e;
+        }
+    }
+    
+    private void startGame() {
+    	System.out.println("game is goin!");
+        if (gameStartListener != null) {
+            gameStartListener.onGameStart();
+        }
+    	clients.get(1).send(ServerComms.START_GAME);
+    	clients.get(0).send(ServerComms.START_GAME);
+    }
+
+    
+    // Other methods to manage game logic, sessions, etc.
 }

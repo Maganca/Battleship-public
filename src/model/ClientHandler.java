@@ -1,36 +1,30 @@
 package model;
 
-import java.net.*;
-import java.io.*;
- 
-/**
- * this is the basic template code for a tcp client
- */
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+import javafx.scene.input.InputEvent;
+
 public class ClientHandler {
- 
-    public static void main(String[] args) {
-        if (args.length < 2) return;
- 
-        String hostname = args[0];
-        int port = Integer.parseInt(args[1]);
- 
-        try (Socket socket = new Socket(hostname, port)) {
- 
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
- 
-            String time = reader.readLine();
- 
-            System.out.println(time);
- 
- 
-        } catch (UnknownHostException ex) {
- 
-            System.out.println("Server not found: " + ex.getMessage());
- 
-        } catch (IOException ex) {
- 
-            System.out.println("I/O error: " + ex.getMessage());
+    private Socket socket;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+    private Board gameBoard;
+
+    public ClientHandler(String serverAddress, int port) {
+        try {
+            socket = new Socket(serverAddress, port);
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+            startGameLoop();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+    
+    private void startGameLoop() {
+    }
+    // Logic to handle communication with the server
 }

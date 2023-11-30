@@ -1,5 +1,4 @@
 //Danilo Malo-Molina
-
 package model;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class Ship {
 	private int[] start;
 	private int[] end;
 	private int verticality;
-	
+	private ShipPosition shipPosition;
 	
 
 	/**
@@ -88,6 +87,7 @@ public class Ship {
 	public int getSize() {
 		return startingSize;
 	}
+<<<<<<< HEAD
 	public boolean isVertical() {
 		if (verticality == 1) {
 			return true;
@@ -106,6 +106,10 @@ public class Ship {
 			return true;
 		}
 		return false;
+=======
+
+	public static Ship[] values() {
+		return null;
+>>>>>>> e3685a87ee74cdd7c94225a10319576cb5a54ca4
 	}
 	
-}
