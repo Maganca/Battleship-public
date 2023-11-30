@@ -15,6 +15,7 @@ import model.Board.ShotResult;
 import model.Player.PlayerType;
 
 public class PirateGameView extends BorderPane {
+    private ViewManager viewManager;
 
 	private HBox ourHBox = new HBox();
 	private Player player1;
@@ -60,7 +61,8 @@ public class PirateGameView extends BorderPane {
 	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
-	public PirateGameView() {
+	public PirateGameView(ViewManager viewManager) {
+        this.viewManager = viewManager;
 		this.player1 = new Player(PlayerType.HUMAN, 10);
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		initializePanel();

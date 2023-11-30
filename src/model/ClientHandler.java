@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javafx.scene.input.InputEvent;
+import views_controller.BattleshipGUI;
 
 public class ClientHandler {
     private Socket socket;
@@ -25,6 +26,9 @@ public class ClientHandler {
     }
     
     private void startGameLoop() {
+    	while (socket.isConnected()) {
+    		BattleshipGUI.
+    	}
     }
     // Logic to handle communication with the server
 }

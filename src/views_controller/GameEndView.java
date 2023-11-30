@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import model.Board;
 
 public class GameEndView extends BorderPane {
+    private ViewManager viewManager;
+    
 	private VBox vBox = new VBox();
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 	private GridPane resultsGrid = new GridPane();
@@ -25,8 +27,16 @@ public class GameEndView extends BorderPane {
 	public Button menuButton = new Button("Main Menu");
 	public Label endText = new Label("YOU WIN");
 
-	public GameEndView() {
+	public GameEndView(ViewManager viewManager) {
+        this.viewManager = viewManager;
 		initializePanel();
+		menuButton.setOnAction(mouseEvent -> {
+			viewManager.changeView(viewManager.getStartView());
+		});
+		playAgainButton.setOnAction(mouseEvent -> {
+			viewManager.getShipSelectionView().reset();
+			viewManager.changeView(viewManager.getShipSelectionView());
+		});
 	}
 
 	private void initializePanel() {

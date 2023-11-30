@@ -4,13 +4,15 @@ import java.io.File;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-public class StartScreenView extends BorderPane {
+public class StartScreenView extends BorderPane{
+    private ViewManager viewManager;
 
     private VBox ourVBox = new VBox();
     public Button startButton = new Button("Start");
@@ -22,8 +24,18 @@ public class StartScreenView extends BorderPane {
 
     private ImageView titleView = new ImageView(titleImage);
 
-    public StartScreenView() {
+    public StartScreenView(ViewManager viewManager) {
+        this.viewManager = viewManager;
         initializePanel();
+		startButton.setOnAction(mouseEvent -> {
+			viewManager.changeView(viewManager.getShipSelectionView());
+		});
+		infoButton.setOnAction(mouseEvent -> {
+			viewManager.changeView(viewManager.getInfoView());
+		});
+		multiplayerButton.setOnAction(mouseEvent -> {
+			viewManager.changeView(viewManager.getMultiplayerSetupView());
+		});
     }
 
     private void initializePanel() {
@@ -40,4 +52,5 @@ public class StartScreenView extends BorderPane {
 
         setCenter(ourVBox);
     }
+
 }

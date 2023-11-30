@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class InfoView extends BorderPane {
+    private ViewManager viewManager; // our local viewManager
+    
     private VBox vBox = new VBox();
     private Label infoText = new Label("Welcome to Battleship Game!");
     private Label description = new Label("Battleship is a strategic game where players place ships on a grid and take turns guessing where the opponent's ships are located. The goal is to sink all of the opponent's ships before they sink yours.");
@@ -21,7 +23,9 @@ public class InfoView extends BorderPane {
     public Button backButton = new Button("Back");
     private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 
-    public InfoView() {
+    public InfoView(ViewManager viewManager) {
+        this.viewManager = viewManager; // allows us to change the program view from here
+        
         infoText.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-font-family: Arial;");
         description.setStyle("-fx-font-size: 16; -fx-font-family: Arial;");
         aboutBattleship.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-font-family: Arial;");
@@ -43,5 +47,10 @@ public class InfoView extends BorderPane {
         vBox.setMaxHeight(400);
         this.setCenter(vBox);
         this.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
+        
+		backButton.setOnAction(mouseEvent -> {
+			// changes the program view to the already created start view.
+			viewManager.changeView(viewManager.getStartView());
+		});
     }
 }

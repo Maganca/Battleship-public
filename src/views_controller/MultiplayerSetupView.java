@@ -26,6 +26,7 @@ import model.ClientHandler;
 import model.ServerHandler;
 
 public class MultiplayerSetupView extends BorderPane {
+    private ViewManager viewManager;
 
 	private String DEV_PORT = "1006";
 	private VBox ourVBox = new VBox();
@@ -46,11 +47,24 @@ public class MultiplayerSetupView extends BorderPane {
 	// Using ExecutorService to run the ServerHandler in a separate thread
 	public ExecutorService serverThread;
 
-	public MultiplayerSetupView() {
+	public MultiplayerSetupView(ViewManager viewManager) {
+        this.viewManager = viewManager;
 		initializePanel();
 		handleMultiplayer();
+		
+		backButton.setOnAction(MouseEvent -> {
+            if (serverThread != null && !serverThread.isShutdown()) {
+            	System.out.println("Exiting!");
+            	serverThread.shutdown();
+            }
+			viewManager.changeView(viewManager.getStartView());
+		});
 	}
 
+	public ExecutorService getServerThread() {
+		return serverThread;
+	}
+	
 	private void initializePanel() {
 		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
@@ -92,7 +106,8 @@ public class MultiplayerSetupView extends BorderPane {
 	}
 
 	private void joinAsClient(int port, String hostnameString) {
-		ClientHandler clientThread = new ClientHandler(hostnameString, port);
+		ClientHandler clientHandler = new ClientHandler(hostnameString, port);
+		viewManager.changeView(viewManager.getDebugView());
 	}
 
 	private void startServerHandler(int port) {
