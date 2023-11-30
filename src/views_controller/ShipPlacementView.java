@@ -35,13 +35,13 @@ public class ShipPlacementView extends BorderPane {
         showPredictionCoordinates(5, 5, 3); // Example prediction, you can customize this
         //this.getChildren().add(getBoardVisual());
     }
-=======
+
         // Customize board size
         Label boardSizeLabel = new Label("Board Size:");
         Slider boardSizeSlider = new Slider(5, 15, 10);
         boardSizeSlider.setShowTickMarks(true);
         boardSizeSlider.setShowTickLabels(true);
->>>>>>> e3685a87ee74cdd7c94225a10319576cb5a54ca4
+
 
         // Number of ships and their lengths
         Label shipsInfoLabel = new Label("Number of Ships and Lengths:");

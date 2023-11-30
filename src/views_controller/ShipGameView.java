@@ -85,7 +85,7 @@ public class ShipGameView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		ShipWinView shipWinView = new ShipWinView(true);
+		ShipWinView shipWinView = new ShipWinView(player1.getBoard());
 		nextButton.setOnAction(mouseEvent -> {
 			this.setCenter(null);
 			this.setCenter(shipWinView);

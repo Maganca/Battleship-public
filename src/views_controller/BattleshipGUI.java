@@ -99,10 +99,10 @@ public class BattleshipGUI extends Application {
             window.setCenter(shipPlacementView);
         });
 
-        shipPlacementView = new ShipPlacementView();
-        shipPlacementView.startButton.setOnAction(e -> {
-            setViewTo(startView);
-        });
+        //shipPlacementView = new ShipPlacementView();
+        //shipPlacementView.startButton.setOnAction(e -> {
+        //    setViewTo(startView);
+        //});
 		
 		startView.startButton.setOnAction(mouseEvent -> {
 			window.setCenter(shipSelectionView);
