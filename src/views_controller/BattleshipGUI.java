@@ -24,13 +24,13 @@ public class BattleshipGUI extends Application {
 	}
 
 	private ShipPlacementView shipPlacementView;
-	
 	private StartScreenView startView;
 	private ShipSelectionView shipSelectionView;
 	private ShipGameView shipGameView;
 	private MultiplayerSetupView multiplayerSetupView;
-	private ShipWinView shipWinView;
-	
+	private GameEndView gameEndView;
+	private InfoView infoView;
+
 	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
@@ -46,44 +46,9 @@ public class BattleshipGUI extends Application {
 
 		setupAllViews();
 
-		//window.setTop(initMenuBar());
-
 		stage.setScene(scene);
 		stage.show();
 		stage.setResizable(false);
-	}
-
-	/**
-	 * Initializes the menu bar that is always on top of the window
-	 * 
-	 * @return
-	 */
-	private MenuBar initMenuBar() {
-		MenuBar menuBar = new MenuBar();
-		Menu options = new Menu("Options");
-		Menu strategies = new Menu("Strategies");
-		MenuItem randomMenu = new MenuItem("RandomAI");
-		MenuItem intermediateMenu = new MenuItem("Intermediate");
-		strategies.getItems().addAll(randomMenu, intermediateMenu);
-		Menu views = new Menu("Views");
-		MenuItem textArea = new MenuItem("TextArea"); // activeView = 0
-		MenuItem button = new MenuItem("Button"); // activeView = 2
-		MenuItem drawing = new MenuItem("Drawing"); // activeView = 1
-		views.getItems().addAll(button, textArea, drawing);
-		// TODO: Get menu buttons working
-		// EVENT HANDLING FOR ALL MENU BUTTONS
-		// Switches view to textArea without restarting the current game
-//		// Starts a new game
-//		startNewGame.setOnAction(mouseEvent -> {
-//			startGameAndViews();
-//		});
-
-		MenuItem startNewGame = new MenuItem("New Game");
-
-		options.getItems().addAll(startNewGame, strategies, views);
-		menuBar.getMenus().addAll(options);
-		return menuBar;
-
 	}
 
 	/**
@@ -94,39 +59,69 @@ public class BattleshipGUI extends Application {
 	 */
 	private void setupAllViews() {
 		startView = new StartScreenView();
-		setViewTo(startView);
-		startView.startButton.setOnAction(mouseEvent -> {
-            window.setCenter(shipPlacementView);
-        });
+		shipGameView = new ShipGameView();
+		shipSelectionView = new ShipSelectionView();
+		multiplayerSetupView = new MultiplayerSetupView();
+		gameEndView = new GameEndView();
 
-        //shipPlacementView = new ShipPlacementView();
-        //shipPlacementView.startButton.setOnAction(e -> {
-        //    setViewTo(startView);
-        //});
-		
+		// shipPlacementView = new ShipPlacementView();
+		infoView = new InfoView();
+
+		setViewTo(startView);
+
 		startView.startButton.setOnAction(mouseEvent -> {
 			window.setCenter(shipSelectionView);
 		});
+		// startView.startButton.setOnAction(mouseEvent -> {
+		// window.setCenter(shipPlacementView);
+		// });
+		startView.infoButton.setOnAction(mouseEvent -> {
+			setViewTo(infoView);
+		});
+		startView.multiplayerButton.setOnAction(mouseEvent -> {
+			window.setCenter(multiplayerSetupView);
+		});
 
-		multiplayerSetupView = new MultiplayerSetupView();
-		//startView.multiplayerButton.setOnAction(mouseEvent -> {
-		//	window.setCenter(multiplayerSetupView);
-		//});
-		shipSelectionView = new ShipSelectionView();
+		shipSelectionView.backButton.setOnAction(mouseEvent -> {
+			setViewTo(startView);
+		});
+		infoView.backButton.setOnAction(mouseEvent -> {
+			setViewTo(startView);
+		});
+		multiplayerSetupView.backButton.setOnAction(mouseEvent -> {
+			setViewTo(startView);
+		});
+		
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_EASY, 10));
+			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
+			shipGameView.setPlayer2(new Player(PlayerType.AI_EASY, 10));
 			setViewTo(shipGameView);
 		});
 		shipSelectionView.normalButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_NORMAL, 10));
+			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
+			shipGameView.setPlayer2(new Player(PlayerType.AI_NORMAL, 10));
 			setViewTo(shipGameView);
 		});
 		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
-			shipGameView = new ShipGameView(shipSelectionView.getConstructedPlayer(),
-					new Player(PlayerType.AI_HARD, 10));
+			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
+			shipGameView.setPlayer2(new Player(PlayerType.AI_HARD, 10));
 			setViewTo(shipGameView);
+		});
+		
+		shipGameView.winnerButton.setOnAction(mouseEvent -> {
+			gameEndView.setWin(true);
+			setViewTo(gameEndView);
+		});
+		shipGameView.loserButton.setOnAction(mouseEvent -> {
+			gameEndView.setWin(false);
+			setViewTo(gameEndView);
+		});
+		
+		gameEndView.menuButton.setOnAction(mouseEvent -> {
+			setViewTo(startView);
+		});
+		gameEndView.playAgainButton.setOnAction(mouseEvent -> {
+			setViewTo(shipSelectionView);
 		});
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -26,6 +27,7 @@ import model.Player;
 import model.Ship;
 import model.Sounds;
 import model.Board.ShotResult;
+import model.Player.PlayerType;
 
 public class ShipGameView extends BorderPane {
 
@@ -36,7 +38,8 @@ public class ShipGameView extends BorderPane {
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
-	public Button nextButton = new Button("Next");
+	public Button winnerButton = new Button("Next");
+	public Button loserButton = new Button("Next");
 
 	private List<Ship> shipList1;
 	private List<Ship> shipList2;
@@ -76,20 +79,23 @@ public class ShipGameView extends BorderPane {
 	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
-	public ShipGameView(Player player1, Player player2) {
-		this.player1 = player1;
-		this.player2 = player2;
+	public ShipGameView() {
+		this.player1 = new Player(PlayerType.AI_EASY, 10);
+		this.player2 = new Player(PlayerType.AI_EASY, 10);
 		shipList1 = player1.getBoard().getShipList();
 		shipList2 = player1.getBoard().getShipList();
 		initializePanel();
 	}
+	
+	public void setPlayer1(Player player) {
+		this.player1 = player;
+	}
+	
+	public void setPlayer2(Player player) {
+		this.player2 = player;
+	}
 
 	private void initializePanel() {
-		ShipWinView shipWinView = new ShipWinView(player1.getBoard());
-		nextButton.setOnAction(mouseEvent -> {
-			this.setCenter(null);
-			this.setCenter(shipWinView);
-		});
 		int boardSize = player1.getBoardSize();
 		player1Grid = new ImageView[boardSize][boardSize];
 		player2Grid = new ImageView[boardSize][boardSize];
@@ -119,9 +125,10 @@ public class ShipGameView extends BorderPane {
 		ourHBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		ourHBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
-		ourHBox.getChildren().add(nextButton);
-		nextButton.setVisible(false);
-		;
+		ourHBox.getChildren().add(winnerButton);
+		ourHBox.getChildren().add(loserButton);
+		winnerButton.setVisible(false);
+		loserButton.setVisible(false);
 		this.setCenter(ourHBox);
 	}
 
@@ -244,8 +251,10 @@ public class ShipGameView extends BorderPane {
 					}
 				}
 			}
-			if (!(player1.isAlive() && player2.isAlive())) {
-				nextButton.setVisible(true);
+			if (!player1.isAlive()) {
+				loserButton.setVisible(true);
+			}else if (!player2.isAlive()) {
+				winnerButton.setVisible(true);
 			}
 		}
 	}
