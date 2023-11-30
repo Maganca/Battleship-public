@@ -1,5 +1,4 @@
 // Kade Dean
-// Kade Dean
 package model;
 
 import java.util.ArrayList;
