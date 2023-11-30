@@ -164,6 +164,18 @@ public class ShipGameView extends BorderPane {
 			return shiphb;
 		} else if (stat.equals("HC")) {
 			return shiphc;
+		} else if (stat.equals("VHA")) {
+			return hitva;
+		} else if (stat.equals("VHB")) {
+			return hitvb;
+		} else if (stat.equals("VHC")) {
+			return hitvc;
+		} else if (stat.equals("HHA")) {
+			return hitha;
+		} else if (stat.equals("HHB")) {
+			return hithb;
+		} else if (stat.equals("HHC")) {
+			return hithc;
 		
 		} else if (stat.equals("_")) {
 			return ocean;
