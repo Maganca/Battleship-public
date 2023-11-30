@@ -83,11 +83,11 @@ public class DefaultGameView extends BorderPane {
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				player1Grid[i][j] = new ImageView(userImageChoice(player1.getBoard().playerToStringCoord(i, j)));
-				player1Grid[i][j].setFitWidth(20);
-				player1Grid[i][j].setFitHeight(20);
+				player1Grid[i][j].setFitWidth(40);
+				player1Grid[i][j].setFitHeight(40);
 				player2Grid[i][j] = new ImageView(ocean);
-				player2Grid[i][j].setFitWidth(20);
-				player2Grid[i][j].setFitHeight(20);
+				player2Grid[i][j].setFitWidth(40);
+				player2Grid[i][j].setFitHeight(40);
 				player2Grid[i][j].setOnMouseClicked(new ShotListener());
 
 				player2GridPane.add(player2Grid[i][j], i, j);
