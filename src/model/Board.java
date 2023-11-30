@@ -12,7 +12,7 @@ public class Board {
 	private Object[][] theBoard; // Main board object
 	private int size; // Board size
 	private int totalBoardHealth; // Aggregate health of all ships on board
-
+	
 	private List<Ship> shipList = new ArrayList<>();
 
 	/**
@@ -95,6 +95,7 @@ public class Board {
 			int y = location[1];
 			this.totalBoardHealth++;
 			theBoard[y][x] = ship;
+			
 		}
 		shipList.add(ship);
 		return true;
@@ -148,8 +149,30 @@ public class Board {
 		}
 		return theBoard[y][x];
 	}
-
+	
 	public String toString() {
+		String result = "";
+		for (Object[] row : theBoard) {
+			for (Object col : row) {
+				if (col == Board.ShotResult.HIT) {
+					result += "H ";
+				} else if (col == Board.ShotResult.MISS) {
+					result += "M ";
+				} else if (col instanceof Ship) {
+					
+					result += "S ";
+				} else if (col == null) {
+					result += "_ ";
+				}
+			}
+			result += "\n";
+		}
+		return result;
+	}
+	/**
+	 * toString for player when this finally gets dev'd
+	 */
+	public String playerToString()  {
 		String result = "";
 		for (Object[] row : theBoard) {
 			for (Object col : row) {
@@ -167,7 +190,52 @@ public class Board {
 		}
 		return result;
 	}
+	/**
+	 * This toString includes the ships in the final string output, which should be
+	 * only visible to the current player.
+	 * 
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return String representation of the coordinate.
+	 */
+	public String playerToStringCoord(int x, int y) {
+		String result = "";
 
+		if (theBoard[y][x] == Board.ShotResult.HIT) {
+			result += "H";
+		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
+			result += "M";
+		} else if (theBoard[y][x] instanceof Ship) {
+			if (((Ship)theBoard[y][x]).isVertical()) {
+				if (((Ship)theBoard[y][x]).isStart(y, x)) {
+					result += "VA";
+				}
+				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
+					result += "VC";
+				}
+				else {
+					result += "VB";
+				}
+				
+			}
+			else if (!((Ship)theBoard[y][x]).isVertical()) {
+				if (((Ship)theBoard[y][x]).isStart(y, x)) {
+					result += "HA";
+				}
+				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
+					result += "HC";
+				}
+				else {
+					result += "HB";
+				}
+			}
+			
+		} else if (theBoard[y][x] == null) {
+			result += "_";
+		}
+
+		return result;
+	}
 	/**
 	 * This toString includes the ships in the final string output, which should be
 	 * only visible to the current player.
@@ -191,7 +259,6 @@ public class Board {
 
 		return result;
 	}
-
 	/**
 	 * This toString hides the ships in the final string output.
 	 * 

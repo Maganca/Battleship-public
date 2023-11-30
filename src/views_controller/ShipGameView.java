@@ -36,7 +36,7 @@ public class ShipGameView extends BorderPane {
 	private ImageView[][] player2Grid;
 	private GridPane player1GridPane = new GridPane();
 	private GridPane player2GridPane = new GridPane();
-	public Button nextButton = new Button("Continue");
+	public Button nextButton = new Button("Next");
 
 	private List<Ship> shipList1;
 	private List<Ship> shipList2;
@@ -46,9 +46,9 @@ public class ShipGameView extends BorderPane {
 	private Image shipha = new Image(new File("Tiles/shipha.gif").toURI().toString());
 	private Image shiphb = new Image(new File("Tiles/shiphb.gif").toURI().toString());
 	private Image shiphc = new Image(new File("Tiles/shiphc.gif").toURI().toString());
-	private Image shipva = new Image(new File("Tiles/shipha.gif").toURI().toString());
-	private Image shipvb = new Image(new File("Tiles/shiphb.gif").toURI().toString());
-	private Image shipvc = new Image(new File("Tiles/shiphc.gif").toURI().toString());
+	private Image shipva = new Image(new File("Tiles/shipva.gif").toURI().toString());
+	private Image shipvb = new Image(new File("Tiles/shipvb.gif").toURI().toString());
+	private Image shipvc = new Image(new File("Tiles/shipvc.gif").toURI().toString());
 
 	private Image hitha = new Image(new File("Tiles/hitha.gif").toURI().toString());
 	private Image hithb = new Image(new File("Tiles/hithb.gif").toURI().toString());
@@ -73,6 +73,7 @@ public class ShipGameView extends BorderPane {
 	private static final Media MISS_NOISE = new Media(new File("soundeffects/miss.mp3").toURI().toString());
 	private static final Media GOOD_NOISE = new Media(new File("soundeffects/good.mp3").toURI().toString());
 	private static final Media BAD_NOISE = new Media(new File("soundeffects/bad.mp3").toURI().toString());
+	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
 
 	public ShipGameView(Player player1, Player player2) {
@@ -84,9 +85,10 @@ public class ShipGameView extends BorderPane {
 	}
 
 	private void initializePanel() {
+		ShipWinView shipWinView = new ShipWinView(true);
 		nextButton.setOnAction(mouseEvent -> {
 			this.setCenter(null);
-			this.setCenter(new ShipWinView(player1.isAlive()));
+			this.setCenter(shipWinView);
 		});
 		int boardSize = player1.getBoardSize();
 		player1Grid = new ImageView[boardSize][boardSize];
@@ -115,7 +117,8 @@ public class ShipGameView extends BorderPane {
 		ourHBox.getChildren().add(new Label("\nYour Board: "));
 		ourHBox.getChildren().add(player1GridPane);
 		ourHBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
-		ourHBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
+		ourHBox.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				BorderWidths.EMPTY, new Insets(10, 10, 10, 10))));
 		ourHBox.getChildren().add(nextButton);
 		nextButton.setVisible(false);
 		;
@@ -143,7 +146,31 @@ public class ShipGameView extends BorderPane {
 		}
 	}
 
-	private Image playerImageChoice;
+	private Image playerImageChoice(String stat) {
+		
+		if (stat.equals("H")) {
+			return hit;
+		} else if (stat.equals("M")) {
+			return miss;
+		} else if (stat.equals("VA")) {
+			return shipva;
+		} else if (stat.equals("VB")) {
+			return shipvb;
+		} else if (stat.equals("VC")) {
+			return shipvc;
+		} else if (stat.equals("HA")) {
+			return shipha;
+		} else if (stat.equals("HB")) {
+			return shiphb;
+		} else if (stat.equals("HC")) {
+			return shiphc;
+		
+		} else if (stat.equals("_")) {
+			return ocean;
+		} else {
+			return null;
+		}
+	} 
 
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
@@ -157,17 +184,17 @@ public class ShipGameView extends BorderPane {
 							ShotResult player1Outcome = player1.takeShot(player2, i, j);
 							switch (player1Outcome) {
 							case GAME_WON:
-								// soundEffect.queueSound(SHOOT_NOISE);
+								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(GOOD_NOISE);
 								System.out.print("You Won");
 								break;
 							case HIT:
-								// soundEffect.queueSound(SHOOT_NOISE);
+								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(HIT_NOISE);
 								System.out.print("You hit my ship!");
 								break;
 							case MISS:
-								// soundEffect.queueSound(SHOOT_NOISE);
+								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(MISS_NOISE);
 								System.out.print("You missed");
 								break;
@@ -176,14 +203,13 @@ public class ShipGameView extends BorderPane {
 								System.out.print("Try Again\n");
 								break;
 							case SUNK:
-								// soundEffect.queueSound(SHOOT_NOISE);
+								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(SHOOT_NOISE);
 								System.out.print("You sunk my ship!");
 								break;
 							default:
 								break;
 							}
-							// while(soundEffect.isPlaying) {}
 							if (player1Outcome.equals(ShotResult.HIT) || player1Outcome.equals(ShotResult.MISS)
 									|| player1Outcome.equals(ShotResult.SUNK)) {
 								ShotResult AIOutcome = player2.takeShot(player1);
@@ -208,7 +234,8 @@ public class ShipGameView extends BorderPane {
 								}
 								for (int k = 0; k < boardSize; k++) {
 									for (int l = 0; l < boardSize; l++) {
-										player1Grid[k][l].setImage(imageChoice(player1.getBoard().toStringCoord(k, l)));
+										player1Grid[k][l]
+												.setImage(playerImageChoice(player1.getBoard().playerToStringCoord(k, l)));
 									}
 								}
 							}

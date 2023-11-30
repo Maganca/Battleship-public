@@ -36,7 +36,7 @@ public class ShipPlacementView extends GridPane {
     private void setupBoard() {
         board = new Board(boardSize);
         showPredictionCoordinates(5, 5, 3); // Example prediction, you can customize this
-        this.getChildren().add(getBoardVisual());
+        //this.getChildren().add(getBoardVisual());
     }
 
     private void showPredictionCoordinates(int row, int col, int size) {
@@ -77,13 +77,13 @@ public class ShipPlacementView extends GridPane {
 
     private void startGame() {
     	// Create a new ShipGameView with the current board and any other necessary parameters
-        ShipGameView shipGameView = new ShipGameView();
+        //ShipGameView shipGameView = new ShipGameView();
         // Create a new Scene with the ShipGameView
-        Scene scene = new Scene(shipGameView, 800, 600);  // Adjust width and height as needed
+        //Scene scene = new Scene(shipGameView, 800, 600);  // Adjust width and height as needed
         // Get the current window (Stage)
         Stage stage = (Stage) getScene().getWindow();
         // Set the scene to the new ShipGameView
-        stage.setScene(scene);
+        //stage.setScene(scene);
         // Show the stage
         stage.show();
     }
@@ -92,11 +92,11 @@ public class ShipPlacementView extends GridPane {
         // Update the visual representation of the board
         // Reset the board
         this.getChildren().clear();
-        this.getChildren().addAll(getBoardVisual());
+        //this.getChildren().addAll(getBoardVisual());
 
         // Visualize placed ships (dark gray color)
-        for (Ship ship : board.getShips()) {
-            for (int[] location : ship.locations) {
+        //for (Ship ship : board.getShips()) {
+            //for (int[] location : ship.locations) {
                 int row = location[0];
                 int col = location[1];
                 Rectangle cell = new Rectangle(30, 30);

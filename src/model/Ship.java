@@ -88,5 +88,24 @@ public class Ship {
 	public int getSize() {
 		return startingSize;
 	}
+	public boolean isVertical() {
+		if (verticality == 1) {
+			return true;
+		}
+		
+		return false;
+	}
+	public boolean isStart( int y, int x) {
+		if (x == start[0] && y == start[1] ) {
+			return true;
+		}
+		return false;
+	}
+	public boolean isEnd( int y, int x) {
+		if (y == end[0] && x == end[1] ) {
+			return true;
+		}
+		return false;
+	}
 	
 }
