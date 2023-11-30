@@ -101,7 +101,7 @@ public class Ship {
 		return false;
 	}
 	public boolean isEnd( int y, int x) {
-		if (y == end[0] && x == end[1] ) {
+		if (x == end[0] && y == end[1] ) {
 			return true;
 		}
 		return false;

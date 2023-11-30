@@ -217,7 +217,30 @@ public class Board {
 		String result = "";
 
 		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			result += "H";
+			if (((Ship)theBoard[y][x]).isVertical()) {
+				if (((Ship)theBoard[y][x]).isStart(y, x)) {
+					result += "VHA";
+				}
+				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
+					result += "VHC";
+				}
+				else {
+					result += "VHB";
+				}
+				
+			}
+			else if (!((Ship)theBoard[y][x]).isVertical()) {
+				if (((Ship)theBoard[y][x]).isStart(y, x)) {
+					result += "HHA";
+				}
+				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
+					result += "HHC";
+				}
+				else {
+					result += "HHB";
+				}
+			}
+			
 		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
 			result += "M";
 		} else if (theBoard[y][x] instanceof Ship) {
