@@ -14,8 +14,6 @@ public class Ship {
 	private int[] start;
 	private int[] end;
 	private int verticality;
-	
-	
 
 	/**
 	 * Ship object constructor
@@ -43,8 +41,7 @@ public class Ship {
 			for (int i = 0; i < size; i++) {
 				if (i == 0) {
 					start = new int[] { row + i, col };
-				}
-				else if (i == size-1) {
+				} else if (i == size - 1) {
 					end = new int[] { row + i, col };
 				}
 				locations.add(new int[] { row + i, col });
@@ -53,8 +50,7 @@ public class Ship {
 			for (int i = 0; i < size; i++) {
 				if (i == 0) {
 					start = new int[] { row, col + i };
-				}
-				else if (i == size-1) {
+				} else if (i == size - 1) {
 					end = new int[] { row, col + i };
 				}
 				locations.add(new int[] { row, col + i });
@@ -62,7 +58,7 @@ public class Ship {
 		}
 		health = locations.size();
 	}
-   
+
 	/**
 	 * gets the ship's current health
 	 * 
@@ -89,22 +85,14 @@ public class Ship {
 	}
 
 	public boolean isVertical() {
-		if (verticality == 1) {
-			return true;
-		}
-		return false;
+		return verticality == 1;
 	}
-	public boolean isStart( int y, int x) {
-		if (x == start[0] && y == start[1] ) {
-			return true;
-		}
-		return false;
+
+	public boolean isStart(int y, int x) {
+		return x == start[0] && y == start[1];
 	}
-	public boolean isEnd( int y, int x) {
-		if (x == end[0] && y == end[1] ) {
-			return true;
-		}
-		return false;
+
+	public boolean isEnd(int y, int x) {
+		return x == end[0] && y == end[1];
 	}
 }
-	

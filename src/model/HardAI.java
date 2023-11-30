@@ -20,7 +20,7 @@ public class HardAI implements AIStrategy {
 			while (!placed) {
 				int row = generator.nextInt(game.getSize());
 				int col = generator.nextInt(game.getSize());
-				int direction = generator.nextInt(1);
+				int direction = generator.nextInt(2);
 				Ship temp = new Ship(row, col, direction, size);
 				placed = game.addShipToBoard(temp);
 			}

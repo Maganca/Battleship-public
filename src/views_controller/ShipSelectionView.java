@@ -20,14 +20,11 @@ import model.Ship;
 import model.Player.PlayerType;
 
 public class ShipSelectionView extends BorderPane {
-	private int GAME_SIZE = 10;
-	private Player player = new Player(PlayerType.HUMAN, GAME_SIZE);
 
 	private VBox ourVBox = new VBox();
-	
-	private Image background = new Image(
-			new File("Tiles/background.png").toURI().toString());
-	
+
+	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
+
 	public Button easyButton = new Button("Start Easy Game");
 	public Button normalButton = new Button("Start Normal Game");
 	public Button hardButton = new Button("Start Hard Game");
@@ -54,7 +51,26 @@ public class ShipSelectionView extends BorderPane {
 	private TextField fiveVert = new TextField();
 
 	public ShipSelectionView() {
+		reset();
 		initializePanel();
+	}
+	
+	public void reset() {		
+		twoXCoord.setText("");
+		twoYCoord.setText("");
+		twoVert.setText("");
+		threeAXCoord.setText("");
+		threeAYCoord.setText("");
+		threeAVert.setText("");
+		threeBXCoord.setText("");
+		threeBYCoord.setText("");
+		threeBVert.setText("");
+		fourXCoord.setText("");
+		fourYCoord.setText("");
+		fourVert.setText("");
+		fiveXCoord.setText("");
+		fiveYCoord.setText("");
+		fiveVert.setText("");
 	}
 
 	private void initializePanel() {
@@ -134,8 +150,7 @@ public class ShipSelectionView extends BorderPane {
 		buttons.add(easyButton, 2, 0);
 		buttons.add(normalButton, 7, 0);
 		buttons.add(hardButton, 12, 0);
-		backButton.setStyle(
-				"-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
+		backButton.setStyle("-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
 		buttons.add(backButton, 2, 2);
 		buttons.setHgap(10);
 		buttons.setVgap(10);
@@ -145,25 +160,25 @@ public class ShipSelectionView extends BorderPane {
 		this.setCenter(ourVBox);
 	}
 
-	public Player getConstructedPlayer() {
+	public Player getConstructedPlayer(int size) {
 		try {
-		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
-				Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
+			Player player = new Player(PlayerType.HUMAN, size);
+			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
+					Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
 
-		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
-				Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
+			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
+					Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
 
-		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
-				Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
+			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
+					Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
 
-		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
-				Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
+			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
+					Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
 
-		player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
-				Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
-		return player;
-		}
-		catch (Exception e) {
+			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
+					Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
+			return player;
+		} catch (Exception e) {
 			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText("Ship placement is not valid!");
 			errorAlert.setContentText("Make sure all your ships are properly placed and all fields are filled out.");

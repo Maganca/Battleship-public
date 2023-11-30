@@ -19,27 +19,18 @@ import model.Board;
 
 public class GameEndView extends BorderPane {
 	private VBox vBox = new VBox();
-	private Label winText = new Label("YOU WIN");
-	private Label loseText = new Label("YOU LOSE");
-	private boolean didWin = true;
-	public Button playAgainButton = new Button("New Game");
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
-	public Button menuButton = new Button("Main Menu");
 	private GridPane resultsGrid = new GridPane();
+	public Button playAgainButton = new Button("New Game");
+	public Button menuButton = new Button("Main Menu");
+	public Label endText = new Label("YOU WIN");
 
 	public GameEndView() {
 		initializePanel();
 	}
 
-	public void setWin(boolean winner) {
-		didWin = winner;
-	}
-
 	private void initializePanel() {
-		if (didWin)
-			vBox.getChildren().add(winText);
-		else
-			vBox.getChildren().add(loseText);
+		vBox.getChildren().add(endText);
 		vBox.getChildren().add(playAgainButton);
 		vBox.getChildren().add(menuButton);
 		vBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));

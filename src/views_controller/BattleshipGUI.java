@@ -26,10 +26,12 @@ public class BattleshipGUI extends Application {
 	private ShipPlacementView shipPlacementView;
 	private StartScreenView startView;
 	private ShipSelectionView shipSelectionView;
-	private ShipGameView shipGameView;
+	private DefaultGameView defaultGameView;
 	private MultiplayerSetupView multiplayerSetupView;
 	private GameEndView gameEndView;
 	private InfoView infoView;
+
+	private int boardSize;
 
 	private static final Media BACKGROUND = new Media(new File("soundeffects/shanty.mp3").toURI().toString());
 	private Sounds soundEffect = new Sounds();
@@ -43,7 +45,7 @@ public class BattleshipGUI extends Application {
 		stage.setTitle("Battleship");
 		window = new BorderPane();
 		Scene scene = new Scene(window, width, height);
-
+		boardSize = 10;
 		setupAllViews();
 
 		stage.setScene(scene);
@@ -59,7 +61,7 @@ public class BattleshipGUI extends Application {
 	 */
 	private void setupAllViews() {
 		startView = new StartScreenView();
-		shipGameView = new ShipGameView();
+		defaultGameView = new DefaultGameView();
 		shipSelectionView = new ShipSelectionView();
 		multiplayerSetupView = new MultiplayerSetupView();
 		gameEndView = new GameEndView();
@@ -91,36 +93,37 @@ public class BattleshipGUI extends Application {
 		multiplayerSetupView.backButton.setOnAction(mouseEvent -> {
 			setViewTo(startView);
 		});
-		
+
 		shipSelectionView.easyButton.setOnAction(mouseEvent -> {
-			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
-			shipGameView.setPlayer2(new Player(PlayerType.AI_EASY, 10));
-			setViewTo(shipGameView);
+			defaultGameView.setPlayer1(shipSelectionView.getConstructedPlayer(boardSize));
+			defaultGameView.setPlayer2(new Player(PlayerType.AI_EASY, boardSize));
+			setViewTo(defaultGameView);
 		});
 		shipSelectionView.normalButton.setOnAction(mouseEvent -> {
-			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
-			shipGameView.setPlayer2(new Player(PlayerType.AI_NORMAL, 10));
-			setViewTo(shipGameView);
+			defaultGameView.setPlayer1(shipSelectionView.getConstructedPlayer(boardSize));
+			defaultGameView.setPlayer2(new Player(PlayerType.AI_NORMAL, boardSize));
+			setViewTo(defaultGameView);
 		});
 		shipSelectionView.hardButton.setOnAction(mouseEvent -> {
-			shipGameView.setPlayer1(shipSelectionView.getConstructedPlayer());
-			shipGameView.setPlayer2(new Player(PlayerType.AI_HARD, 10));
-			setViewTo(shipGameView);
+			defaultGameView.setPlayer1(shipSelectionView.getConstructedPlayer(boardSize));
+			defaultGameView.setPlayer2(new Player(PlayerType.AI_HARD, boardSize));
+			setViewTo(defaultGameView);
 		});
-		
-		shipGameView.winnerButton.setOnAction(mouseEvent -> {
-			gameEndView.setWin(true);
+
+		defaultGameView.winnerButton.setOnAction(mouseEvent -> {
+			gameEndView.endText.setText("YOU WIN");
 			setViewTo(gameEndView);
 		});
-		shipGameView.loserButton.setOnAction(mouseEvent -> {
-			gameEndView.setWin(false);
+		defaultGameView.loserButton.setOnAction(mouseEvent -> {
+			gameEndView.endText.setText("YOU LOSE");
 			setViewTo(gameEndView);
 		});
-		
+
 		gameEndView.menuButton.setOnAction(mouseEvent -> {
 			setViewTo(startView);
 		});
 		gameEndView.playAgainButton.setOnAction(mouseEvent -> {
+			shipSelectionView.reset();
 			setViewTo(shipSelectionView);
 		});
 	}

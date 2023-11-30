@@ -1,5 +1,3 @@
-// Kade Dean
-// Kade Dean
 package model;
 
 import java.util.ArrayList;
@@ -12,23 +10,21 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class Board {
 	private Object[][] theBoard; // Main board object
+	private Object[][] hiddenBoard;
 	private int size; // Board size
 	private int totalBoardHealth; // Aggregate health of all ships on board
-	
 	private List<Ship> shipList = new ArrayList<>();
-	
 	private final SimpleObjectProperty<GameResult> gameResult = new SimpleObjectProperty<>(null);
-
 	private List<Ship> placedShips;
-	
-    public enum GameResult {
-        WIN, LOSE
-    }
 
-    public SimpleObjectProperty<GameResult> gameResultProperty() {
-        return gameResult;
-    }
-	
+	public enum GameResult {
+		WIN, LOSE
+	}
+
+	public SimpleObjectProperty<GameResult> gameResultProperty() {
+		return gameResult;
+	}
+
 	/**
 	 * Shot result enum types.
 	 */
@@ -44,11 +40,11 @@ public class Board {
 	public Board(int size) {
 		this.size = size;
 		theBoard = new Object[size][size];
+		hiddenBoard = new Object[size][size];
 		this.totalBoardHealth = 0;
-		
 		placedShips = new ArrayList<>();
 	}
-	
+
 	/**
 	 * Attempts a new shot on the board and returns one of the resulting ShotResult
 	 * enum types
@@ -68,11 +64,14 @@ public class Board {
 			((Ship) theBoard[y][x]).damage();
 			this.totalBoardHealth--;
 			if (this.totalBoardHealth == 0) {
+				for (int[] location : ((Ship) hiddenBoard[y][x]).locations)
+					theBoard[location[1]][location[0]] = ShotResult.SUNK;
 				return ShotResult.GAME_WON;
 			}
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
-				theBoard[y][x] = ShotResult.HIT;
+				for (int[] location : ((Ship) hiddenBoard[y][x]).locations)
+					theBoard[location[1]][location[0]] = ShotResult.SUNK;
 				return ShotResult.SUNK;
 			}
 			// The ship did not sink so this is just a hit.
@@ -98,7 +97,6 @@ public class Board {
 	 * @param ship to be added. The ship object will contain the needed coordinates.
 	 * @return true if ship was added, false if ship cannot be added
 	 */
-
 	public boolean addShipToBoard(Ship ship) {
 		for (int[] location : ship.locations) {
 			int x = location[0];
@@ -111,7 +109,7 @@ public class Board {
 			int y = location[1];
 			this.totalBoardHealth++;
 			theBoard[y][x] = ship;
-			
+			hiddenBoard[y][x] = ship;
 		}
 		shipList.add(ship);
 		return true;
@@ -134,7 +132,6 @@ public class Board {
 	public Object[][] getBoard() {
 		return theBoard;
 	}
-	
 
 	/**
 	 * Returns the total health of remaining ships on the board.
@@ -144,9 +141,11 @@ public class Board {
 	public int getBoardHealth() {
 		return this.totalBoardHealth;
 	}
-	public List<Ship> getShipList(){
+
+	public List<Ship> getShipList() {
 		return shipList;
 	}
+
 	/**
 	 * This returns an obfuscated object of a board at x, y
 	 * 
@@ -164,47 +163,7 @@ public class Board {
 		}
 		return theBoard[y][x];
 	}
-	
-	public String toString() {
-		String result = "";
-		for (Object[] row : theBoard) {
-			for (Object col : row) {
-				if (col == Board.ShotResult.HIT) {
-					result += "H ";
-				} else if (col == Board.ShotResult.MISS) {
-					result += "M ";
-				} else if (col instanceof Ship) {
-					
-					result += "S ";
-				} else if (col == null) {
-					result += "_ ";
-				}
-			}
-			result += "\n";
-		}
-		return result;
-	}
-	/**
-	 * toString for player when this finally gets dev'd
-	 */
-	public String playerToString()  {
-		String result = "";
-		for (Object[] row : theBoard) {
-			for (Object col : row) {
-				if (col == Board.ShotResult.HIT) {
-					result += "H ";
-				} else if (col == Board.ShotResult.MISS) {
-					result += "M ";
-				} else if (col instanceof Ship) {
-					result += "S ";
-				} else if (col == null) {
-					result += "_ ";
-				}
-			}
-			result += "\n";
-		}
-		return result;
-	}
+
 	/**
 	 * This toString includes the ships in the final string output, which should be
 	 * only visible to the current player.
@@ -214,66 +173,62 @@ public class Board {
 	 * @return String representation of the coordinate.
 	 */
 	public String playerToStringCoord(int x, int y) {
-		String result = "";
-
 		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			if (((Ship)theBoard[y][x]).isVertical()) {
-				if (((Ship)theBoard[y][x]).isStart(y, x)) {
-					result += "VHA";
+			if (((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "HVA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "HVC";
 				}
-				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
-					result += "VHC";
+				return "HVB";
+			} else if (!((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "HHA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "HHC";
 				}
-				else {
-					result += "VHB";
-				}
-				
+				return "HHB";
 			}
-			else if (!((Ship)theBoard[y][x]).isVertical()) {
-				if (((Ship)theBoard[y][x]).isStart(y, x)) {
-					result += "HHA";
-				}
-				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
-					result += "HHC";
-				}
-				else {
-					result += "HHB";
-				}
-			}
-			
 		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
-			result += "M";
-		} else if (theBoard[y][x] instanceof Ship) {
-			if (((Ship)theBoard[y][x]).isVertical()) {
-				if (((Ship)theBoard[y][x]).isStart(y, x)) {
-					result += "VA";
+			return "M";
+		} else if (theBoard[y][x] == Board.ShotResult.SUNK) {
+			if (((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "SVA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "SVC";
 				}
-				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
-					result += "VC";
-				}
-				else {
-					result += "VB";
-				}
-				
-			}
-			else if (!((Ship)theBoard[y][x]).isVertical()) {
-				if (((Ship)theBoard[y][x]).isStart(y, x)) {
-					result += "HA";
-				}
-				else if (((Ship)theBoard[y][x]).isEnd(y, x)) {
-					result += "HC";
-				}
-				else {
-					result += "HB";
-				}
-			}
-			
-		} else if (theBoard[y][x] == null) {
-			result += "_";
-		}
+				return "SVB";
 
-		return result;
+			} else if (!((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "SHA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "SHC";
+				}
+				return "SHB";
+			}
+		} else if (theBoard[y][x] instanceof Ship) {
+			if (((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "VA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "VC";
+				}
+				return "VB";
+			} else if (!((Ship) hiddenBoard[y][x]).isVertical()) {
+				if (((Ship) hiddenBoard[y][x]).isStart(y, x)) {
+					return "HA";
+				} else if (((Ship) hiddenBoard[y][x]).isEnd(y, x)) {
+					return "HC";
+				}
+				return "HB";
+			}
+		}
+		return "_";
+
 	}
+
 	/**
 	 * This toString includes the ships in the final string output, which should be
 	 * only visible to the current player.
@@ -283,44 +238,18 @@ public class Board {
 	 * @return String representation of the coordinate.
 	 */
 	public String toStringCoord(int x, int y) {
-		String result = "";
-
 		if (theBoard[y][x] == Board.ShotResult.HIT) {
-			result += "H";
+			return "H";
 		} else if (theBoard[y][x] == Board.ShotResult.MISS) {
-			result += "M";
+			return "M";
+		} else if (theBoard[y][x] == Board.ShotResult.SUNK) {
+			return "Sunk";
 		} else if (theBoard[y][x] instanceof Ship) {
-			result += "S";
-		} else if (theBoard[y][x] == null) {
-			result += "_";
+			return "S";
 		}
+		return "_";
+	}
 
-		return result;
-	}
-	/**
-	 * This toString hides the ships in the final string output.
-	 * 
-	 * TODO: somehow figure out how to show opponents ships on this view too??
-	 * 
-	 * @return string
-	 */
-	public String toStringOpponentView() {
-		String result = "";
-		for (Object[] row : theBoard) {
-			for (Object col : row) {
-				if (col == Board.ShotResult.HIT) {
-					result += "H";
-				} else if (col == Board.ShotResult.MISS) {
-					result += "M";
-				} else {
-					result += "_";
-				}
-			}
-			result += "\n";
-		}
-		return result;
-	}
-	
 	public int[] calculateTotalHitsAndMisses(Board playerBoard) {
 		int[] result = new int[2];
 
@@ -333,43 +262,14 @@ public class Board {
 				}
 			}
 		}
-
 		return result;
 	}
 
-	public boolean addShipToBoard1(Ship ship) {
-		for (int[] location : ship.locations) {
-			int x = location[0];
-			int y = location[1];
-			if (x >= theBoard[0].length || y >= theBoard.length || theBoard[y][x] != null)
-				return false;
-		}
-		for (int[] location : ship.locations) {
-			int x = location[0];
-			int y = location[1];
-			this.totalBoardHealth++;
-			theBoard[y][x] = ship;
-		}
-		placedShips.add(ship);
-		return true;
-		
-	}
-	
-	public boolean allShipsPlaced() {
-        for (Ship ship : Ship.values()) {
-            if (!placedShips.contains(ship)) {
-                return false;
-            }
-        }
-        return true;
-    }
-	
 	public void customizeBoardSize(int newSize) {
-        this.size = newSize;
-        this.theBoard = new Object[newSize][newSize];
-        clearBoard();
-    }
-	
+		this.size = newSize;
+		this.theBoard = new Object[newSize][newSize];
+		clearBoard();
+	}
 
 	public void clearBoard() {
 		for (int i = 0; i < size; i++) {
