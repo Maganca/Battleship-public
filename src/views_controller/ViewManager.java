@@ -35,11 +35,11 @@ public class ViewManager {
 	public void changeView(Node newView) {
 		battleshipGUI.setViewTo(newView);
 	}
-	
+
 	public int getBoardSize() {
 		return boardSize;
 	}
-	
+
 	public void setBoardSize(int x) {
 		boardSize = x;
 	}

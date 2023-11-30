@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import model.*;
 import model.Player.*;
 
-public class BattleshipGUI extends Application{
+public class BattleshipGUI extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
@@ -32,14 +32,14 @@ public class BattleshipGUI extends Application{
 
 	public void start(Stage stage) {
 		viewManager = new ViewManager(this);
-        stage.setOnCloseRequest(event -> {
-        	ExecutorService serverThread = viewManager.getMultiplayerSetupView().getServerThread();
-            if (serverThread != null && !serverThread.isShutdown()) {
-            	System.out.println("Exiting!");
-            	serverThread.shutdown();
-            }
-            Platform.exit(); // Exit the application when the window is closed
-        });
+		stage.setOnCloseRequest(event -> {
+			ExecutorService serverThread = viewManager.getMultiplayerSetupView().getServerThread();
+			if (serverThread != null && !serverThread.isShutdown()) {
+				System.out.println("Exiting!");
+				serverThread.shutdown();
+			}
+			Platform.exit(); // Exit the application when the window is closed
+		});
 		soundEffect.loop(BACKGROUND);
 		stage.setTitle("Battleship");
 		window = new BorderPane();
@@ -47,9 +47,10 @@ public class BattleshipGUI extends Application{
 		stage.setScene(scene);
 		stage.show();
 		stage.setResizable(false);
-		
+
 		// New view manager implementation
-		viewManager.changeView(viewManager.getStartView());
+		// CHANGE ME BACK
+		viewManager.changeView(viewManager.getMultiplayerSetupView());
 	}
 
 	public void setViewTo(Node newView) {

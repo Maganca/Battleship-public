@@ -26,7 +26,7 @@ import model.ClientHandler;
 import model.ServerHandler;
 
 public class MultiplayerSetupView extends BorderPane {
-    private ViewManager viewManager;
+	private ViewManager viewManager;
 
 	private String DEV_PORT = "1006";
 	private VBox ourVBox = new VBox();
@@ -41,22 +41,23 @@ public class MultiplayerSetupView extends BorderPane {
 	private TextField hostname = new TextField("localhost");
 	private TextField port1 = new TextField(DEV_PORT);
 	private TextField port2 = new TextField(DEV_PORT);
-	private Image background = new Image(
-			new File("Tiles/background.png").toURI().toString());
+	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 	public ServerHandler serverHandler;
 	// Using ExecutorService to run the ServerHandler in a separate thread
 	public ExecutorService serverThread;
 
 	public MultiplayerSetupView(ViewManager viewManager) {
-        this.viewManager = viewManager;
+		this.viewManager = viewManager;
 		initializePanel();
 		handleMultiplayer();
-		
+
 		backButton.setOnAction(MouseEvent -> {
-            if (serverThread != null && !serverThread.isShutdown()) {
-            	System.out.println("Exiting!");
-            	serverThread.shutdown();
-            }
+			if (serverThread != null && !serverThread.isShutdown()) {
+				System.out.println("Exiting!");
+				serverThread.shutdown();
+			}
+			disableInputs(false);
+			statusText.setText("");
 			viewManager.changeView(viewManager.getStartView());
 		});
 	}
@@ -64,35 +65,27 @@ public class MultiplayerSetupView extends BorderPane {
 	public ExecutorService getServerThread() {
 		return serverThread;
 	}
-	
+
 	private void initializePanel() {
 		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-		ourVBox.getChildren().addAll(titleLabel, port1, hostButton, orLabel,
-				hostnameLabel, hostname, port2, joinButton, statusText,
-				backButton);
+		ourVBox.getChildren().addAll(titleLabel, port1, hostButton, orLabel, hostnameLabel, hostname, port2, joinButton,
+				statusText, backButton);
 		ourVBox.setSpacing(10);
 		ourVBox.setAlignment(Pos.CENTER);
-		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
-				new CornerRadii(5), Insets.EMPTY)));
+		ourVBox.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(5), Insets.EMPTY)));
 		ourVBox.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
-						new CornerRadii(5), BorderWidths.DEFAULT)));
+				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
 
 		hostname.setPromptText("Enter IP address");
 		port1.setPromptText("Enter port number");
 		port2.setPromptText("Enter port number");
 
-		backButton.setStyle(
-				"-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
-		hostButton.setStyle(
-				"-fx-font-size: 17px; -fx-min-width: 60px; -fx-min-height: 30px;");
-		joinButton.setStyle(
-				"-fx-font-size: 17px; -fx-min-width: 60px; -fx-min-height: 30px;");
-		hostnameLabel.setStyle(
-				"-fx-font-size: 20px; -fx-min-width: 60px; -fx-min-height: 30px;");
-		portLabel.setStyle(
-				"-fx-font-size: 20px; -fx-min-width: 60px; -fx-min-height: 30px;");
+		backButton.setStyle("-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
+		hostButton.setStyle("-fx-font-size: 17px; -fx-min-width: 60px; -fx-min-height: 30px;");
+		joinButton.setStyle("-fx-font-size: 17px; -fx-min-width: 60px; -fx-min-height: 30px;");
+		hostnameLabel.setStyle("-fx-font-size: 20px; -fx-min-width: 60px; -fx-min-height: 30px;");
+		portLabel.setStyle("-fx-font-size: 20px; -fx-min-width: 60px; -fx-min-height: 30px;");
 		hostname.setMaxWidth(150);
 		port1.setMaxWidth(150);
 		port2.setMaxWidth(150);
@@ -100,14 +93,18 @@ public class MultiplayerSetupView extends BorderPane {
 		ourVBox.setMaxHeight(400);
 
 		this.setCenter(ourVBox);
-		this.setBackground(new Background(
-				new BackgroundImage(background, null, null, null, null)));
+		this.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		this.setPadding(new Insets(20));
 	}
 
 	private void joinAsClient(int port, String hostnameString) {
-		ClientHandler clientHandler = new ClientHandler(hostnameString, port);
-		viewManager.changeView(viewManager.getDebugView());
+		try {
+			ClientHandler clientHandler = new ClientHandler(hostnameString, port, viewManager);
+			viewManager.changeView(viewManager.getDebugView());
+		} catch (Exception e) {
+			statusText.setText("Unable to Join. Check your details and try again.");
+			disableInputs(false);
+		}
 	}
 
 	private void startServerHandler(int port) {
@@ -135,8 +132,8 @@ public class MultiplayerSetupView extends BorderPane {
 				try {
 					int portNumber = Integer.parseInt(port);
 					disableInputs(true);
-					statusText.setText(
-							"Server Started! Waiting for user to connect.");
+					statusText.setText("Server Started! Waiting for user to connect.");
+					serverThread = Executors.newSingleThreadExecutor(); // Initialize the executor
 					serverThread.submit(() -> startServerHandler(portNumber));
 					joinAsClient(portNumber, "localhost");
 				} catch (NumberFormatException e) {
