@@ -2,8 +2,11 @@
 package views_controller;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -39,8 +42,17 @@ public class BattleshipGUI extends Application {
 	public BorderPane window;
 	public static final int width = 700;
 	public static final int height = 600;
+    private ExecutorService serverThread; // Declare executor as a class variable
+
 
 	public void start(Stage stage) {
+        stage.setOnCloseRequest(event -> {
+            if (serverThread != null && !serverThread.isShutdown()) {
+            	System.out.println("Exiting!");
+            	serverThread.shutdown();
+            }
+            Platform.exit(); // Exit the application when the window is closed
+        });
 		soundEffect.loop(BACKGROUND);
 		stage.setTitle("Battleship");
 		window = new BorderPane();
@@ -90,7 +102,17 @@ public class BattleshipGUI extends Application {
 		infoView.backButton.setOnAction(mouseEvent -> {
 			setViewTo(startView);
 		});
-		multiplayerSetupView.backButton.setOnAction(mouseEvent -> {
+        // Handles multiplayer view buttons
+        startView.multiplayerButton.setOnAction(mouseEvent -> {
+        	serverThread = Executors.newSingleThreadExecutor(); // Initialize the executor
+            multiplayerSetupView.serverThread = serverThread; // Assign the executor to the view
+            setViewTo(multiplayerSetupView);
+        });
+		multiplayerSetupView.backButton.setOnAction(MouseEvent -> {
+            if (serverThread != null && !serverThread.isShutdown()) {
+            	System.out.println("Exiting!");
+            	serverThread.shutdown();
+            }
 			setViewTo(startView);
 		});
 
