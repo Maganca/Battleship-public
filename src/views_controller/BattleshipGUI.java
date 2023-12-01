@@ -35,7 +35,7 @@ public class BattleshipGUI extends Application {
 	private Sounds soundEffect = new Sounds();
 
 	public BorderPane window;
-	public static final int width = 700;
+	public static final int width = 1200;
 	public static final int height = 600;
     private ExecutorService serverThread; // Declare executor as a class variable
 
