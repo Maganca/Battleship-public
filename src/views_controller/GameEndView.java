@@ -31,6 +31,7 @@ public class GameEndView extends BorderPane {
         this.viewManager = viewManager;
 		initializePanel();
 		menuButton.setOnAction(mouseEvent -> {
+			viewManager.getShipSelectionView().reset();
 			viewManager.changeView(viewManager.getStartView());
 		});
 		playAgainButton.setOnAction(mouseEvent -> {

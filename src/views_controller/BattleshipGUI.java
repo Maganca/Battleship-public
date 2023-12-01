@@ -4,7 +4,6 @@ package views_controller;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -13,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
 import model.*;
-import model.Player.*;
 
 public class BattleshipGUI extends Application {
 
@@ -27,7 +25,7 @@ public class BattleshipGUI extends Application {
 	private Sounds soundEffect = new Sounds();
 
 	public BorderPane window;
-	public static final int width = 700;
+	public static final int width = 1200;
 	public static final int height = 600;
 
 	public void start(Stage stage) {
@@ -64,7 +62,7 @@ public class BattleshipGUI extends Application {
 
 		// New view manager implementation
 		// CHANGE ME BACK
-		viewManager.changeView(viewManager.getMultiplayerSetupView());
+		viewManager.changeView(viewManager.getStartView());
 	}
 
 	public void setViewTo(Node newView) {

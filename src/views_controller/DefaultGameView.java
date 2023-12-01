@@ -109,9 +109,9 @@ public class DefaultGameView extends BorderPane {
 		player1GridPane.setHgap(2);
 		player1GridPane.setVgap(2);
 		ourHBox.getChildren().clear();
-		ourHBox.getChildren().add(new Label("My Board: "));
+		ourHBox.getChildren().add(new Label("Opponent Board: "));
 		ourHBox.getChildren().add(player2GridPane);
-		ourHBox.getChildren().add(new Label("\nYour Board: "));
+		ourHBox.getChildren().add(new Label("\tUser Board: "));
 		ourHBox.getChildren().add(player1GridPane);
 		ourHBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		ourHBox.setBorder(new Border(new BorderStroke(null, null, null, null, new Insets(10, 10, 10, 10))));
