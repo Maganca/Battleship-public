@@ -1,6 +1,9 @@
 package views_controller;
 
 import javafx.scene.Node;
+import model.ClientHandler;
+import model.ServerHandler;
+import multiplayer_views.MPShipSelectionView;
 
 public class ViewManager {
 	private StartScreenView startView;
@@ -11,6 +14,7 @@ public class ViewManager {
 	private InfoView infoView;
 	public DebugView debugView;
 	private BattleshipGUI battleshipGUI;
+	private MPShipSelectionView mpShipSelectionView;
 	// Other views...
 
 	private int boardSize = 10;
@@ -29,6 +33,7 @@ public class ViewManager {
 		gameEndView = new GameEndView(this);
 		infoView = new InfoView(this);
 		debugView = new DebugView(this);
+		mpShipSelectionView = new MPShipSelectionView(this);
 		// Initialize other views...
 	}
 
@@ -72,4 +77,24 @@ public class ViewManager {
 	public GameEndView getGameEndView() {
 		return gameEndView;
 	}
+
+	public MPShipSelectionView getMPShipSelectionView() {
+		return mpShipSelectionView;
+	}
+
+//	@Override
+//	public void onObjectReceived(Object object) {
+//		if (object == ServerHandler.ServerComms.PLAYER_1) {
+//			System.out.println("baller1");
+//			changeView(shipSelectionView);
+//			//vm.changeView(vm.getMPShipSelectionView());
+//			
+//		}
+//		if (object == ServerHandler.ServerComms.PLAYER_2) {
+//			System.out.println("baller2");
+//			changeView(shipSelectionView);
+//			//vm.changeView(vm.getMPShipSelectionView());
+//		}
+//		
+//	}
 }

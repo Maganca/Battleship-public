@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -42,9 +43,14 @@ public class MultiplayerSetupView extends BorderPane {
 	private TextField port1 = new TextField(DEV_PORT);
 	private TextField port2 = new TextField(DEV_PORT);
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
-	public ServerHandler serverHandler;
+
 	// Using ExecutorService to run the ServerHandler in a separate thread
-	public ExecutorService serverThread;
+	private ServerHandler serverHandler;
+	private ClientHandler clientHandler;
+	public ExecutorService serverThread = Executors.newSingleThreadExecutor();
+	public ExecutorService clientThread = Executors.newSingleThreadExecutor();
+	private MultiplayerCallbackHandler mpCallbackHandler;
+	private boolean running = true;
 
 	public MultiplayerSetupView(ViewManager viewManager) {
 		this.viewManager = viewManager;
@@ -52,21 +58,34 @@ public class MultiplayerSetupView extends BorderPane {
 		handleMultiplayer();
 
 		backButton.setOnAction(MouseEvent -> {
-			if (serverThread != null && !serverThread.isShutdown()) {
-				System.out.println("Exiting!");
-				serverThread.shutdown();
-			}
-			disableInputs(false);
+			attemptShutdown();
 			statusText.setText("");
 			viewManager.changeView(viewManager.getStartView());
 		});
 	}
 
-	public ExecutorService getServerThread() {
-		return serverThread;
+	private void attemptShutdown() {
+		if (serverThread != null && !serverThread.isShutdown()) {
+			System.out.println("Exiting Server!");
+			serverThread.shutdown();
+		}
+		if (clientThread != null && !clientThread.isShutdown()) {
+			System.out.println("Exiting Client!");
+			clientThread.shutdown();
+		}
+		disableInputs(false);
+		if (clientHandler != null) {
+			clientHandler.stopClient();
+		}
+		if (serverHandler != null) {
+			serverHandler.stopServer();
+		}
+		serverThread = Executors.newSingleThreadExecutor();
+		clientThread = Executors.newSingleThreadExecutor();
 	}
 
 	private void initializePanel() {
+		mpCallbackHandler = new MultiplayerCallbackHandler(viewManager);
 		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
 		ourVBox.getChildren().addAll(titleLabel, port1, hostButton, orLabel, hostnameLabel, hostname, port2, joinButton,
@@ -97,23 +116,12 @@ public class MultiplayerSetupView extends BorderPane {
 		this.setPadding(new Insets(20));
 	}
 
-	private void joinAsClient(int port, String hostnameString) {
-		try {
-			ClientHandler clientHandler = new ClientHandler(hostnameString, port, viewManager);
-			viewManager.changeView(viewManager.getDebugView());
-		} catch (Exception e) {
-			statusText.setText("Unable to Join. Check your details and try again.");
-			disableInputs(false);
-		}
+	private void joinAsClient(int port, String hostnameString) throws Exception {
+		clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
 	}
 
-	private void startServerHandler(int port) {
-		try {
-			serverHandler = new ServerHandler(port);
-		} catch (IOException e) {
-			statusText.setText("Unable to start server. Try a different port.");
-			disableInputs(false);
-		}
+	private void startServerHandler(int port) throws Exception {
+		serverHandler = new ServerHandler(port);
 	}
 
 	private void disableInputs(boolean i) {
@@ -131,11 +139,36 @@ public class MultiplayerSetupView extends BorderPane {
 			if (!port.isEmpty()) {
 				try {
 					int portNumber = Integer.parseInt(port);
-					disableInputs(true);
-					statusText.setText("Server Started! Waiting for user to connect.");
-					serverThread = Executors.newSingleThreadExecutor(); // Initialize the executor
-					serverThread.submit(() -> startServerHandler(portNumber));
-					joinAsClient(portNumber, "localhost");
+
+					serverThread.submit(() -> {
+						try {
+							running = true;
+							startServerHandler(portNumber);
+						} catch (Exception e) {
+							Platform.runLater(() -> {
+								running = false;
+								statusText.setText("Unable to start server. Try a different port.");
+								disableInputs(false);
+								attemptShutdown();
+							});
+						}
+					});
+					if (running) {
+						statusText.setText("Server Started! Waiting for user to connect.");
+						disableInputs(true);
+						clientThread.submit(() -> {
+							try {
+								joinAsClient(portNumber, "localhost");
+							} catch (Exception e) {
+								Platform.runLater(() -> {
+									statusText.setText("Unable to Join. Check your details and try again.");
+									disableInputs(false);
+									attemptShutdown();
+								});
+							}
+						});
+					}
+					// viewManager.changeView(viewManager.getDebugView());
 				} catch (NumberFormatException e) {
 					statusText.setText("Invalid port number.");
 				}
@@ -148,8 +181,35 @@ public class MultiplayerSetupView extends BorderPane {
 			if (!port.isEmpty() && !hostnameString.isEmpty()) {
 				int portNumber = Integer.parseInt(port);
 				joinButton.setDisable(true);
-				joinAsClient(portNumber, hostnameString);
+				clientThread.submit(() -> {
+					try {
+						joinAsClient(portNumber, hostnameString);
+					} catch (Exception e) {
+						Platform.runLater(() -> {
+							statusText.setText("Unable to Join. Check your details and try again.");
+							disableInputs(false);
+							attemptShutdown();
+						});
+					}
+				});
+				// viewManager.changeView(viewManager.getDebugView());
 			}
 		});
+	}
+
+	public ServerHandler getServerHander() {
+		return serverHandler;
+	}
+
+	public ClientHandler getClientHander() {
+		return clientHandler;
+	}
+
+	public ExecutorService getServerThread() {
+		return serverThread;
+	}
+
+	public ExecutorService getClientThread() {
+		return clientThread;
 	}
 }
