@@ -31,25 +31,7 @@ public class BattleshipGUI extends Application {
 	public void start(Stage stage) {
 		viewManager = new ViewManager(this);
 		stage.setOnCloseRequest(event -> {
-			ClientHandler clientHandler = viewManager.getMultiplayerSetupView().getClientHander();
-			ServerHandler serverHandler = viewManager.getMultiplayerSetupView().getServerHander();
-			if (clientHandler != null) {
-				clientHandler.stopClient();
-			}
-			if (serverHandler != null) {
-				serverHandler.stopServer();
-			}
-			ExecutorService serverThread = viewManager.getMultiplayerSetupView().getServerThread();
-			ExecutorService clientThread = viewManager.getMultiplayerSetupView().getClientThread();
-			if (serverThread != null && !serverThread.isShutdown()) {
-				System.out.println("Exiting server!");
-				serverThread.shutdown();
-			}
-			if (clientThread != null && !clientThread.isShutdown()) {
-				System.out.println("Exiting client!");
-				clientThread.shutdown();
-			}
-
+			viewManager.getMultiplayerSetupView().attemptShutdown();
 			Platform.exit(); // Exit the application when the window is closed
 		});
 		soundEffect.loop(BACKGROUND);
@@ -62,7 +44,7 @@ public class BattleshipGUI extends Application {
 
 		// New view manager implementation
 		// CHANGE ME BACK
-		viewManager.changeView(viewManager.getStartView());
+		viewManager.changeView(viewManager.getMultiplayerSetupView());
 	}
 
 	public void setViewTo(Node newView) {

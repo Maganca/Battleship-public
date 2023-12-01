@@ -43,7 +43,7 @@ public class ClientHandler {
         }
     }
     
-    private void send(ServerComms msg) {
+    public void send(Object msg) {
         try {
             output.writeObject(msg);
             output.flush();

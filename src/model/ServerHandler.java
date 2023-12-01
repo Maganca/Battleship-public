@@ -10,9 +10,7 @@ import java.util.concurrent.CountDownLatch;
 public class ServerHandler {
 	private ServerSocket serverSocket;
 	private List<ServerClient> clients = new ArrayList<>();
-	private Board gameBoard;
 	private CountDownLatch readyLatch;
-	private boolean running = false;
 
 	public enum ServerComms {
 		START_GAME, PLAYER_1, PLAYER_2, READY;
@@ -22,15 +20,13 @@ public class ServerHandler {
 		System.out.println("Starting server listener..");
 		try {
 			serverSocket = new ServerSocket(port);
-			gameBoard = new Board(10); // Initialize the game board with a size
 
 			readyLatch = new CountDownLatch(2); // Two players need to signal readiness
-			
+
 			// Start listening for incoming connections
-			running = true;
 			while (clients.size() < 2) {
 				Socket clientSocket = serverSocket.accept();
-				ServerClient serverClient = new ServerClient(clientSocket, gameBoard, this);
+				ServerClient serverClient = new ServerClient(clientSocket, this);
 				clients.add(serverClient);
 				serverClient.start();
 			}
@@ -40,10 +36,6 @@ public class ServerHandler {
 		} catch (IOException e) {
 			throw e;
 		}
-	}
-	
-	public boolean isRunning() {
-		return running;
 	}
 
 	private void waitForReadySignal() {
@@ -66,13 +58,16 @@ public class ServerHandler {
 	}
 
 	public void stopServer() {
-		running = false;
+		try {
+			clients.get(0).stopSocket();
+			clients.get(1).stopSocket();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		try {
 			if (serverSocket != null) {
 				serverSocket.close();
 			}
-			clients.get(0).stopSocket();
-			clients.get(1).stopSocket();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

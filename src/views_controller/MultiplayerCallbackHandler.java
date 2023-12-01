@@ -2,33 +2,38 @@ package views_controller;
 
 import javafx.application.Platform;
 import model.ClientHandler;
-import model.ServerHandler;
+import model.Player;
+import model.ServerHandler.ServerComms;
 
 public class MultiplayerCallbackHandler implements ClientHandler.MessageCallback {
 	private ViewManager vm;
+	private ClientHandler ch;
 
 	public MultiplayerCallbackHandler(ViewManager viewManager) {
 		this.vm = viewManager;
-		Platform.runLater(() -> {
-			vm.getMPShipSelectionView().startButton.setOnAction(mouseEvent -> {
-				// TODO: communicate this with the server
-				vm.getMPShipSelectionView().getConstructedPlayer(vm.getBoardSize());
+	}
 
-			});
+	public void setClientHandler(ClientHandler ch) {
+		this.ch = ch;
+		Platform.runLater(() -> {
+			vm.getMPShipSelectionView().setClientHandler(ch);
 		});
 	}
 
 	// Implementing the onObjectReceived method from ClientHandler.MessageCallback
 	@Override
 	public void onObjectReceived(Object object) {
-		if (object == ServerHandler.ServerComms.PLAYER_1) {
+		if (object instanceof ServerComms) {
+			ServerComms message = (ServerComms) object;
 			Platform.runLater(() -> {
-				vm.changeView(vm.getMPShipSelectionView());
-			});
-		}
-		if (object == ServerHandler.ServerComms.PLAYER_2) {
-			Platform.runLater(() -> {
-				vm.changeView(vm.getMPShipSelectionView());
+				switch (message) {
+				case PLAYER_1:
+					vm.changeView(vm.getMPShipSelectionView());
+				case PLAYER_2:
+					vm.changeView(vm.getMPShipSelectionView());
+				default:
+					break;
+				}
 			});
 		}
 	}

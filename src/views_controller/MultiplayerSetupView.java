@@ -64,24 +64,24 @@ public class MultiplayerSetupView extends BorderPane {
 		});
 	}
 
-	private void attemptShutdown() {
-		if (serverThread != null && !serverThread.isShutdown()) {
-			System.out.println("Exiting Server!");
-			serverThread.shutdown();
-		}
-		if (clientThread != null && !clientThread.isShutdown()) {
-			System.out.println("Exiting Client!");
-			clientThread.shutdown();
-		}
-		disableInputs(false);
+	public void attemptShutdown() {
 		if (clientHandler != null) {
 			clientHandler.stopClient();
 		}
 		if (serverHandler != null) {
 			serverHandler.stopServer();
 		}
-		serverThread = Executors.newSingleThreadExecutor();
-		clientThread = Executors.newSingleThreadExecutor();
+		if (serverThread != null && !serverThread.isShutdown()) {
+			System.out.println("Closing server!");
+			serverThread.shutdownNow();
+			serverThread = Executors.newSingleThreadExecutor(); // Recreate the ExecutorService
+		}
+		if (clientThread != null && !clientThread.isShutdown()) {
+			System.out.println("Closing client thread!");
+			clientThread.shutdownNow();
+			clientThread = Executors.newSingleThreadExecutor(); // Recreate the ExecutorService
+		}
+		disableInputs(false);
 	}
 
 	private void initializePanel() {
@@ -116,20 +116,39 @@ public class MultiplayerSetupView extends BorderPane {
 		this.setPadding(new Insets(20));
 	}
 
-	private void joinAsClient(int port, String hostnameString) throws Exception {
-		clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
+	private void joinAsClient(int port, String hostnameString) {
+		try {
+			clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
+		} catch (Exception e) {
+			Platform.runLater(() -> {
+				statusText.setText("Unable to join. Check your details and try again.");
+				disableInputs(false);
+				attemptShutdown();
+			});
+		}
 	}
 
-	private void startServerHandler(int port) throws Exception {
-		serverHandler = new ServerHandler(port);
+	private void startServerHandler(int port) {
+		try {
+			serverHandler = new ServerHandler(port);
+		} catch (IOException e) {
+			Platform.runLater(() -> {
+				running = false;
+				statusText.setText("Unable to start server. Try a different port.");
+				disableInputs(false);
+				attemptShutdown();
+			});
+		}
 	}
 
 	private void disableInputs(boolean i) {
-		hostButton.setDisable(i);
-		joinButton.setDisable(i);
-		port1.setDisable(i);
-		port2.setDisable(i);
-		hostname.setDisable(i);
+		Platform.runLater(() -> {
+			hostButton.setDisable(i);
+			joinButton.setDisable(i);
+			port1.setDisable(i);
+			port2.setDisable(i);
+			hostname.setDisable(i);
+		});
 	}
 
 	private void handleMultiplayer() {
@@ -139,34 +158,16 @@ public class MultiplayerSetupView extends BorderPane {
 			if (!port.isEmpty()) {
 				try {
 					int portNumber = Integer.parseInt(port);
-
 					serverThread.submit(() -> {
-						try {
-							running = true;
-							startServerHandler(portNumber);
-						} catch (Exception e) {
-							Platform.runLater(() -> {
-								running = false;
-								statusText.setText("Unable to start server. Try a different port.");
-								disableInputs(false);
-								attemptShutdown();
-							});
-						}
+						startServerHandler(portNumber);
 					});
 					if (running) {
 						statusText.setText("Server Started! Waiting for user to connect.");
 						disableInputs(true);
 						clientThread.submit(() -> {
-							try {
-								joinAsClient(portNumber, "localhost");
-							} catch (Exception e) {
-								Platform.runLater(() -> {
-									statusText.setText("Unable to Join. Check your details and try again.");
-									disableInputs(false);
-									attemptShutdown();
-								});
-							}
+							joinAsClient(portNumber, "localhost");
 						});
+						mpCallbackHandler.setClientHandler(clientHandler);
 					}
 					// viewManager.changeView(viewManager.getDebugView());
 				} catch (NumberFormatException e) {
@@ -180,18 +181,10 @@ public class MultiplayerSetupView extends BorderPane {
 			String hostnameString = hostname.getText();
 			if (!port.isEmpty() && !hostnameString.isEmpty()) {
 				int portNumber = Integer.parseInt(port);
-				joinButton.setDisable(true);
 				clientThread.submit(() -> {
-					try {
-						joinAsClient(portNumber, hostnameString);
-					} catch (Exception e) {
-						Platform.runLater(() -> {
-							statusText.setText("Unable to Join. Check your details and try again.");
-							disableInputs(false);
-							attemptShutdown();
-						});
-					}
+					joinAsClient(portNumber, hostnameString);
 				});
+				mpCallbackHandler.setClientHandler(clientHandler);
 				// viewManager.changeView(viewManager.getDebugView());
 			}
 		});
