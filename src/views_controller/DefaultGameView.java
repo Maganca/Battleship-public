@@ -166,7 +166,6 @@ public class DefaultGameView extends BorderPane {
 		} else if (stat.equals("HC")) {
 			return shiphc;
 		} else if (stat.equals("HVA")) {
-			System.out.println(stat);
 			return hitva;
 		} else if (stat.equals("HVB")) {
 			return hitvb;

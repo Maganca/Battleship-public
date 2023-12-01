@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
@@ -12,10 +11,10 @@ public class Board {
 	private Object[][] theBoard; // Main board object
 	private Object[][] hiddenBoard;
 	private int size; // Board size
+	private int shipsLeft;
 	private int totalBoardHealth; // Aggregate health of all ships on board
 	private List<Ship> shipList = new ArrayList<>();
 	private final SimpleObjectProperty<GameResult> gameResult = new SimpleObjectProperty<>(null);
-	private List<Ship> placedShips;
 
 	public enum GameResult {
 		WIN, LOSE
@@ -41,8 +40,8 @@ public class Board {
 		this.size = size;
 		theBoard = new Object[size][size];
 		hiddenBoard = new Object[size][size];
-		this.totalBoardHealth = 0;
-		placedShips = new ArrayList<>();
+		shipsLeft = 0;
+		totalBoardHealth = 0;
 	}
 
 	/**
@@ -55,9 +54,8 @@ public class Board {
 	 */
 	public ShotResult shotAttempt(int x, int y) {
 		// Checks to make sure shot attempt is valid
-		if (x >= theBoard[0].length || y >= theBoard.length || x < 0 || y < 0) {
+		if (x >= theBoard[0].length || y >= theBoard.length || x < 0 || y < 0)
 			return ShotResult.INVALID;
-		}
 		// Checks to see if we've hit a ship
 		if (theBoard[y][x] instanceof Ship) {
 			// Damages ship and reduces board health
@@ -70,6 +68,7 @@ public class Board {
 			}
 			if (((Ship) theBoard[y][x]).getHealth() == 0) {
 				// The ship is now fully sunk so return SUNK
+				shipsLeft--;
 				for (int[] location : ((Ship) hiddenBoard[y][x]).locations)
 					theBoard[location[1]][location[0]] = ShotResult.SUNK;
 				return ShotResult.SUNK;
@@ -111,6 +110,7 @@ public class Board {
 			theBoard[y][x] = ship;
 			hiddenBoard[y][x] = ship;
 		}
+		shipsLeft++;
 		shipList.add(ship);
 		return true;
 	}
@@ -139,7 +139,16 @@ public class Board {
 	 * @return int of board health
 	 */
 	public int getBoardHealth() {
-		return this.totalBoardHealth;
+		return totalBoardHealth;
+	}
+
+	/**
+	 * Returns the number of remaining ships on the board.
+	 * 
+	 * @return int of ships left
+	 */
+	public int getShipsLeft() {
+		return shipsLeft;
 	}
 
 	public List<Ship> getShipList() {
@@ -155,12 +164,10 @@ public class Board {
 	 */
 	public Object getHiddenCoord(int x, int y) {
 		// basic error checking
-		if ((x > size - 1 || x < 0) || (y > size - 1 || y < 0)) {
+		if ((x > size - 1 || x < 0) || (y > size - 1 || y < 0))
 			return ShotResult.INVALID;
-		}
-		if (theBoard[y][x] instanceof Ship) {
+		if (theBoard[y][x] instanceof Ship)
 			return null;
-		}
 		return theBoard[y][x];
 	}
 
@@ -272,11 +279,9 @@ public class Board {
 	}
 
 	public void clearBoard() {
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
 				theBoard[i][j] = null;
-			}
-		}
 		this.totalBoardHealth = 0;
 	}
 }

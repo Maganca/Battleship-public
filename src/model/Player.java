@@ -37,33 +37,27 @@ public class Player {
 
 	public ShotResult takeShot(Player opponent, int x, int y) {
 		if (playerType.equals(PlayerType.AI_EASY) || playerType.equals(PlayerType.AI_NORMAL)
-				|| playerType.equals(PlayerType.AI_HARD)) {
+				|| playerType.equals(PlayerType.AI_HARD))
 			return ShotResult.INVALID;
-		}
 		return opponent.getBoard().shotAttempt(x, y);
 	}
 
 	public ShotResult takeShot(Player opponent) {
-		switch (playerType) {
-		case AI_EASY:
+		if (playerType == PlayerType.AI_EASY) {
 			EasyAI easyAI = new EasyAI();
 			return easyAI.shoot(opponent.getBoard());
-		case AI_NORMAL:
+		} else if (playerType == PlayerType.AI_NORMAL) {
 			NormalAI normalAI = new NormalAI();
 			return normalAI.shoot(opponent.getBoard());
-		case AI_HARD:
+		} else if (playerType == PlayerType.AI_HARD) {
 			HardAI hardAI = new HardAI();
 			return hardAI.shoot(opponent.getBoard());
-		default:
-			return ShotResult.INVALID;
 		}
+		return ShotResult.INVALID;
 	}
 
 	public boolean isAlive() {
-		if (board.getBoardHealth() == 0) {
-			return false;
-		}
-		return true;
+		return board.getBoardHealth() != 0;
 	}
 
 	public int getBoardSize() {
