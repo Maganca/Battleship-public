@@ -25,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import model.ClientHandler;
 import model.ServerHandler;
+import networking.BattleshipClient;
+import networking.BattleshipServer;
 
 public class MultiplayerSetupView extends BorderPane {
 	private ViewManager viewManager;
@@ -47,10 +49,13 @@ public class MultiplayerSetupView extends BorderPane {
 	// Using ExecutorService to run the ServerHandler in a separate thread
 	private ServerHandler serverHandler;
 	private ClientHandler clientHandler;
-	public ExecutorService serverThread = Executors.newSingleThreadExecutor();
-	public ExecutorService clientThread = Executors.newSingleThreadExecutor();
 	private MultiplayerCallbackHandler mpCallbackHandler;
 	private boolean running = true;
+
+	private BattleshipServer server;
+	private BattleshipClient client;
+	public ExecutorService serverThread; // = Executors.newSingleThreadExecutor();
+	public ExecutorService clientThread; // = Executors.newSingleThreadExecutor();
 
 	public MultiplayerSetupView(ViewManager viewManager) {
 		this.viewManager = viewManager;
@@ -65,14 +70,14 @@ public class MultiplayerSetupView extends BorderPane {
 	}
 
 	public void attemptShutdown() {
-		if (clientHandler != null) {
-			clientHandler.stopClient();
+		if (server != null) {
+			server.shutDown();
 		}
-		if (serverHandler != null) {
-			serverHandler.stopServer();
+		if (client != null) {
+			client.shutDown();
 		}
 		if (serverThread != null && !serverThread.isShutdown()) {
-			System.out.println("Closing server!");
+			System.out.println("Closing server Thread!");
 			serverThread.shutdownNow();
 			serverThread = Executors.newSingleThreadExecutor(); // Recreate the ExecutorService
 		}
@@ -85,7 +90,7 @@ public class MultiplayerSetupView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		mpCallbackHandler = new MultiplayerCallbackHandler(viewManager);
+		// mpCallbackHandler = new MultiplayerCallbackHandler(viewManager);
 		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
 		ourVBox.getChildren().addAll(titleLabel, port1, hostButton, orLabel, hostnameLabel, hostname, port2, joinButton,
@@ -116,30 +121,33 @@ public class MultiplayerSetupView extends BorderPane {
 		this.setPadding(new Insets(20));
 	}
 
-	private void joinAsClient(int port, String hostnameString) {
-		try {
-			clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
-		} catch (Exception e) {
-			Platform.runLater(() -> {
-				statusText.setText("Unable to join. Check your details and try again.");
-				disableInputs(false);
-				attemptShutdown();
-			});
-		}
-	}
+//	private void joinAsClient(int port, String hostnameString) {
+//		try {
+//			clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
+//		} catch (Exception e) {
+//			Platform.runLater(() -> {
+//				statusText.setText("Unable to join. Check your details and try again.");
+//				disableInputs(false);
+//				attemptShutdown();
+//			});
+//		}
+//	}
 
-	private void startServerHandler(int port) {
-		try {
-			serverHandler = new ServerHandler(port);
-		} catch (IOException e) {
-			Platform.runLater(() -> {
-				running = false;
-				statusText.setText("Unable to start server. Try a different port.");
-				disableInputs(false);
-				attemptShutdown();
-			});
-		}
-	}
+//	private void startServerHandler(int port) {
+//		try {
+//			serverHandler = new ServerHandler(port);
+//			statusText.setText("Server Started! Waiting for user to connect.");
+//			disableInputs(true);
+//			joinAsClient(port, hostname.getText());
+//		} catch (IOException e) {
+//			Platform.runLater(() -> {
+//				running = false;
+//				statusText.setText("Unable to start server. Try a different port.");
+//				disableInputs(false);
+//				attemptShutdown();
+//			});
+//		}
+//	}
 
 	private void disableInputs(boolean i) {
 		Platform.runLater(() -> {
@@ -158,34 +166,34 @@ public class MultiplayerSetupView extends BorderPane {
 			if (!port.isEmpty()) {
 				try {
 					int portNumber = Integer.parseInt(port);
-					serverThread.submit(() -> {
-						startServerHandler(portNumber);
-					});
-					if (running) {
-						statusText.setText("Server Started! Waiting for user to connect.");
-						disableInputs(true);
-						clientThread.submit(() -> {
-							joinAsClient(portNumber, "localhost");
-						});
-						mpCallbackHandler.setClientHandler(clientHandler);
-					}
-					// viewManager.changeView(viewManager.getDebugView());
+					server = new BattleshipServer(portNumber);
+					statusText.setText("Server Started! Waiting for user to connect.");
+					joinButton.fireEvent(mouseEvent);
+					disableInputs(true);
 				} catch (NumberFormatException e) {
 					statusText.setText("Invalid port number.");
+					e.printStackTrace();
+				} catch (Exception e) {
+					statusText.setText("Error creating server, try another port.");
+					e.printStackTrace();
 				}
+			} else {
+				statusText.setText("Empty port number.");
 			}
 		});
 		// Handles the join button
 		joinButton.setOnAction(mouseEvent -> {
 			String port = port2.getText();
-			String hostnameString = hostname.getText();
-			if (!port.isEmpty() && !hostnameString.isEmpty()) {
-				int portNumber = Integer.parseInt(port);
-				clientThread.submit(() -> {
-					joinAsClient(portNumber, hostnameString);
-				});
-				mpCallbackHandler.setClientHandler(clientHandler);
-				// viewManager.changeView(viewManager.getDebugView());
+			if (!port.isEmpty()) {
+				try {
+					int portNumber = Integer.parseInt(port);
+					client = new BattleshipClient(portNumber);
+				} catch (Exception e) {
+					statusText.setText("Unable to join. Check your details and try again.");
+					e.printStackTrace();
+				}
+			} else {
+				statusText.setText("Invalid port number.");
 			}
 		});
 	}
