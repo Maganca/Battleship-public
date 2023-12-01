@@ -20,6 +20,7 @@ import model.Ship;
 import model.Player.PlayerType;
 
 public class ShipSelectionView extends BorderPane {
+    private ViewManager viewManager;
 
 	private VBox ourVBox = new VBox();
 
@@ -50,9 +51,30 @@ public class ShipSelectionView extends BorderPane {
 	private TextField fiveYCoord = new TextField();
 	private TextField fiveVert = new TextField();
 
-	public ShipSelectionView() {
+	public ShipSelectionView(ViewManager viewManager) {
+        this.viewManager = viewManager;
+        int size = viewManager.getBoardSize();
 		reset();
 		initializePanel();
+		easyButton.setOnAction(mouseEvent -> {
+			viewManager.getDefaultView().setPlayer1(getConstructedPlayer(size));
+			viewManager.getDefaultView().setPlayer2(new Player(PlayerType.AI_EASY, size));
+			viewManager.changeView(viewManager.getDefaultView());
+		});
+		normalButton.setOnAction(mouseEvent -> {
+			viewManager.getDefaultView().setPlayer1(getConstructedPlayer(size));
+			viewManager.getDefaultView().setPlayer2(new Player(PlayerType.AI_NORMAL, size));
+			viewManager.changeView(viewManager.getDefaultView());
+		});
+		hardButton.setOnAction(mouseEvent -> {
+			viewManager.getDefaultView().setPlayer1(getConstructedPlayer(size));
+			viewManager.getDefaultView().setPlayer2(new Player(PlayerType.AI_HARD, size));
+			viewManager.changeView(viewManager.getDefaultView());
+		});
+		backButton.setOnAction(mouseEvent -> {
+			viewManager.changeView(viewManager.getStartView());
+		});
+		
 	}
 	
 	public void reset() {		
