@@ -15,14 +15,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
 import model.Player;
 import model.Ship;
+import model.Sounds;
 import model.Player.PlayerType;
 
 public class ShipSelectionView extends BorderPane {
 	private boolean pirateUnlocked;
 	private VBox ourVBox = new VBox();
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
+	private Sounds soundEffect = new Sounds();
+	private static final Media PIRATE_NOISE = new Media(new File("soundeffects/piratefinal.mp3").toURI().toString());
 
 	public Button easyButton = new Button("Start Easy Game");
 	public Button normalButton = new Button("Start Normal Game");
@@ -71,6 +75,7 @@ public class ShipSelectionView extends BorderPane {
 			viewManager.changeView(viewManager.getDefaultView());
 		});
 		pirateButton.setOnAction(mouseEvent -> {
+			soundEffect.queueSound(PIRATE_NOISE);
 			viewManager.getPirateView().setPlayer1(getConstructedPlayer(size));
 			viewManager.getPirateView().setPlayer2(new Player(PlayerType.AI_NORMAL, size));
 			viewManager.changeView(viewManager.getPirateView());

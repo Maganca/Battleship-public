@@ -18,12 +18,13 @@ import javafx.scene.layout.VBox;
 import model.ClientHandler;
 import model.Player;
 import model.Ship;
+import networking.PlayerMessage;
 import views_controller.MultiplayerCallbackHandler;
 import views_controller.ViewManager;
 import model.Player.PlayerType;
 
 public class MPShipSelectionView extends BorderPane {
-    private ViewManager viewManager;
+	private ViewManager viewManager;
 
 	private VBox ourVBox = new VBox();
 
@@ -50,16 +51,16 @@ public class MPShipSelectionView extends BorderPane {
 	private TextField fiveXCoord = new TextField("0");
 	private TextField fiveYCoord = new TextField("4");
 	private TextField fiveVert = new TextField("0");
+	PlayerMessage pm = new PlayerMessage();
 
 	public MPShipSelectionView(ViewManager viewManager) {
-        this.viewManager = viewManager;
-        int size = viewManager.getBoardSize();
-		//reset();
+		this.viewManager = viewManager;
+		int size = viewManager.getBoardSize();
+		// reset();
 		initializePanel();
 	}
-	
-	
-	public void reset() {		
+
+	public void reset() {
 		twoXCoord.setText("");
 		twoYCoord.setText("");
 		twoVert.setText("");
@@ -162,19 +163,32 @@ public class MPShipSelectionView extends BorderPane {
 
 	public Player getConstructedPlayer(int size) {
 		try {
-			Player player = new Player(PlayerType.HUMAN, size);
+			Player player = new Player(PlayerType.HUMAN, viewManager.getBoardSize());
+			pm.type = PlayerType.HUMAN;
+			pm.size = viewManager.getBoardSize();
+			pm.ship1 = new int[] { Integer.parseInt(twoXCoord.getText()), Integer.parseInt(twoYCoord.getText()),
+					Integer.parseInt(twoVert.getText()), 2 };
+
 			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(twoXCoord.getText()),
 					Integer.parseInt(twoYCoord.getText()), Integer.parseInt(twoVert.getText()), 2));
 
+			pm.ship2 = new int[] { Integer.parseInt(threeAXCoord.getText()), Integer.parseInt(threeAYCoord.getText()),
+					Integer.parseInt(threeAVert.getText()), 3 };
 			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeAXCoord.getText()),
 					Integer.parseInt(threeAYCoord.getText()), Integer.parseInt(threeAVert.getText()), 3));
 
+			pm.ship3 = new int[] { Integer.parseInt(threeBXCoord.getText()), Integer.parseInt(threeBYCoord.getText()),
+					Integer.parseInt(threeBVert.getText()), 3 };
 			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(threeBXCoord.getText()),
 					Integer.parseInt(threeBYCoord.getText()), Integer.parseInt(threeBVert.getText()), 3));
 
+			pm.ship4 = new int[] { Integer.parseInt(fourXCoord.getText()), Integer.parseInt(fourYCoord.getText()),
+					Integer.parseInt(fourVert.getText()), 4 };
 			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fourXCoord.getText()),
 					Integer.parseInt(fourYCoord.getText()), Integer.parseInt(fourVert.getText()), 4));
 
+			pm.ship5 = new int[] { Integer.parseInt(fiveXCoord.getText()), Integer.parseInt(fiveYCoord.getText()),
+					Integer.parseInt(fiveVert.getText()), 5 };
 			player.getBoard().addShipToBoard(new Ship(Integer.parseInt(fiveXCoord.getText()),
 					Integer.parseInt(fiveYCoord.getText()), Integer.parseInt(fiveVert.getText()), 5));
 			return player;
@@ -185,5 +199,9 @@ public class MPShipSelectionView extends BorderPane {
 			errorAlert.showAndWait();
 		}
 		return null;
+	}
+	
+	public PlayerMessage getPlayerMessage() {
+		return pm;
 	}
 }

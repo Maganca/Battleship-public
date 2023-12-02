@@ -35,6 +35,11 @@ public class Player {
 		}
 	}
 
+	public Player() {
+		this.wins = 0;
+		this.losses = 0;
+	}
+
 	public ShotResult takeShot(Player opponent, int x, int y) {
 		if (playerType.equals(PlayerType.AI_EASY) || playerType.equals(PlayerType.AI_NORMAL)
 				|| playerType.equals(PlayerType.AI_HARD))
