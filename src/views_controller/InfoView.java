@@ -16,8 +16,8 @@ public class InfoView extends BorderPane {
     private VBox vBox = new VBox();
     private Label infoText = new Label("Welcome to Battleship Game!");
     private Label description = new Label("Battleship is a strategic game where players place ships on a grid and take turns guessing where the opponent's ships are located. The goal is to sink all of the opponent's ships before they sink yours.");
-    private Label aboutBattleship = new Label("About Battleship:");
-    private Label battleshipInfo = new Label("Battleship is a classic guessing game played by two players. Each player has a grid where they place their ships without the opponent seeing their placement. Players take turns calling out specific coordinates on the opponent's grid, aiming to hit the opponent's ships. The player who sinks all of the opponent's ships first wins the game.");
+    private Label aboutBattleship = new Label("PIRATE MODE:");
+    private Label battleshipInfo = new Label("Pirate Mode is a custom gamemode where each player makes one shot for every ship they have that is not sunk. The next player then does the same. The game ends when one player has all their ships sunk.");
     private Label howToPlay = new Label("How to Play:");
     private Label howToPlayInfo = new Label("1. Each player places their ships on their grid.\n2. Players take turns clicking coordinates to guess the opponent's ship locations.\n3. If the guessed coordinate has an opponent's ship, it's a hit. Otherwise, it's a miss.\n4. The game continues until one player sinks all of the opponent's ships.");
     public Button backButton = new Button("Back");
