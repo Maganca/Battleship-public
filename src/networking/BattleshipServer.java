@@ -86,6 +86,12 @@ public class BattleshipServer extends Listener {
 	public void shutDown() {
 		if (server != null) {
 			// Close all connections and stop the server
+			PacketMessage packetMessage = new PacketMessage();
+			// Assign the message text.
+			packetMessage.message = "Left!";
+			if (clients.size()==2) {
+				clients.get(1).sendTCP(packetMessage);
+			}
 			server.close();
 			server.stop();
 			System.out.println("Server is shut down.");
