@@ -67,15 +67,15 @@ public class DefaultGameView extends BorderPane {
 		this.viewManager = viewManager;
 		this.player1 = new Player(PlayerType.HUMAN, 10);
 		this.player2 = new Player(PlayerType.HUMAN, 10);
-		
+
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			
+			soundEffect.clearQueue();
 			viewManager.getGameEndView().endImg.setImage(winImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			
+			soundEffect.clearQueue();
 			viewManager.getGameEndView().endImg.setImage(loseImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});

@@ -14,6 +14,7 @@ import model.*;
 import model.Board.ShotResult;
 import model.Player.PlayerType;
 import networking.BattleshipClient;
+import networking.ShotMessage;
 import views_controller.ViewManager;
 
 public class MPGameView extends BorderPane {
@@ -55,6 +56,9 @@ public class MPGameView extends BorderPane {
 	private Image sunk = new Image(new File("Tiles/psunk.gif").toURI().toString());
 	private Image hit = new Image(new File("Tiles/phit.gif").toURI().toString());
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
+	private Image winImage = new Image(new File("Tiles/VICTORY.png").toURI().toString());
+	
+	private Image loseImage = new Image(new File("Tiles/LOSS.png").toURI().toString());
 
 	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
 	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
@@ -71,11 +75,13 @@ public class MPGameView extends BorderPane {
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU WIN");
+			soundEffect.clearQueue();
+			viewManager.getGameEndView().endImg.setImage(winImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU LOSE");
+			soundEffect.clearQueue();
+			viewManager.getGameEndView().endImg.setImage(loseImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 	}
@@ -89,7 +95,7 @@ public class MPGameView extends BorderPane {
 		this.player2 = player;
 		initializePanel();
 	}
-	
+
 	public void setClient(BattleshipClient bc) {
 		this.bc = bc;
 	}
@@ -203,71 +209,67 @@ public class MPGameView extends BorderPane {
 		}
 		return ocean;
 	}
-	
+
+	private boolean didWin() {
+		int boardSize = player1.getBoardSize();
+		if (!player1.isAlive() || !player2.isAlive()) {
+			for (int k = 0; k < boardSize; k++) {
+				for (int l = 0; l < boardSize; l++) {
+					player1Grid[k][l].setImage(userImageChoice(player1.getBoard().playerToStringCoord(k, l)));
+					player2Grid[k][l].setImage(userImageChoice(player2.getBoard().playerToStringCoord(k, l)));
+				}
+			}
+			if (!player1.isAlive())
+				loserButton.setVisible(true);
+			if (!player2.isAlive())
+				winnerButton.setVisible(true);
+			return true;
+		}
+		return false;
+	}
+
+	public void updateMyself(ShotMessage sm) {
+		int boardSize = player1.getBoardSize();
+		for (int n = 0; n < player2.getBoard().getShipsLeft(); n++) {
+			player2.takeShot(player1, sm.x, sm.y);
+			for (int i = 0; i < boardSize; i++)
+				for (int j = 0; j < boardSize; j++)
+					player1Grid[i][j].setImage(userImageChoice(player1.getBoard().playerToStringCoord(i, j)));
+			didWin();
+		}
+	}
+
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent arg0) {
-			int boardSize = player1.getBoardSize();
-			if (player1.isAlive() && player2.isAlive() && canShoot) {
+			if (!didWin() && canShoot) {
+				int boardSize = player1.getBoardSize();
 				ImageView ImageClicked = (ImageView) arg0.getSource();
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 10; j++) {
+						ShotMessage sm = new ShotMessage();
+						sm.x = i;
+						sm.y = j;
 						if (player2Grid[i][j] == ImageClicked) {
 							ShotResult player1Outcome = player1.takeShot(player2, i, j);
-							switch (player1Outcome) {
-							case GAME_WON:
+							if (player1Outcome == ShotResult.GAME_WON) {
+								bc.shotMessage(sm);
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(GOOD_NOISE);
-								System.out.print("You Won");
-								break;
-							case HIT:
+							} else if (player1Outcome == ShotResult.HIT) {
+								bc.shotMessage(sm);
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(HIT_NOISE);
-								System.out.print("You hit my ship!");
-								break;
-							case MISS:
+							} else if (player1Outcome == ShotResult.MISS) {
+								bc.shotMessage(sm);
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(MISS_NOISE);
-								System.out.print("You missed");
-								break;
-							case REPEAT_ATTEMPT:
+							} else if (player1Outcome == ShotResult.REPEAT_ATTEMPT) {
 								soundEffect.queueSound(BAD_NOISE);
-								System.out.print("Try Again\n");
-								break;
-							case SUNK:
+							} else if (player1Outcome == ShotResult.SUNK) {
+								bc.shotMessage(sm);
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(SHOOT_NOISE);
-								System.out.print("You sunk my ship!");
-								break;
-							default:
-								break;
-							}
-							if (player1Outcome.equals(ShotResult.HIT) || player1Outcome.equals(ShotResult.MISS)
-									|| player1Outcome.equals(ShotResult.SUNK)) {
-								ShotResult AIOutcome = player2.takeShot(player1);
-
-								System.out.print("\nMy turn: ");
-								switch (AIOutcome) {
-								case GAME_WON:
-									System.out.print("I won!\n");
-									break;
-								case HIT:
-									System.out.print("I hit your ship!\n");
-									break;
-								case MISS:
-									System.out.print("I missed\n");
-									break;
-								case SUNK:
-									System.out.print("I sunk your ship!\n");
-									break;
-								default:
-									System.out.print(AIOutcome);
-									break;
-								}
-								for (int k = 0; k < boardSize; k++)
-									for (int l = 0; l < boardSize; l++)
-										player1Grid[k][l].setImage(
-												userImageChoice(player1.getBoard().playerToStringCoord(k, l)));
 							}
 							player2Grid[i][j].setImage(opponentImageChoice(player2.getBoard().toStringCoord(i, j)));
 							if (player2Grid[i][j].getImage() == sunk)
@@ -276,20 +278,9 @@ public class MPGameView extends BorderPane {
 										if (player2.getBoard().toStringCoord(k, l) == "Sunk")
 											player2Grid[k][l].setImage(sunk);
 						}
+						didWin();
 					}
 				}
-			}
-			if (!player1.isAlive() || !player2.isAlive()) {
-				for (int k = 0; k < boardSize; k++) {
-					for (int l = 0; l < boardSize; l++) {
-						player1Grid[k][l].setImage(userImageChoice(player1.getBoard().playerToStringCoord(k, l)));
-						player2Grid[k][l].setImage(userImageChoice(player2.getBoard().playerToStringCoord(k, l)));
-					}
-				}
-				if (!player1.isAlive())
-					loserButton.setVisible(true);
-				if (!player2.isAlive())
-					winnerButton.setVisible(true);
 			}
 		}
 	}

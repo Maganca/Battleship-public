@@ -65,7 +65,7 @@ public class BattleshipClient extends Listener {
 		this.vm = vm;
 		main();
 	}
-	
+
 	public void shotMessage(ShotMessage sm) {
 		client.sendTCP(sm);
 	}
@@ -132,7 +132,7 @@ public class BattleshipClient extends Listener {
 		}
 		if (p instanceof ShotMessage) {
 			ShotMessage sm = (ShotMessage) p;
-			
+			vm.getMPGameView().updateMyself(sm);
 		}
 		if (p instanceof PlayerMessage) {
 			// Cast it, so we can access the message within.

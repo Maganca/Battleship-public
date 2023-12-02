@@ -55,6 +55,8 @@ public class PirateGameView extends BorderPane {
 	private Image sunk = new Image(new File("Tiles/psunk.gif").toURI().toString());
 	private Image hit = new Image(new File("Tiles/phit.gif").toURI().toString());
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
+	private Image winImage = new Image(new File("Tiles/VICTORY.png").toURI().toString());
+	private Image loseImage = new Image(new File("Tiles/LOSS.png").toURI().toString());
 
 	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
 	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
@@ -69,11 +71,13 @@ public class PirateGameView extends BorderPane {
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU WIN");
+			soundEffect.clearQueue();
+			viewManager.getGameEndView().endImg.setImage(winImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU LOSE");
+			soundEffect.clearQueue();
+			viewManager.getGameEndView().endImg.setImage(loseImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 	}

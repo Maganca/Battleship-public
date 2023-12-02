@@ -1,6 +1,6 @@
 package networking;
 
 public class ShotMessage {
-	int x;
-	int y;
+	public int x;
+	public int y;
 }
