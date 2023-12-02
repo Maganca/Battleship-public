@@ -20,15 +20,14 @@ import model.Ship;
 import model.Player.PlayerType;
 
 public class ShipSelectionView extends BorderPane {
-    private ViewManager viewManager;
-
+	private boolean pirateUnlocked;
 	private VBox ourVBox = new VBox();
-
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 
 	public Button easyButton = new Button("Start Easy Game");
 	public Button normalButton = new Button("Start Normal Game");
 	public Button hardButton = new Button("Start Hard Game");
+	public Button pirateButton = new Button("Start PIRATE MODE");
 	public Button backButton = new Button("Back");
 
 	private TextField twoXCoord = new TextField();
@@ -52,8 +51,8 @@ public class ShipSelectionView extends BorderPane {
 	private TextField fiveVert = new TextField();
 
 	public ShipSelectionView(ViewManager viewManager) {
-        this.viewManager = viewManager;
-        int size = viewManager.getBoardSize();
+		int size = viewManager.getBoardSize();
+		pirateUnlocked = viewManager.getPirateUnlocked();
 		reset();
 		initializePanel();
 		easyButton.setOnAction(mouseEvent -> {
@@ -71,13 +70,18 @@ public class ShipSelectionView extends BorderPane {
 			viewManager.getDefaultView().setPlayer2(new Player(PlayerType.AI_HARD, size));
 			viewManager.changeView(viewManager.getDefaultView());
 		});
+		pirateButton.setOnAction(mouseEvent -> {
+			viewManager.getPirateView().setPlayer1(getConstructedPlayer(size));
+			viewManager.getPirateView().setPlayer2(new Player(PlayerType.AI_NORMAL, size));
+			viewManager.changeView(viewManager.getPirateView());
+		});
 		backButton.setOnAction(mouseEvent -> {
 			viewManager.changeView(viewManager.getStartView());
 		});
-		
+
 	}
-	
-	public void reset() {		
+
+	public void reset() {
 		twoXCoord.setText("");
 		twoYCoord.setText("");
 		twoVert.setText("");
@@ -172,6 +176,7 @@ public class ShipSelectionView extends BorderPane {
 		buttons.add(easyButton, 2, 0);
 		buttons.add(normalButton, 7, 0);
 		buttons.add(hardButton, 12, 0);
+		buttons.add(pirateButton, 17, 0);
 		backButton.setStyle("-fx-font-size: 10px; -fx-min-width: 40px; -fx-min-height: 20px;");
 		buttons.add(backButton, 2, 2);
 		buttons.setHgap(10);

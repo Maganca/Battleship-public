@@ -44,7 +44,7 @@ public class BattleshipGUI extends Application {
 
 		// New view manager implementation
 		// CHANGE ME BACK
-		viewManager.changeView(viewManager.getMultiplayerSetupView());
+		viewManager.changeView(viewManager.getStartView());
 	}
 
 	public void setViewTo(Node newView) {

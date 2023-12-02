@@ -15,7 +15,7 @@ import model.Board.ShotResult;
 import model.Player.PlayerType;
 
 public class DefaultGameView extends BorderPane {
-    private ViewManager viewManager;
+	private ViewManager viewManager;
 
 	private HBox ourHBox = new HBox();
 	private Player player1;
@@ -64,7 +64,7 @@ public class DefaultGameView extends BorderPane {
 	private Sounds soundEffect = new Sounds();
 
 	public DefaultGameView(ViewManager viewManager) {
-        this.viewManager = viewManager;
+		this.viewManager = viewManager;
 		this.player1 = new Player(PlayerType.HUMAN, 10);
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		
@@ -282,8 +282,11 @@ public class DefaultGameView extends BorderPane {
 				}
 				if (!player1.isAlive())
 					loserButton.setVisible(true);
-				if (!player2.isAlive())
+				if (!player2.isAlive()) {
+					if (player2.getPlayerType() == PlayerType.AI_HARD)
+						viewManager.setPirateUnlocked(true);
 					winnerButton.setVisible(true);
+				}
 			}
 		}
 	}

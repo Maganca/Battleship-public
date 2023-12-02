@@ -6,21 +6,25 @@ import model.ServerHandler;
 import multiplayer_views.MPShipSelectionView;
 
 public class ViewManager {
+	public DebugView debugView;
 	private StartScreenView startView;
 	private ShipSelectionView shipSelectionView;
 	private DefaultGameView defaultGameView;
+	private PirateGameView pirateGameView;
 	private MultiplayerSetupView multiplayerSetupView;
 	private GameEndView gameEndView;
 	private InfoView infoView;
-	public DebugView debugView;
 	private BattleshipGUI battleshipGUI;
 	private MPShipSelectionView mpShipSelectionView;
 	// Other views...
 
 	private int boardSize = 10;
+	
+	private boolean pirateUnlocked;
 
 	public ViewManager(BattleshipGUI battleshipGUI) {
 		this.battleshipGUI = battleshipGUI;
+		pirateUnlocked = false;
 		initializeViews();
 	}
 
@@ -28,6 +32,7 @@ public class ViewManager {
 		// Initialize all the views
 		startView = new StartScreenView(this);
 		defaultGameView = new DefaultGameView(this);
+		pirateGameView = new PirateGameView(this);
 		shipSelectionView = new ShipSelectionView(this);
 		multiplayerSetupView = new MultiplayerSetupView(this);
 		gameEndView = new GameEndView(this);
@@ -39,6 +44,14 @@ public class ViewManager {
 
 	public void changeView(Node newView) {
 		battleshipGUI.setViewTo(newView);
+	}
+	
+	public void setPirateUnlocked(boolean lock) {
+		pirateUnlocked = lock;
+	}
+	
+	public boolean getPirateUnlocked() {
+		return pirateUnlocked;
 	}
 
 	public int getBoardSize() {
@@ -68,6 +81,10 @@ public class ViewManager {
 
 	public DefaultGameView getDefaultView() {
 		return defaultGameView;
+	}
+	
+	public PirateGameView getPirateView() {
+		return pirateGameView;
 	}
 
 	public DebugView getDebugView() {

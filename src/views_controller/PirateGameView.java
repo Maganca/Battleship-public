@@ -18,6 +18,7 @@ import views_controller.DefaultGameView.ShotListener;
 public class PirateGameView extends BorderPane {
 	private ViewManager viewManager;
 
+	private int turnCounter;
 	private HBox ourHBox = new HBox();
 	private Player player1;
 	private Player player2;
@@ -89,6 +90,7 @@ public class PirateGameView extends BorderPane {
 
 	private void initializePanel() {
 		int boardSize = player1.getBoardSize();
+		turnCounter = 0;
 		player1Grid = new ImageView[boardSize][boardSize];
 		player2Grid = new ImageView[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++) {
@@ -100,7 +102,6 @@ public class PirateGameView extends BorderPane {
 				player2Grid[i][j].setFitWidth(40);
 				player2Grid[i][j].setFitHeight(40);
 				player2Grid[i][j].setOnMouseClicked(new ShotListener());
-
 				player2GridPane.add(player2Grid[i][j], i, j);
 				player1GridPane.add(player1Grid[i][j], i, j);
 			}
@@ -212,6 +213,18 @@ public class PirateGameView extends BorderPane {
 		return false;
 	}
 
+	private void aiTurn() {
+		turnCounter = 0;
+		int boardSize = player1.getBoardSize();
+		for (int n = 0; n < player2.getBoard().getShipsLeft(); n++) {
+			player2.takeShot(player1);
+			for (int i = 0; i < boardSize; i++)
+				for (int j = 0; j < boardSize; j++)
+					player1Grid[i][j].setImage(userImageChoice(player1.getBoard().playerToStringCoord(i, j)));
+			didWin();
+		}
+	}
+
 	public class ShotListener implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent arg0) {
@@ -221,60 +234,36 @@ public class PirateGameView extends BorderPane {
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 10; j++) {
 						if (player2Grid[i][j] == ImageClicked) {
+							turnCounter++;
 							ShotResult player1Outcome = player1.takeShot(player2, i, j);
-							System.out.print("\nOpponent turn: ");
 							if (player1Outcome == ShotResult.GAME_WON) {
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(GOOD_NOISE);
-								System.out.print("You Won");
 							} else if (player1Outcome == ShotResult.HIT) {
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(HIT_NOISE);
-								System.out.print("You hit my ship!");
 							} else if (player1Outcome == ShotResult.MISS) {
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(MISS_NOISE);
-								System.out.print("You missed");
 							} else if (player1Outcome == ShotResult.REPEAT_ATTEMPT) {
+								turnCounter--;
 								soundEffect.queueSound(BAD_NOISE);
-								System.out.print("Try Again\n");
 							} else if (player1Outcome == ShotResult.SUNK) {
 								soundEffect.queueSound(SHOOT_NOISE);
 								soundEffect.queueSound(SHOOT_NOISE);
-								System.out.print("You sunk my ship!");
 							}
-						}
-						player2Grid[i][j].setImage(opponentImageChoice(player2.getBoard().toStringCoord(i, j)));
-						if (player2Grid[i][j].getImage() == sunk) {
-							for (int k = 0; k < boardSize; k++) {
-								for (int l = 0; l < boardSize; l++) {
-									if (player2.getBoard().toStringCoord(k, l) == "Sunk")
-										player2Grid[k][l].setImage(sunk);
-								}
-							}
+							player2Grid[i][j].setImage(opponentImageChoice(player2.getBoard().toStringCoord(i, j)));
+							if (player2Grid[i][j].getImage() == sunk)
+								for (int k = 0; k < boardSize; k++)
+									for (int l = 0; l < boardSize; l++)
+										if (player2.getBoard().toStringCoord(k, l) == "Sunk")
+											player2Grid[k][l].setImage(sunk);
 						}
 						didWin();
 					}
 				}
-
-				for (int n = 0; n < player2.getBoard().getShipsLeft(); n++) {
-					ShotResult AIOutcome = player2.takeShot(player1);
-					System.out.print("\nOpponent turn: ");
-					if (AIOutcome == ShotResult.GAME_WON) {
-						System.out.print("I won!\n");
-					} else if (AIOutcome == ShotResult.HIT) {
-						System.out.print("I hit your ship!\n");
-					} else if (AIOutcome == ShotResult.MISS) {
-						System.out.print("I missed\n");
-					} else if (AIOutcome == ShotResult.SUNK) {
-						System.out.print("I sunk your ship!\n");
-					} else
-						System.out.print(AIOutcome);
-					for (int i = 0; i < boardSize; i++)
-						for (int j = 0; j < boardSize; j++)
-							player1Grid[i][j].setImage(userImageChoice(player1.getBoard().playerToStringCoord(i, j)));
-					didWin();
-				}
+				if (turnCounter == player1.getBoard().getShipsLeft())
+					aiTurn();
 			}
 		}
 	}
