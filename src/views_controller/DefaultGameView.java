@@ -15,7 +15,7 @@ import model.Board.ShotResult;
 import model.Player.PlayerType;
 
 public class DefaultGameView extends BorderPane {
-    private ViewManager viewManager;
+	private ViewManager viewManager;
 
 	private HBox ourHBox = new HBox();
 	private Player player1;
@@ -53,6 +53,9 @@ public class DefaultGameView extends BorderPane {
 	private Image sunk = new Image(new File("Tiles/psunk.gif").toURI().toString());
 	private Image hit = new Image(new File("Tiles/phit.gif").toURI().toString());
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
+	private Image winImage = new Image(new File("Tiles/VICTORY.png").toURI().toString());
+	
+	private Image loseImage = new Image(new File("Tiles/LOSS.png").toURI().toString());
 
 	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
 	private static final Media HIT_NOISE = new Media(new File("soundeffects/hit.mp3").toURI().toString());
@@ -62,16 +65,19 @@ public class DefaultGameView extends BorderPane {
 	private Sounds soundEffect = new Sounds();
 
 	public DefaultGameView(ViewManager viewManager) {
-        this.viewManager = viewManager;
+		this.viewManager = viewManager;
 		this.player1 = new Player(PlayerType.HUMAN, 10);
 		this.player2 = new Player(PlayerType.HUMAN, 10);
+		
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU WIN");
+			
+			viewManager.getGameEndView().endImg.setImage(winImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU LOSE");
+			
+			viewManager.getGameEndView().endImg.setImage(loseImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 	}
@@ -277,8 +283,11 @@ public class DefaultGameView extends BorderPane {
 				}
 				if (!player1.isAlive())
 					loserButton.setVisible(true);
-				if (!player2.isAlive())
+				if (!player2.isAlive()) {
+					if (player2.getPlayerType() == PlayerType.AI_HARD)
+						viewManager.setPirateUnlocked(true);
 					winnerButton.setVisible(true);
+				}
 			}
 		}
 	}

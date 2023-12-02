@@ -69,7 +69,7 @@ public class Player {
 		return size;
 	}
 
-	public PlayerType getType() {
+	public PlayerType getPlayerType() {
 		return playerType;
 	}
 
