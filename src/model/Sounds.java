@@ -15,8 +15,9 @@ public class Sounds {
 		isPlaying = false;
 	}
 	
-	public void emptyQueue() {
-		
+	public void clearQueue() {
+		musicQueue.clear();
+		isPlaying = false;
 	}
 
 	public void loop(Media song) {

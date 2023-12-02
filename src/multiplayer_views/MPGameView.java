@@ -75,12 +75,12 @@ public class MPGameView extends BorderPane {
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			
+			soundEffect.clearQueue();
 			viewManager.getGameEndView().endImg.setImage(winImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			
+			soundEffect.clearQueue();
 			viewManager.getGameEndView().endImg.setImage(loseImage);
 			viewManager.changeView(viewManager.getGameEndView());
 		});
