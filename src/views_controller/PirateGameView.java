@@ -100,7 +100,6 @@ public class PirateGameView extends BorderPane {
 				player2Grid[i][j].setFitWidth(40);
 				player2Grid[i][j].setFitHeight(40);
 				player2Grid[i][j].setOnMouseClicked(new ShotListener());
-
 				player2GridPane.add(player2Grid[i][j], i, j);
 				player1GridPane.add(player1Grid[i][j], i, j);
 			}
