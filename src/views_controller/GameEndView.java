@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
@@ -26,7 +27,8 @@ public class GameEndView extends BorderPane {
 	public Button playAgainButton = new Button("New Game");
 	public Button menuButton = new Button("Main Menu");
 	public Label endText = new Label("YOU WIN");
-
+	public ImageView endImg = new ImageView(new Image(new File("Tiles/VICTORY.png").toURI().toString()));
+	
 	public GameEndView(ViewManager viewManager) {
         this.viewManager = viewManager;
 		initializePanel();
@@ -41,7 +43,7 @@ public class GameEndView extends BorderPane {
 	}
 
 	private void initializePanel() {
-		vBox.getChildren().add(endText);
+		vBox.getChildren().add(endImg);
 		vBox.getChildren().add(playAgainButton);
 		vBox.getChildren().add(menuButton);
 		vBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));

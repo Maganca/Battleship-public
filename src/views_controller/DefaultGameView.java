@@ -67,11 +67,11 @@ public class DefaultGameView extends BorderPane {
 		this.player2 = new Player(PlayerType.HUMAN, 10);
 		initializePanel();
 		winnerButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU WIN");
+			viewManager.getGameEndView().endImg.setImage(new Image(new File("Tiles/VICTORY.png").toURI().toString()));
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 		loserButton.setOnAction(mouseEvent -> {
-			viewManager.getGameEndView().endText.setText("YOU LOSE");
+			viewManager.getGameEndView().endImg.setImage(new Image(new File("Tiles/LOSS.png").toURI().toString()));
 			viewManager.changeView(viewManager.getGameEndView());
 		});
 	}
