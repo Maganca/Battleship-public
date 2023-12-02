@@ -15,7 +15,7 @@ public class BattleshipClient extends Listener {
 	// Our client object.
 	static Client client;
 	// IP to connect to.
-	static String ip = "localhost";
+	private static String ip;
 	private ViewManager vm;
 	Player me;
 	Player enemy;
@@ -60,8 +60,9 @@ public class BattleshipClient extends Listener {
 		// This is here to stop the program from closing before we receive a message.
 	}
 
-	public BattleshipClient(int port, ViewManager vm) throws Exception {
+	public BattleshipClient(int port, String ip, ViewManager vm) throws Exception {
 		BattleshipClient.port = port;
+		BattleshipClient.ip = ip;
 		this.vm = vm;
 		main();
 	}

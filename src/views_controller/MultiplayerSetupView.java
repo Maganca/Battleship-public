@@ -126,34 +126,6 @@ public class MultiplayerSetupView extends BorderPane {
 		this.setPadding(new Insets(20));
 	}
 
-//	private void joinAsClient(int port, String hostnameString) {
-//		try {
-//			clientHandler = new ClientHandler(hostnameString, port, mpCallbackHandler);
-//		} catch (Exception e) {
-//			Platform.runLater(() -> {
-//				statusText.setText("Unable to join. Check your details and try again.");
-//				disableInputs(false);
-//				attemptShutdown();
-//			});
-//		}
-//	}
-
-//	private void startServerHandler(int port) {
-//		try {
-//			serverHandler = new ServerHandler(port);
-//			statusText.setText("Server Started! Waiting for user to connect.");
-//			disableInputs(true);
-//			joinAsClient(port, hostname.getText());
-//		} catch (IOException e) {
-//			Platform.runLater(() -> {
-//				running = false;
-//				statusText.setText("Unable to start server. Try a different port.");
-//				disableInputs(false);
-//				attemptShutdown();
-//			});
-//		}
-//	}
-
 	private void disableInputs(boolean i) {
 		Platform.runLater(() -> {
 			hostButton.setDisable(i);
@@ -201,7 +173,7 @@ public class MultiplayerSetupView extends BorderPane {
 				serverThread.submit(() -> {
 					try {
 						int portNumber = Integer.parseInt(port);
-						client = new BattleshipClient(portNumber, viewManager);
+						client = new BattleshipClient(portNumber, hostname.getText(), viewManager);
 					} catch (Exception e) {
 						Platform.runLater(() -> {
 							statusText.setText("Unable to join. Check your details and try again.");
@@ -214,7 +186,6 @@ public class MultiplayerSetupView extends BorderPane {
 			}
 		});
 	}
-
 
 	public ServerHandler getServerHander() {
 		return serverHandler;
