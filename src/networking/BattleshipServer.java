@@ -42,6 +42,7 @@ public class BattleshipServer extends Listener {
 		server.getKryo().register(model.Player.PlayerType.class);
 		// server.getKryo().register(javafx.beans.property.SimpleObjectProperty.class);
 		// We can only send objects as packets if they are registered.
+	    String ipAddress = "your_desired_ip_address"; // Replace this with your desired IP address
 
 		// Bind to a port
 		server.bind(port, port);

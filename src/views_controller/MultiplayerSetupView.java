@@ -91,6 +91,7 @@ public class MultiplayerSetupView extends BorderPane {
 			clientThread.shutdownNow();
 			clientThread = Executors.newSingleThreadExecutor(); // Recreate the ExecutorService
 		}
+		viewManager.getMPShipSelectionView().startButton.setDisable(false);
 		disableInputs(false);
 	}
 
