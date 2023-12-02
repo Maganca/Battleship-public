@@ -2,6 +2,7 @@ package views_controller;
 
 import java.io.File;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -43,9 +44,14 @@ public class GameEndView extends BorderPane {
 	}
 
 	private void initializePanel() {
+		endImg.setFitHeight(300);
+		endImg.setFitWidth(300);
 		vBox.getChildren().add(endImg);
 		vBox.getChildren().add(playAgainButton);
 		vBox.getChildren().add(menuButton);
+		vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(20);
+        vBox.setPadding(new Insets(50));
 		vBox.setBackground(new Background(new BackgroundImage(background, null, null, null, null)));
 		vBox.setAlignment(Pos.CENTER);
 		this.setCenter(vBox);
