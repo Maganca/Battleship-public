@@ -217,18 +217,7 @@ public class PirateGameView extends BorderPane {
 		turnCounter = 0;
 		int boardSize = player1.getBoardSize();
 		for (int n = 0; n < player2.getBoard().getShipsLeft(); n++) {
-			ShotResult AIOutcome = player2.takeShot(player1);
-			System.out.print("\nOpponent turn: ");
-			if (AIOutcome == ShotResult.GAME_WON) {
-				System.out.print("I won!\n");
-			} else if (AIOutcome == ShotResult.HIT) {
-				System.out.print("I hit your ship!\n");
-			} else if (AIOutcome == ShotResult.MISS) {
-				System.out.print("I missed\n");
-			} else if (AIOutcome == ShotResult.SUNK) {
-				System.out.print("I sunk your ship!\n");
-			} else
-				System.out.print(AIOutcome);
+			player2.takeShot(player1);
 			for (int i = 0; i < boardSize; i++)
 				for (int j = 0; j < boardSize; j++)
 					player1Grid[i][j].setImage(userImageChoice(player1.getBoard().playerToStringCoord(i, j)));
@@ -273,10 +262,8 @@ public class PirateGameView extends BorderPane {
 						didWin();
 					}
 				}
-				System.out.println(turnCounter);
-				if (turnCounter == player1.getBoard().getShipsLeft()) {
+				if (turnCounter == player1.getBoard().getShipsLeft())
 					aiTurn();
-				}
 			}
 		}
 	}
