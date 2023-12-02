@@ -2,15 +2,19 @@ package views_controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,6 +31,7 @@ import model.ClientHandler;
 import model.ServerHandler;
 import networking.BattleshipClient;
 import networking.BattleshipServer;
+import networking.PacketMessage;
 
 public class MultiplayerSetupView extends BorderPane {
 	private ViewManager viewManager;
@@ -40,7 +45,7 @@ public class MultiplayerSetupView extends BorderPane {
 	private Label orLabel = new Label("or");
 	private Label hostnameLabel = new Label("Connect to Game:");
 	private Label portLabel = new Label("Enter port:");
-	private static Label statusText = new Label("");
+	public Label statusText = new Label("");
 	private TextField hostname = new TextField("localhost");
 	private TextField port1 = new TextField(DEV_PORT);
 	private TextField port2 = new TextField(DEV_PORT);
@@ -54,8 +59,8 @@ public class MultiplayerSetupView extends BorderPane {
 
 	private BattleshipServer server;
 	private BattleshipClient client;
-	public ExecutorService serverThread; // = Executors.newSingleThreadExecutor();
-	public ExecutorService clientThread; // = Executors.newSingleThreadExecutor();
+	public ExecutorService serverThread = Executors.newSingleThreadExecutor();
+	public ExecutorService clientThread = Executors.newSingleThreadExecutor();
 
 	public MultiplayerSetupView(ViewManager viewManager) {
 		this.viewManager = viewManager;
@@ -166,15 +171,23 @@ public class MultiplayerSetupView extends BorderPane {
 			if (!port.isEmpty()) {
 				try {
 					int portNumber = Integer.parseInt(port);
-					server = new BattleshipServer(portNumber);
-					statusText.setText("Server Started! Waiting for user to connect.");
-					joinButton.fireEvent(mouseEvent);
-					disableInputs(true);
+					serverThread.submit(() -> {
+						try {
+							server = new BattleshipServer(portNumber);
+							Platform.runLater(() -> {
+								statusText.setText("Server Started! Waiting for user to connect.");
+								joinButton.fireEvent(mouseEvent);
+								disableInputs(true);
+							});
+						} catch (Exception e) {
+							Platform.runLater(() -> {
+								statusText.setText("Error creating server, try another port.");
+								e.printStackTrace();
+							});
+						}
+					});
 				} catch (NumberFormatException e) {
 					statusText.setText("Invalid port number.");
-					e.printStackTrace();
-				} catch (Exception e) {
-					statusText.setText("Error creating server, try another port.");
 					e.printStackTrace();
 				}
 			} else {
@@ -185,18 +198,23 @@ public class MultiplayerSetupView extends BorderPane {
 		joinButton.setOnAction(mouseEvent -> {
 			String port = port2.getText();
 			if (!port.isEmpty()) {
-				try {
-					int portNumber = Integer.parseInt(port);
-					client = new BattleshipClient(portNumber);
-				} catch (Exception e) {
-					statusText.setText("Unable to join. Check your details and try again.");
-					e.printStackTrace();
-				}
+				serverThread.submit(() -> {
+					try {
+						int portNumber = Integer.parseInt(port);
+						client = new BattleshipClient(portNumber, viewManager);
+					} catch (Exception e) {
+						Platform.runLater(() -> {
+							statusText.setText("Unable to join. Check your details and try again.");
+							e.printStackTrace();
+						});
+					}
+				});
 			} else {
 				statusText.setText("Invalid port number.");
 			}
 		});
 	}
+
 
 	public ServerHandler getServerHander() {
 		return serverHandler;
@@ -212,5 +230,17 @@ public class MultiplayerSetupView extends BorderPane {
 
 	public ExecutorService getClientThread() {
 		return clientThread;
+	}
+
+	public void showLeaveAlert() {
+		try {
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText("A Player has left the game!");
+			errorAlert.setContentText("You have been redirected to the setup screen.");
+			errorAlert.showAndWait();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 }

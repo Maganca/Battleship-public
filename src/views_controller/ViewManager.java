@@ -3,6 +3,7 @@ package views_controller;
 import javafx.scene.Node;
 import model.ClientHandler;
 import model.ServerHandler;
+import multiplayer_views.MPGameView;
 import multiplayer_views.MPShipSelectionView;
 
 public class ViewManager {
@@ -15,6 +16,7 @@ public class ViewManager {
 	public DebugView debugView;
 	private BattleshipGUI battleshipGUI;
 	private MPShipSelectionView mpShipSelectionView;
+	private MPGameView mpGameView;
 	// Other views...
 
 	private int boardSize = 10;
@@ -34,6 +36,7 @@ public class ViewManager {
 		infoView = new InfoView(this);
 		debugView = new DebugView(this);
 		mpShipSelectionView = new MPShipSelectionView(this);
+		mpGameView = new MPGameView(this);
 		// Initialize other views...
 	}
 
@@ -80,6 +83,10 @@ public class ViewManager {
 
 	public MPShipSelectionView getMPShipSelectionView() {
 		return mpShipSelectionView;
+	}
+	
+	public MPGameView getMPGameView() {
+		return mpGameView;
 	}
 
 //	@Override
