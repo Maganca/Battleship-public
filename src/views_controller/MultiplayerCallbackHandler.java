@@ -16,7 +16,7 @@ public class MultiplayerCallbackHandler implements ClientHandler.MessageCallback
 	public void setClientHandler(ClientHandler ch) {
 		this.ch = ch;
 		Platform.runLater(() -> {
-			vm.getMPShipSelectionView().setClientHandler(ch);
+			//vm.getMPShipSelectionView().setClientHandler(ch);
 		});
 	}
 
