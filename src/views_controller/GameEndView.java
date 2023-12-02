@@ -59,15 +59,6 @@ public class GameEndView extends BorderPane {
 		this.setCenter(vBox);
 	}
 
-	private void setupResultsScreen(Board playerBoard) {
-		// Create a listener for the game results
-		playerBoard.gameResultProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) {
-				showResults(newValue, playerBoard);
-			}
-		});
-	}
-
 	private void showResults(Board.GameResult result, Board playerBoard) {
 		int[] hitsAndMisses = playerBoard.calculateTotalHitsAndMisses(playerBoard);
 		String hitsText = "Total Hits: " + hitsAndMisses[0];

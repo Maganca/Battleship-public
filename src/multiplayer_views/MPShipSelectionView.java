@@ -32,31 +32,31 @@ public class MPShipSelectionView extends BorderPane {
 
 	public Button startButton = new Button("Start Game");
 
-	private TextField twoXCoord = new TextField("0");
-	private TextField twoYCoord = new TextField("0");
-	private TextField twoVert = new TextField("0");
+	private TextField twoXCoord = new TextField();
+	private TextField twoYCoord = new TextField();
+	private TextField twoVert = new TextField();
 
-	private TextField threeAXCoord = new TextField("0");
-	private TextField threeAYCoord = new TextField("1");
-	private TextField threeAVert = new TextField("0");
+	private TextField threeAXCoord = new TextField();
+	private TextField threeAYCoord = new TextField();
+	private TextField threeAVert = new TextField();
 
-	private TextField threeBXCoord = new TextField("0");
-	private TextField threeBYCoord = new TextField("2");
-	private TextField threeBVert = new TextField("0");
+	private TextField threeBXCoord = new TextField();
+	private TextField threeBYCoord = new TextField();
+	private TextField threeBVert = new TextField();
 
-	private TextField fourXCoord = new TextField("0");
-	private TextField fourYCoord = new TextField("3");
-	private TextField fourVert = new TextField("0");
+	private TextField fourXCoord = new TextField();
+	private TextField fourYCoord = new TextField();
+	private TextField fourVert = new TextField();
 
-	private TextField fiveXCoord = new TextField("0");
-	private TextField fiveYCoord = new TextField("4");
-	private TextField fiveVert = new TextField("0");
+	private TextField fiveXCoord = new TextField();
+	private TextField fiveYCoord = new TextField();
+	private TextField fiveVert = new TextField();
 	PlayerMessage pm = new PlayerMessage();
 
 	public MPShipSelectionView(ViewManager viewManager) {
 		this.viewManager = viewManager;
 		int size = viewManager.getBoardSize();
-		// reset();
+		reset();
 		initializePanel();
 	}
 
