@@ -14,6 +14,10 @@ public class Sounds {
 		musicQueue = new ArrayList<Media>();
 		isPlaying = false;
 	}
+	
+	public void emptyQueue() {
+		
+	}
 
 	public void loop(Media song) {
 		soundPlayer = new MediaPlayer(song);
