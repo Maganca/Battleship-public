@@ -54,7 +54,6 @@ public class DefaultGameView extends BorderPane {
 	private Image hit = new Image(new File("Tiles/phit.gif").toURI().toString());
 	private Image background = new Image(new File("Tiles/background.png").toURI().toString());
 	private Image winImage = new Image(new File("Tiles/VICTORY.png").toURI().toString());
-	
 	private Image loseImage = new Image(new File("Tiles/LOSS.png").toURI().toString());
 
 	private static final Media SHOOT_NOISE = new Media(new File("soundeffects/shoot.mp3").toURI().toString());
