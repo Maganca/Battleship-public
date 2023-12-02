@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.SimpleObjectProperty;
+//import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Board.java class that handles all battleship board functions.
@@ -14,15 +14,15 @@ public class Board {
 	private int shipsLeft;
 	private int totalBoardHealth; // Aggregate health of all ships on board
 	private List<Ship> shipList = new ArrayList<>();
-	private final SimpleObjectProperty<GameResult> gameResult = new SimpleObjectProperty<>(null);
+	//private final SimpleObjectProperty<GameResult> gameResult = new SimpleObjectProperty<>(null);
 
 	public enum GameResult {
 		WIN, LOSE
 	}
 
-	public SimpleObjectProperty<GameResult> gameResultProperty() {
-		return gameResult;
-	}
+	//public SimpleObjectProperty<GameResult> gameResultProperty() {
+	//	return gameResult;
+	//}
 
 	/**
 	 * Shot result enum types.
